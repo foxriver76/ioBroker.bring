@@ -10,26 +10,5 @@ tests.integration(path.join(__dirname, '..'), {
 
     // If the adapter may call process.exit during startup, define here which exit codes are allowed.
     // By default, termination during startup is not allowed.
-    allowedExitCodes: [11],
-
-    defineAdditionalTests(getHarness) {
-
-        describe('Test sendTo()', () => {
-
-            it('Should work', () => {
-                return new Promise(resolve => {
-                    // Create a fresh harness instance each test!
-                    const harness = getHarness();
-                    // Start the adapter and wait until it has started
-                    harness.startAdapterAndWait().then(() => {
-
-                        harness.sendTo('denon.0', 'browse', 'message', (resp) => {
-                            console.dir(resp);
-                            resolve();
-                        });
-                    });
-                });
-            }).timeout(6000);
-        });
-    }
+    allowedExitCodes: [11]
 });
