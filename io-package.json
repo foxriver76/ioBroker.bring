@@ -1,0 +1,81 @@
+{
+    "common": {
+        "name": "bring",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial adapter",
+                "de": "Initiale Version",
+                "ru": "начальная адаптер",
+                "pt": "adaptador inicial",
+                "nl": "eerste adapter",
+                "fr": "initiale de l'adaptateur",
+                "it": "iniziale adattatore",
+                "es": "adaptador inicial",
+                "pl": "początkowa adapter",
+                "zh-cn": "最初的适配器"
+            }
+        },
+        "title": "Bring!",
+        "desc": {
+            "en": "Manage your shopping list with Bring!"
+        },
+        "authors": [
+            "Moritz Heusinger <moritz.heusinger@gmail.com>"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "mode": "daemon",
+        "icon": "bring.png",
+        "materialize": true,
+        "enabled": true,
+        "compact": true,
+        "messagebox": true,
+        "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.bring/master/admin/bring.png",
+        "keywords": [
+            "bring!",
+            "bring",
+            "avr",
+            "shopping",
+            "list"
+        ],
+        "readme": "https://github.com/foxriver76/ioBroker.bring/blob/master/README.md",
+        "loglevel": "info",
+        "type": "multimedia"
+    },
+    "docs": {
+        "de": "docs/de/README.md"
+    },
+    "native": {
+        "username": "",
+        "password": ""
+    },
+    "protectedNative": [
+        "username",
+        "password"
+    ],
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "If connected to Bring! API",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
+}
