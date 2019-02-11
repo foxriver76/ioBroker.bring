@@ -18,7 +18,16 @@
         },
         "title": "Bring!",
         "desc": {
-            "en": "Manage your shopping list with Bring!"
+            "en": "Manage your shopping list with Bring!",
+            "de": "Verwalten Sie Ihre Einkaufsliste mit Bring!",
+            "ru": "Управляйте своим списком покупок с Bring!",
+            "pt": "Gerencie sua lista de compras com o Bring!",
+            "nl": "Beheer uw boodschappenlijstje met Bring!",
+            "fr": "Gérez votre liste de courses avec Bring!",
+            "it": "Gestisci la tua lista della spesa con Bring!",
+            "es": "Gestiona tu lista de compras con Bring!",
+            "pl": "Zarządzaj swoją listą zakupów za pomocą narzędzia Przynieś!",
+            "zh-cn": "使用Bring管理您的购物清单！"
         },
         "authors": [
             "Moritz Heusinger <moritz.heusinger@gmail.com>"
@@ -47,11 +56,11 @@
         "de": "docs/de/README.md"
     },
     "native": {
-        "username": "",
+        "mail": "",
         "password": ""
     },
     "protectedNative": [
-        "username",
+        "mail",
         "password"
     ],
     "objects": [],

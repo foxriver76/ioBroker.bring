@@ -30,6 +30,7 @@
 		"url": "https://github.com/foxriver76/ioBroker.bring"
 	},
 	"dependencies": {
+		"request": "^2.88.0",
 		"@iobroker/adapter-core": "^1.0.3",
 		"request-promise-native": "^1.0.5"
 	},
