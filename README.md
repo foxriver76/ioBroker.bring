@@ -56,13 +56,13 @@ For every shopping list a channel with the following states will be created:
     |string|R/W|
 
    *Select an item which should be removed from the shopping list. 
-   The state will be acknowledged when the command is acknowledged by API.*
+   The state will be acknowledged when the command is acknowledged by the Bring! API.*
    
 * *list*.saveItem
 
     |Data type|Permission|                                                                       
     |:---:|:---:|
-    |string|R|
+    |string|R/W|
 
    *Select an item which should be added to the shopping list. You can also specify additional information of the
    item, by setting the state by the following schema:* 
@@ -70,7 +70,7 @@ For every shopping list a channel with the following states will be created:
    ```Apple, 2.50 $, the green ones```
    
    *Note, that everything behind the comma describes the specification. 
-   The state will be acknowledged when the command is acknowledged by API.*
+   The state will be acknowledged when the command is acknowledged by the Bring! API.*
     
 * *list*.users
 
