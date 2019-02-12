@@ -9,6 +9,7 @@
 const utils = require(`@iobroker/adapter-core`);
 const crypto = require(__dirname + `/lib/crypto`);
 const Bring = require(__dirname + `/lib/bring`);
+const tableify = require(`tableify`);
 let adapter;
 
 let mail;
@@ -110,6 +111,10 @@ function pollList(listUuid) {
         adapter.log.debug(`[DATA] Items from ${listUuid} loaded: ${JSON.stringify(data)}`);
         adapter.setState(`${listUuid}.content`, JSON.stringify(data.purchase), true);
         adapter.setState(`${listUuid}.recentContent`, JSON.stringify(data.recently), true);
+        adapter.setState(`${listUuid}.contentHtml`, tableify(data.purchase), true);
+        adapter.setState(`${listUuid}.recentContentHtml`, tableify(data.recently), true);
+        adapter.setState(`${listUuid}.count`, data.purchase.length, true);
+        adapter.log.warn(tableify(data.purchase));
     }).catch(e => {
         adapter.log.warn(e);
     });
@@ -117,6 +122,7 @@ function pollList(listUuid) {
     bring.getAllUsersFromList(listUuid).then(data => {
         adapter.log.debug(`[DATA] Users from ${listUuid} loaded: ${JSON.stringify(data)}`);
         adapter.setState(`${listUuid}.users`, JSON.stringify(data.users), true);
+        adapter.setState(`${listUuid}.usersHtml`, tableify(data.users), true);
     }).catch(e => {
         adapter.log.warn(e);
     });
@@ -181,6 +187,48 @@ async function pollAllLists() {
             native: {}
         }));
 
+        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.contentHtml`, {
+            type: `state`,
+            common: {
+                role: `list.html`,
+                name: `Content`,
+                desc: `Content of ${entry.name}`,
+                read: true,
+                write: false,
+                type: `string`,
+                def: `[]`
+            },
+            native: {}
+        }));
+
+        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.recentContentHtml`, {
+            type: `state`,
+            common: {
+                role: `list.html`,
+                name: `Recent Content`,
+                desc: `Recent Content of ${entry.name}`,
+                read: true,
+                write: false,
+                type: `string`,
+                def: `[]`
+            },
+            native: {}
+        }));
+
+        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.usersHtml`, {
+            type: `state`,
+            common: {
+                role: `list.html`,
+                name: `Users`,
+                desc: `Users of ${entry.name}`,
+                read: true,
+                write: false,
+                type: `string`,
+                def: `[]`
+            },
+            native: {}
+        }));
+
         promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.removeItem`, {
             type: `state`,
             common: {
@@ -209,12 +257,30 @@ async function pollAllLists() {
             native: {}
         }));
 
+        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.count`, {
+            type: `state`,
+            common: {
+                role: `indicator.count`,
+                name: `Count`,
+                desc: `Number of entrys in ${entry.name}`,
+                read: true,
+                write: false,
+                type: `number`,
+                def: ``
+            },
+            native: {}
+        }));
+
         await Promise.all(promises);
 
         bring.getItems(entry.listUuid).then(data => {
             adapter.log.debug(`[DATA] Items from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
             adapter.setState(`${entry.listUuid}.content`, JSON.stringify(data.purchase), true);
             adapter.setState(`${entry.listUuid}.recentContent`, JSON.stringify(data.recently), true);
+            adapter.setState(`${entry.listUuid}.contentHtml`, tableify(data.purchase), true);
+            adapter.setState(`${entry.listUuid}.recentContentHtml`, tableify(data.recently), true);
+            adapter.setState(`${entry.listUuid}.count`, data.purchase.length, true);
+            adapter.log.warn(tableify(data.purchase));
         }).catch(e => {
             adapter.log.warn(e);
         });
@@ -222,6 +288,7 @@ async function pollAllLists() {
         bring.getAllUsersFromList(entry.listUuid).then(data => {
             adapter.log.debug(`[DATA] Users from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
             adapter.setState(`${entry.listUuid}.users`, JSON.stringify(data.users), true);
+            adapter.setState(`${entry.listUuid}.usersHtml`, tableify(data.users), true);
         }).catch(e => {
             adapter.log.warn(e);
         });

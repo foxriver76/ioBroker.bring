@@ -80,6 +80,10 @@ For every shopping list a channel with the following states will be created:
 
    *Read only json string formatted as a list. Contains the users which are part of the shopping list, 
    as well as their email address.*
+   
+### 0.0.5
+* (foxriver76) add equivalent html states for json states
+* (foxriver76) add counter for every list
 
 ### 0.0.4
 * (foxriver76) fix when login fails
@@ -90,7 +94,7 @@ For every shopping list a channel with the following states will be created:
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2018 Moritz Heusinger <moritz.heusinger@gmail.com>
+Copyright (c) 2019 Moritz Heusinger <moritz.heusinger@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

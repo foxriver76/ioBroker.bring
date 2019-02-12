@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "0.0.4",
+        "version": "0.0.5",
         "news": {
+            "0.0.5": {
+                "en": "create html states and counter",
+                "de": "HTML-Status und Zähler erstellen",
+                "ru": "создавать HTML-состояния и счетчик",
+                "pt": "criar estados e contador de html",
+                "nl": "HTML-status en teller maken",
+                "fr": "créer des états html et contrer",
+                "it": "creare stati e counter html",
+                "es": "crear estados html y contador",
+                "pl": "utwórz stany html i licznik",
+                "zh-cn": "创建html状态和计数器"
+            },
             "0.0.4": {
                 "en": "fix when login fails",
                 "de": "beheben, wenn Anmeldung fehlschlägt",
