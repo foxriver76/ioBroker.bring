@@ -64,7 +64,7 @@ function startAdapter(options) {
         } else if (method === `saveItem`) {
             try {
                 const item = state.val.split(`,`)[0].trim() || state.val;
-                const specification = state.val.substring(state.val.indexOf(`,`) + 1).trim() || ``;
+                const specification = state.val.includes(`,`) ? state.val.substring(state.val.indexOf(`,`) + 1).trim() : ``;
                 await bring.saveItem(listId, item, specification);
                 adapter.log.info(`[SAVE] Saved ${item} (${specification}) to ${listId}`);
                 adapter.setState(id, state.val, true);
