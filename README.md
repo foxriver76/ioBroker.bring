@@ -33,7 +33,7 @@ For a description of the created states, see below.
 ### Shopping lists
 For every shopping list a channel with the following states will be created:
 
-* <listname>.content
+* *list*.content
 
     |Data type|Permission|                                                                       
     |:---:|:---:|
@@ -41,7 +41,7 @@ For every shopping list a channel with the following states will be created:
 
    *Read only json string formatted as a list. Contains the items which are currently on your shopping list.*
    
-* <listname>.recentContent
+* *list*.recentContent
 
     |Data type|Permission|                                                                       
     |:---:|:---:|
@@ -49,7 +49,7 @@ For every shopping list a channel with the following states will be created:
 
    *Read only json string formatted as a list. Contains the items which was recently on your shopping list.*
    
-* <listname>.removeItem
+* *list*.removeItem
 
     |Data type|Permission|                                                                       
     |:---:|:---:|
@@ -58,16 +58,21 @@ For every shopping list a channel with the following states will be created:
    *Select an item which should be removed from the shopping list. 
    The state will be acknowledged when the command is acknowledged by API.*
    
-* <listname>.saveItem
+* *list*.saveItem
 
     |Data type|Permission|                                                                       
     |:---:|:---:|
     |string|R|
 
-   *Select an item which should be added to the shopping list. 
-   The state will be acknowledged when the command is acknowledged by API.*  
+   *Select an item which should be added to the shopping list. You can also specify additional information of the
+   item, by setting the state by the following schema:* 
+   
+   ```Apple, 2.50 $, the green ones```
+   
+   *Note, that everything behind the comma describes the specification. 
+   The state will be acknowledged when the command is acknowledged by API.*
     
-* <listname>.users
+* *list*.users
 
     |Data type|Permission|                                                                       
     |:---:|:---:|
