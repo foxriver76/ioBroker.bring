@@ -279,7 +279,6 @@ async function pollAllLists() {
             adapter.setState(`${entry.listUuid}.contentHtml`, tableify(data.purchase), true);
             adapter.setState(`${entry.listUuid}.recentContentHtml`, tableify(data.recently), true);
             adapter.setState(`${entry.listUuid}.count`, data.purchase.length, true);
-            adapter.log.warn(tableify(data.purchase));
         }).catch(e => {
             adapter.log.warn(e);
         });

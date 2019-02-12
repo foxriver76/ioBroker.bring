@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "bring",
-        "version": "0.0.5",
+        "version": "0.0.6",
         "news": {
-            "0.0.5": {
+            "0.0.6": {
                 "en": "create html states and counter",
                 "de": "HTML-Status und Zähler erstellen",
                 "ru": "создавать HTML-состояния и счетчик",
