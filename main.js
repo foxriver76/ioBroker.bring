@@ -53,19 +53,10 @@ function startAdapter(options) {
         const listId = id.split(`.`)[2];
         const method = id.split(`.`).pop();
 
-        if (method === `search`) {
-            try {
-                const res = await bring.searchItem(state.val, listId);
-                adapter.log.warn(`[SEARCH] Received ${JSON.stringify(res)}`);
-                adapter.setState(id, state.val, true);
-                adapter.setState(`${listId}.searchResult`, JSON.stringify(res), true); // TODO: as soon as searching works, fix this
-            } catch (e) {
-                adapter.log.warn(e);
-            }
-        } else if (method === `removeItem`) {
+        if (method === `removeItem`) {
             try {
                 await bring.removeItem(listId, state.val);
-                adapter.log.warn(`[REMOVE] Removed ${state.val} from ${listId}`);
+                adapter.log.info(`[REMOVE] Removed ${state.val} from ${listId}`);
                 adapter.setState(id, state.val, true);
             } catch (e) {
                 adapter.log.warn(e);
@@ -75,7 +66,7 @@ function startAdapter(options) {
                 const item = state.val.split(`,`)[0].trim() || ``;
                 const specification = state.val.split(`,`)[1].trim() || ``;
                 await bring.saveItem(listId, item, specification);
-                adapter.log.warn(`[SAVE] Saved ${item} (${specification}) to ${listId}`);
+                adapter.log.info(`[SAVE] Saved ${item} (${specification}) to ${listId}`);
                 adapter.setState(id, state.val, true);
             } catch (e) {
                 adapter.log.warn(e);
@@ -106,12 +97,14 @@ async function main() {
 
     adapter.setState(`info.user`, bring.name, true);
 
+    /*
     try {
         const res = await bring.getUserSettings();
-        adapter.log.warn(`[DATA] User settings loaded: ${JSON.stringify(res)}`);
+        adapter.log.info(`[DATA] User settings loaded: ${JSON.stringify(res)}`);
     } catch (e) {
         adapter.log.warn(e);
     } // endTryCatch
+    */
 
     await pollAllLists();
 } // endMain
@@ -119,7 +112,7 @@ async function main() {
 function pollList(listUuid) {
     adapter.log.debug(`[POLL] Poll specific list: ${listUuid}`);
     bring.getItems(listUuid).then(data => {
-        adapter.log.warn(`[DATA] Items from ${listUuid} loaded: ${JSON.stringify(data)}`);
+        adapter.log.debug(`[DATA] Items from ${listUuid} loaded: ${JSON.stringify(data)}`);
         adapter.setState(`${listUuid}.content`, JSON.stringify(data.purchase), true);
         adapter.setState(`${listUuid}.recentContent`, JSON.stringify(data.recently), true);
     }).catch(e => {
@@ -127,7 +120,7 @@ function pollList(listUuid) {
     });
 
     bring.getAllUsersFromList(listUuid).then(data => {
-        adapter.log.warn(`[DATA] Users from ${listUuid} loaded: ${JSON.stringify(data)}`);
+        adapter.log.debug(`[DATA] Users from ${listUuid} loaded: ${JSON.stringify(data)}`);
         adapter.setState(`${listUuid}.users`, JSON.stringify(data.users), true);
     }).catch(e => {
         adapter.log.warn(e);
@@ -138,7 +131,7 @@ async function pollAllLists() {
     adapter.log.debug(`[POLL] Poll all lists`);
     const bringLists = await bring.loadLists();
 
-    adapter.log.warn(`[DATA] Lists loaded: ${JSON.stringify(bringLists)}`);
+    adapter.log.debug(`[DATA] Lists loaded: ${JSON.stringify(bringLists)}`);
 
     for (const entry of bringLists.lists) {
         const promises = [];
@@ -193,34 +186,6 @@ async function pollAllLists() {
             native: {}
         }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.search`, {
-            type: `state`,
-            common: {
-                role: `text`,
-                name: `Search`,
-                desc: `Search for an item`,
-                read: true,
-                write: true,
-                type: `string`,
-                def: ``
-            },
-            native: {}
-        }));
-
-        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.searchResult`, {
-            type: `state`,
-            common: {
-                role: `text`,
-                name: `Search Result`,
-                desc: `Result of Search`,
-                read: true,
-                write: false,
-                type: `string`,
-                def: ``
-            },
-            native: {}
-        }));
-
         promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.removeItem`, {
             type: `state`,
             common: {
@@ -252,7 +217,7 @@ async function pollAllLists() {
         await Promise.all(promises);
 
         bring.getItems(entry.listUuid).then(data => {
-            adapter.log.warn(`[DATA] Items from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
+            adapter.log.debug(`[DATA] Items from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
             adapter.setState(`${entry.listUuid}.content`, JSON.stringify(data.purchase), true);
             adapter.setState(`${entry.listUuid}.recentContent`, JSON.stringify(data.recently), true);
         }).catch(e => {
@@ -260,7 +225,7 @@ async function pollAllLists() {
         });
 
         bring.getAllUsersFromList(entry.listUuid).then(data => {
-            adapter.log.warn(`[DATA] Users from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
+            adapter.log.debug(`[DATA] Users from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
             adapter.setState(`${entry.listUuid}.users`, JSON.stringify(data.users), true);
         }).catch(e => {
             adapter.log.warn(e);
