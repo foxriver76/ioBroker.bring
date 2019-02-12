@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "0.0.3",
+        "version": "0.0.4",
         "news": {
+            "0.0.4": {
+                "en": "fix when login fails",
+                "de": "beheben, wenn Anmeldung fehlschlägt",
+                "ru": "исправить ошибку при входе в систему",
+                "pt": "corrigir quando o login falhar",
+                "nl": "verhelpen wanneer inloggen niet lukt",
+                "fr": "correction lorsque la connexion échoue",
+                "it": "risolti quando l'accesso fallisce",
+                "es": "corregir cuando falla el inicio de sesión",
+                "pl": "napraw, gdy logowanie się nie powiedzie",
+                "zh-cn": "登录失败时修复"
+            },
             "0.0.3": {
                 "en": "initial adapter",
                 "de": "Initiale Version",

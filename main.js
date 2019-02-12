@@ -88,14 +88,11 @@ async function main() {
     adapter.subscribeStates(`*`);
 
     bring = new Bring({
-        logger: adapter.log,
         mail: mail,
         password: password
     });
 
     await tryLogin();
-
-    adapter.setState(`info.user`, bring.name, true);
 
     /*
     try {
@@ -105,8 +102,6 @@ async function main() {
         adapter.log.warn(e);
     } // endTryCatch
     */
-
-    await pollAllLists();
 } // endMain
 
 function pollList(listUuid) {
@@ -239,6 +234,8 @@ async function tryLogin() {
     try {
         await bring.login();
         adapter.setState(`info.connection`, true, true);
+        adapter.setState(`info.user`, bring.name, true);
+        await pollAllLists();
         return Promise.resolve();
     } catch (e) {
         adapter.log.warn(e);

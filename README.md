@@ -81,6 +81,9 @@ For every shopping list a channel with the following states will be created:
    *Read only json string formatted as a list. Contains the users which are part of the shopping list, 
    as well as their email address.*
 
+### 0.0.4
+* (foxriver76) fix when login fails
+
 ### 0.0.3
 * (foxriver76) initial release
 
