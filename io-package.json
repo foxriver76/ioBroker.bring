@@ -85,6 +85,18 @@
                 "def": false
             },
             "native": {}
+        },
+        {
+            "_id": "info.user",
+            "type": "state",
+            "common": {
+                "role": "name",
+                "name": "Name of logged-in user",
+                "type": "string",
+                "read": true,
+                "write": false
+            },
+            "native": {}
         }
     ]
 }
