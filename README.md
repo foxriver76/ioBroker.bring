@@ -33,21 +33,21 @@ For a description of the created states, see below.
 ### Shopping lists
 For every shopping list a channel with the following states will be created:
 
-* *list*.content
+* *list*.content / *list*.contentHtml
 
     |Data type|Permission|                                                                       
     |:---:|:---:|
     |string|R|
 
-   *Read only json string formatted as a list. Contains the items which are currently on your shopping list.*
+   *Read only json/html string formatted as a list or html table. Contains the items which are currently on your shopping list.*
    
-* *list*.recentContent
+* *list*.recentContent / *list*.recentContentHtml
 
     |Data type|Permission|                                                                       
     |:---:|:---:|
     |string|R|
 
-   *Read only json string formatted as a list. Contains the items which was recently on your shopping list.*
+   *Read only json/html string formatted as a list or html table. Contains the items which were recently on your shopping list.*
    
 * *list*.removeItem
 
@@ -72,14 +72,22 @@ For every shopping list a channel with the following states will be created:
    *Note, that everything behind the comma describes the specification. 
    The state will be acknowledged when the command is acknowledged by the Bring! API.*
     
-* *list*.users
+* *list*.users / *list*.usersHtml
 
     |Data type|Permission|                                                                       
     |:---:|:---:|
     |string|R|
 
-   *Read only json string formatted as a list. Contains the users which are part of the shopping list, 
+   *Read only json/html string formatted as a list or html table. Contains the users which are part of the shopping list, 
    as well as their email address.*
+   
+* *list*.count
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |number|R|
+
+   *Read only number, which represents the number of contained items of the list.*
    
 ### 0.0.5
 * (foxriver76) add equivalent html states for json states
