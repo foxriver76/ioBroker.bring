@@ -114,7 +114,6 @@ function pollList(listUuid) {
         adapter.setState(`${listUuid}.contentHtml`, tableify(data.purchase), true);
         adapter.setState(`${listUuid}.recentContentHtml`, tableify(data.recently), true);
         adapter.setState(`${listUuid}.count`, data.purchase.length, true);
-        adapter.log.warn(tableify(data.purchase));
     }).catch(e => {
         adapter.log.warn(e);
     });
