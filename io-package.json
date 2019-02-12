@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "bring",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "news": {
-            "0.0.1": {
+            "0.0.2": {
                 "en": "initial adapter",
                 "de": "Initiale Version",
                 "ru": "начальная адаптер",
@@ -50,7 +50,7 @@
         ],
         "readme": "https://github.com/foxriver76/ioBroker.bring/blob/master/README.md",
         "loglevel": "info",
-        "type": "multimedia"
+        "type": "household"
     },
     "docs": {
         "de": "docs/de/README.md"
