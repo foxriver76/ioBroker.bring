@@ -117,9 +117,9 @@ function pollList(listUuid) {
         const recentContentHtml = tableify(data.recently);
 
         adapter.setState(`${listUuid}.contentHtml`, contentHtml, true);
-        adapter.setState(`${listUuid}.contentHtmlNoHead`, `<table>${contentHtml.split(`</thead>`)[1]}`, true);
+        adapter.setState(`${listUuid}.contentHtmlNoHead`, contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml, true);
         adapter.setState(`${listUuid}.recentContentHtml`, recentContentHtml, true);
-        adapter.setState(`${listUuid}.recentContentHtmlNoHead`, `<table>${recentContentHtml.split(`</thead>`)[1]}`, true);
+        adapter.setState(`${listUuid}.recentContentHtmlNoHead`, recentContentHtml.includes(`</thead>`) ? `<table>${recentContentHtml.split(`</thead>`)[1]}` : recentContentHtml, true);
         adapter.setState(`${listUuid}.count`, data.purchase.length, true);
     }).catch(e => {
         adapter.log.warn(e);
@@ -329,8 +329,14 @@ async function pollAllLists() {
             adapter.log.debug(`[DATA] Items from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
             adapter.setState(`${entry.listUuid}.content`, JSON.stringify(data.purchase), true);
             adapter.setState(`${entry.listUuid}.recentContent`, JSON.stringify(data.recently), true);
-            adapter.setState(`${entry.listUuid}.contentHtml`, tableify(data.purchase), true);
-            adapter.setState(`${entry.listUuid}.recentContentHtml`, tableify(data.recently), true);
+
+            const contentHtml = tableify(data.purchase);
+            const recentContentHtml = tableify(data.recently);
+
+            adapter.setState(`${entry.listUuid}.contentHtml`, contentHtml, true);
+            adapter.setState(`${entry.listUuid}.contentHtmlNoHead`, contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml, true);
+            adapter.setState(`${entry.listUuid}.recentContentHtml`, recentContentHtml, true);
+            adapter.setState(`${entry.listUuid}.recentContentHtmlNoHead`, recentContentHtml.includes(`</thead>`) ? `<table>${recentContentHtml.split(`</thead>`)[1]}` : recentContentHtml, true);
             adapter.setState(`${entry.listUuid}.count`, data.purchase.length, true);
         }).catch(e => {
             adapter.log.warn(e);
@@ -339,7 +345,11 @@ async function pollAllLists() {
         bring.getAllUsersFromList(entry.listUuid).then(data => {
             adapter.log.debug(`[DATA] Users from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
             adapter.setState(`${entry.listUuid}.users`, JSON.stringify(data.users), true);
-            adapter.setState(`${entry.listUuid}.usersHtml`, tableify(data.users), true);
+
+            const usersHtml = tableify(data.users);
+
+            adapter.setState(`${entry.listUuid}.usersHtml`, usersHtml, true);
+            adapter.setState(`${entry.listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
         }).catch(e => {
             adapter.log.warn(e);
         });
