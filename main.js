@@ -77,7 +77,7 @@ function startAdapter(options) {
 
         if (!polling[listId]) polling[listId] = setTimeout(() => {
             pollList(listId);
-            clearTimeout(polling[listId]);
+            if (polling[listId]) clearTimeout(polling[listId]);
             polling[listId] = null;
         }, 5000);
     });
@@ -292,7 +292,7 @@ async function pollAllLists() {
             adapter.log.warn(e);
         });
 
-        clearTimeout(polling.all);
+        if (polling.all) clearTimeout(polling.all);
         polling.all = setTimeout(pollAllLists, 90000);
     }
 } // endPollAllLists
@@ -304,12 +304,12 @@ async function tryLogin() {
         adapter.setState(`info.user`, bring.name, true);
         adapter.log.info(`[LOGIN] Successfully logged in as ${bring.name}`);
         await pollAllLists();
-        clearInterval(loginTimeout);
+        if (loginTimeout) clearTimeout(loginTimeout);
         return Promise.resolve();
     } catch (e) {
         adapter.log.warn(e);
         adapter.log.info(`[LOGIN] Reconnection in 30 seconds`);
-        clearInterval(loginTimeout);
+        if (loginTimeout) clearTimeout(loginTimeout);
         loginTimeout = setTimeout(tryLogin, 30000);
     } // endCatch
 } // endTryLogin
