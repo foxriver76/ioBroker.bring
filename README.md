@@ -89,6 +89,9 @@ For every shopping list a channel with the following states will be created:
 
    *Read only number, which represents the number of contained items of the list.*
    
+### 0.0.7
+* (foxriver76) fixed a potential memory leak by setTimeout functions
+
 ### 0.0.6
 * (foxriver76) add equivalent html states for json states
 * (foxriver76) add counter for every list

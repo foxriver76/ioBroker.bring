@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "news": {
+            "0.0.7": {
+                "en": "fixed a potential memory leak by setTimeout functions",
+                "de": "ein potentieller Speicherverlust durch setTimeout-Funktionen behoben",
+                "ru": "исправлена ​​потенциальная утечка памяти функциями setTimeout",
+                "pt": "corrigido um vazamento de memória potencial por funções setTimeout",
+                "nl": "een mogelijk geheugenlek opgelost door setTimeout-functies",
+                "fr": "correction d'une fuite de mémoire potentielle par les fonctions setTimeout",
+                "it": "risolto una potenziale perdita di memoria con le funzioni setTimeout",
+                "es": "arreglado una pérdida potencial de memoria por las funciones setTimeout",
+                "pl": "naprawiono potencjalny wyciek pamięci przez funkcje setTimeout",
+                "zh-cn": "通过setTimeout函数修复了潜在的内存泄漏"
+            },
             "0.0.6": {
                 "en": "create html states and counter",
                 "de": "HTML-Status und Zähler erstellen",
