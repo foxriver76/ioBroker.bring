@@ -300,6 +300,7 @@ async function tryLogin() {
         await bring.login();
         adapter.setState(`info.connection`, true, true);
         adapter.setState(`info.user`, bring.name, true);
+        adapter.log.info(`[LOGIN] Successfully logged in as ${bring.name}`);
         await pollAllLists();
         return Promise.resolve();
     } catch (e) {
