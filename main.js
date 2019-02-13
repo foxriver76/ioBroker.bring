@@ -16,6 +16,7 @@ let mail;
 let password;
 let bring;
 const polling = {};
+let loginTimeout;
 
 function startAdapter(options) {
     options = options || {};
@@ -291,7 +292,8 @@ async function pollAllLists() {
             adapter.log.warn(e);
         });
 
-        setTimeout(pollAllLists, 90000);
+        clearTimeout(polling.all);
+        polling.all = setTimeout(pollAllLists, 90000);
     }
 } // endPollAllLists
 
@@ -302,11 +304,13 @@ async function tryLogin() {
         adapter.setState(`info.user`, bring.name, true);
         adapter.log.info(`[LOGIN] Successfully logged in as ${bring.name}`);
         await pollAllLists();
+        clearInterval(loginTimeout);
         return Promise.resolve();
     } catch (e) {
         adapter.log.warn(e);
         adapter.log.info(`[LOGIN] Reconnection in 30 seconds`);
-        setTimeout(tryLogin, 30000);
+        clearInterval(loginTimeout);
+        loginTimeout = setTimeout(tryLogin, 30000);
     } // endCatch
 } // endTryLogin
 
