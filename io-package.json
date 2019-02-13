@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "0.0.8",
+        "version": "0.0.9",
         "news": {
+            "0.0.9": {
+                "en": "also updating no head states on normal polling, important bugfixes and handle no internet connection error",
+                "de": "Es werden auch NoHead Zustände beim normalen Polling aktualisiert, wichtige Bugfixes und keine Internetverbindungsfehler behandelt",
+                "ru": "также обновляет состояние без заголовка при обычном опросе, важные исправления ошибок и не обрабатывает ошибку интернет-соединения",
+                "pt": "também atualizando sem estados de cabeça no polling normal, correções de bugs importantes e não lida com erros de conexão com a Internet",
+                "nl": "ook geen head states bij te werken op normale polling, belangrijke bugfixes en geen internetverbinding te verhelpen",
+                "fr": "met également à jour aucun état principal lors de l'interrogation normale, corrige des bogues importants et ne gère aucune erreur de connexion Internet",
+                "it": "inoltre non aggiorna gli stati della testa al polling normale, correzioni di bug importanti e non gestisce alcun errore di connessione internet",
+                "es": "También no se actualizan los estados principales en el sondeo normal, se corrigen errores importantes y no se maneja ningún error de conexión a Internet",
+                "pl": "nie aktualizuje również stanów głowic podczas normalnego odpytywania, ważnych poprawek i nie obsługuje błędu połączenia z Internetem",
+                "zh-cn": "在正常轮询，重要错误修正和处理没有互联网连接错误也更新没有头状态"
+            },
             "0.0.8": {
                 "en": "added html states without header and minor fixes",
                 "de": "HTML-Status ohne Header und kleinere Korrekturen hinzugefügt",

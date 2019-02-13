@@ -140,223 +140,225 @@ function pollList(listUuid) {
 
 async function pollAllLists() {
     adapter.log.debug(`[POLL] Poll all lists`);
-    const bringLists = await bring.loadLists();
 
-    adapter.log.debug(`[DATA] Lists loaded: ${JSON.stringify(bringLists)}`);
+    try {
+        const bringLists = await bring.loadLists();
 
-    for (const entry of bringLists.lists) {
-        const promises = [];
 
-        promises.push(adapter.setObjectNotExistsAsync(entry.listUuid, {
-            type: `channel`,
-            common: {
-                name: entry.name
-            },
-            native: {}
-        }));
+        adapter.log.debug(`[DATA] Lists loaded: ${JSON.stringify(bringLists)}`);
 
-        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.content`, {
-            type: `state`,
-            common: {
-                role: `list.json`,
-                name: `Content`,
-                desc: `Content of ${entry.name}`,
-                read: true,
-                write: false,
-                type: `string`,
-                def: `[]`
-            },
-            native: {}
-        }));
+        for (const entry of bringLists.lists) {
+            const promises = [];
 
-        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.recentContent`, {
-            type: `state`,
-            common: {
-                role: `list.json`,
-                name: `Recent Content`,
-                desc: `Recent Content of ${entry.name}`,
-                read: true,
-                write: false,
-                type: `string`,
-                def: `[]`
-            },
-            native: {}
-        }));
+            promises.push(adapter.setObjectNotExistsAsync(entry.listUuid, {
+                type: `channel`,
+                common: {
+                    name: entry.name
+                },
+                native: {}
+            }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.users`, {
-            type: `state`,
-            common: {
-                role: `list.json`,
-                name: `Users`,
-                desc: `Users of ${entry.name}`,
-                read: true,
-                write: false,
-                type: `string`,
-                def: `[]`
-            },
-            native: {}
-        }));
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.content`, {
+                type: `state`,
+                common: {
+                    role: `list.json`,
+                    name: `Content`,
+                    desc: `Content of ${entry.name}`,
+                    read: true,
+                    write: false,
+                    type: `string`,
+                    def: `[]`
+                },
+                native: {}
+            }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.contentHtml`, {
-            type: `state`,
-            common: {
-                role: `list.html`,
-                name: `Content`,
-                desc: `Content of ${entry.name}`,
-                read: true,
-                write: false,
-                type: `string`,
-                def: `[]`
-            },
-            native: {}
-        }));
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.recentContent`, {
+                type: `state`,
+                common: {
+                    role: `list.json`,
+                    name: `Recent Content`,
+                    desc: `Recent Content of ${entry.name}`,
+                    read: true,
+                    write: false,
+                    type: `string`,
+                    def: `[]`
+                },
+                native: {}
+            }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.recentContentHtml`, {
-            type: `state`,
-            common: {
-                role: `list.html`,
-                name: `Recent Content`,
-                desc: `Recent Content of ${entry.name}`,
-                read: true,
-                write: false,
-                type: `string`,
-                def: `[]`
-            },
-            native: {}
-        }));
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.users`, {
+                type: `state`,
+                common: {
+                    role: `list.json`,
+                    name: `Users`,
+                    desc: `Users of ${entry.name}`,
+                    read: true,
+                    write: false,
+                    type: `string`,
+                    def: `[]`
+                },
+                native: {}
+            }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.usersHtml`, {
-            type: `state`,
-            common: {
-                role: `list.html`,
-                name: `Users`,
-                desc: `Users of ${entry.name}`,
-                read: true,
-                write: false,
-                type: `string`,
-                def: `[]`
-            },
-            native: {}
-        }));
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.contentHtml`, {
+                type: `state`,
+                common: {
+                    role: `list.html`,
+                    name: `Content`,
+                    desc: `Content of ${entry.name}`,
+                    read: true,
+                    write: false,
+                    type: `string`,
+                    def: `[]`
+                },
+                native: {}
+            }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.contentHtmlNoHead`, {
-            type: `state`,
-            common: {
-                role: `list.html`,
-                name: `Content`,
-                desc: `Content of ${entry.name} w/o header`,
-                read: true,
-                write: false,
-                type: `string`,
-                def: `[]`
-            },
-            native: {}
-        }));
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.recentContentHtml`, {
+                type: `state`,
+                common: {
+                    role: `list.html`,
+                    name: `Recent Content`,
+                    desc: `Recent Content of ${entry.name}`,
+                    read: true,
+                    write: false,
+                    type: `string`,
+                    def: `[]`
+                },
+                native: {}
+            }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.recentContentHtmlNoHead`, {
-            type: `state`,
-            common: {
-                role: `list.html`,
-                name: `Recent Content`,
-                desc: `Recent Content of ${entry.name} w/o header`,
-                read: true,
-                write: false,
-                type: `string`,
-                def: `[]`
-            },
-            native: {}
-        }));
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.usersHtml`, {
+                type: `state`,
+                common: {
+                    role: `list.html`,
+                    name: `Users`,
+                    desc: `Users of ${entry.name}`,
+                    read: true,
+                    write: false,
+                    type: `string`,
+                    def: `[]`
+                },
+                native: {}
+            }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.usersHtmlNoHead`, {
-            type: `state`,
-            common: {
-                role: `list.html`,
-                name: `Users`,
-                desc: `Users of ${entry.name} w/o header`,
-                read: true,
-                write: false,
-                type: `string`,
-                def: `[]`
-            },
-            native: {}
-        }));
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.contentHtmlNoHead`, {
+                type: `state`,
+                common: {
+                    role: `list.html`,
+                    name: `Content`,
+                    desc: `Content of ${entry.name} w/o header`,
+                    read: true,
+                    write: false,
+                    type: `string`,
+                    def: `[]`
+                },
+                native: {}
+            }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.removeItem`, {
-            type: `state`,
-            common: {
-                role: `text`,
-                name: `Remove Item`,
-                desc: `Remove item from List`,
-                read: true,
-                write: true,
-                type: `string`,
-                def: ``
-            },
-            native: {}
-        }));
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.recentContentHtmlNoHead`, {
+                type: `state`,
+                common: {
+                    role: `list.html`,
+                    name: `Recent Content`,
+                    desc: `Recent Content of ${entry.name} w/o header`,
+                    read: true,
+                    write: false,
+                    type: `string`,
+                    def: `[]`
+                },
+                native: {}
+            }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.saveItem`, {
-            type: `state`,
-            common: {
-                role: `text`,
-                name: `Save Item`,
-                desc: `Save item to List`,
-                read: true,
-                write: true,
-                type: `string`,
-                def: ``
-            },
-            native: {}
-        }));
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.usersHtmlNoHead`, {
+                type: `state`,
+                common: {
+                    role: `list.html`,
+                    name: `Users`,
+                    desc: `Users of ${entry.name} w/o header`,
+                    read: true,
+                    write: false,
+                    type: `string`,
+                    def: `[]`
+                },
+                native: {}
+            }));
 
-        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.count`, {
-            type: `state`,
-            common: {
-                role: `indicator.count`,
-                name: `Count`,
-                desc: `Number of entrys in ${entry.name}`,
-                read: true,
-                write: false,
-                type: `number`,
-                def: ``
-            },
-            native: {}
-        }));
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.removeItem`, {
+                type: `state`,
+                common: {
+                    role: `text`,
+                    name: `Remove Item`,
+                    desc: `Remove item from List`,
+                    read: true,
+                    write: true,
+                    type: `string`,
+                    def: ``
+                },
+                native: {}
+            }));
 
-        await Promise.all(promises);
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.saveItem`, {
+                type: `state`,
+                common: {
+                    role: `text`,
+                    name: `Save Item`,
+                    desc: `Save item to List`,
+                    read: true,
+                    write: true,
+                    type: `string`,
+                    def: ``
+                },
+                native: {}
+            }));
 
-        bring.getItems(entry.listUuid).then(data => {
-            adapter.log.debug(`[DATA] Items from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
-            adapter.setState(`${entry.listUuid}.content`, JSON.stringify(data.purchase), true);
-            adapter.setState(`${entry.listUuid}.recentContent`, JSON.stringify(data.recently), true);
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.count`, {
+                type: `state`,
+                common: {
+                    role: `indicator.count`,
+                    name: `Count`,
+                    desc: `Number of entrys in ${entry.name}`,
+                    read: true,
+                    write: false,
+                    type: `number`,
+                    def: ``
+                },
+                native: {}
+            }));
 
-            const contentHtml = tableify(data.purchase);
-            const recentContentHtml = tableify(data.recently);
+            await Promise.all(promises);
 
-            adapter.setState(`${entry.listUuid}.contentHtml`, contentHtml, true);
-            adapter.setState(`${entry.listUuid}.contentHtmlNoHead`, contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml, true);
-            adapter.setState(`${entry.listUuid}.recentContentHtml`, recentContentHtml, true);
-            adapter.setState(`${entry.listUuid}.recentContentHtmlNoHead`, recentContentHtml.includes(`</thead>`) ? `<table>${recentContentHtml.split(`</thead>`)[1]}` : recentContentHtml, true);
-            adapter.setState(`${entry.listUuid}.count`, data.purchase.length, true);
-        }).catch(e => {
-            adapter.log.warn(e);
-        });
+            bring.getItems(entry.listUuid).then(data => {
+                adapter.log.debug(`[DATA] Items from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
+                adapter.setState(`${entry.listUuid}.content`, JSON.stringify(data.purchase), true);
+                adapter.setState(`${entry.listUuid}.recentContent`, JSON.stringify(data.recently), true);
 
-        bring.getAllUsersFromList(entry.listUuid).then(data => {
-            adapter.log.debug(`[DATA] Users from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
-            adapter.setState(`${entry.listUuid}.users`, JSON.stringify(data.users), true);
+                const contentHtml = tableify(data.purchase);
+                const recentContentHtml = tableify(data.recently);
 
-            const usersHtml = tableify(data.users);
+                adapter.setState(`${entry.listUuid}.contentHtml`, contentHtml, true);
+                adapter.setState(`${entry.listUuid}.contentHtmlNoHead`, contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml, true);
+                adapter.setState(`${entry.listUuid}.recentContentHtml`, recentContentHtml, true);
+                adapter.setState(`${entry.listUuid}.recentContentHtmlNoHead`, recentContentHtml.includes(`</thead>`) ? `<table>${recentContentHtml.split(`</thead>`)[1]}` : recentContentHtml, true);
+                adapter.setState(`${entry.listUuid}.count`, data.purchase.length, true);
+            });
 
-            adapter.setState(`${entry.listUuid}.usersHtml`, usersHtml, true);
-            adapter.setState(`${entry.listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
-        }).catch(e => {
-            adapter.log.warn(e);
-        });
+            bring.getAllUsersFromList(entry.listUuid).then(data => {
+                adapter.log.debug(`[DATA] Users from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
+                adapter.setState(`${entry.listUuid}.users`, JSON.stringify(data.users), true);
 
-        if (polling.all) clearTimeout(polling.all);
-        polling.all = setTimeout(pollAllLists, 90000);
-    }
+                const usersHtml = tableify(data.users);
+
+                adapter.setState(`${entry.listUuid}.usersHtml`, usersHtml, true);
+                adapter.setState(`${entry.listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
+            });
+        } // endFor
+    } catch (e) {
+        adapter.log.warn(e);
+    } // endTryCatch
+
+    if (polling.all) clearTimeout(polling.all);
+    polling.all = setTimeout(pollAllLists, 90000);
 } // endPollAllLists
 
 async function tryLogin() {
