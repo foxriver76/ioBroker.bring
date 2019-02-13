@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "news": {
+            "0.0.8": {
+                "en": "added html states without header and minor fixes",
+                "de": "HTML-Status ohne Header und kleinere Korrekturen hinzugefügt",
+                "ru": "добавлены HTML-состояния без заголовка и незначительных исправлений",
+                "pt": "adicionou estados html sem cabeçalho e pequenas correções",
+                "nl": "html-staten toegevoegd zonder header en kleine fixes",
+                "fr": "ajout d'états html sans en-tête ni correctifs mineurs",
+                "it": "stati aggiunti html senza intestazione e correzioni minori",
+                "es": "Estados HTML añadidos sin encabezado y correcciones menores",
+                "pl": "dodano stany html bez nagłówka i drobnych poprawek",
+                "zh-cn": "添加了没有标题和次要修复的html状态"
+            },
             "0.0.7": {
                 "en": "fixed a potential memory leak by setTimeout functions",
                 "de": "ein potentieller Speicherverlust durch setTimeout-Funktionen behoben",
@@ -14,18 +26,6 @@
                 "es": "arreglado una pérdida potencial de memoria por las funciones setTimeout",
                 "pl": "naprawiono potencjalny wyciek pamięci przez funkcje setTimeout",
                 "zh-cn": "通过setTimeout函数修复了潜在的内存泄漏"
-            },
-            "0.0.6": {
-                "en": "create html states and counter",
-                "de": "HTML-Status und Zähler erstellen",
-                "ru": "создавать HTML-состояния и счетчик",
-                "pt": "criar estados e contador de html",
-                "nl": "HTML-status en teller maken",
-                "fr": "créer des états html et contrer",
-                "it": "creare stati e counter html",
-                "es": "crear estados html y contador",
-                "pl": "utwórz stany html i licznik",
-                "zh-cn": "创建html状态和计数器"
             },
             "0.0.4": {
                 "en": "fix when login fails",

@@ -51,7 +51,7 @@ function startAdapter(options) {
 
     adapter.on(`stateChange`, async (id, state) => {
         if (!id || !state || state.ack) return;
-        adapter.log.warn(`[STATE] Changed ${id} to ${state.val}`);
+        adapter.log.debug(`[STATE] Changed ${id} to ${state.val}`);
         const listId = id.split(`.`)[2];
         const method = id.split(`.`).pop();
 
@@ -112,8 +112,14 @@ function pollList(listUuid) {
         adapter.log.debug(`[DATA] Items from ${listUuid} loaded: ${JSON.stringify(data)}`);
         adapter.setState(`${listUuid}.content`, JSON.stringify(data.purchase), true);
         adapter.setState(`${listUuid}.recentContent`, JSON.stringify(data.recently), true);
-        adapter.setState(`${listUuid}.contentHtml`, tableify(data.purchase), true);
-        adapter.setState(`${listUuid}.recentContentHtml`, tableify(data.recently), true);
+
+        const contentHtml = tableify(data.purchase);
+        const recentContentHtml = tableify(data.recently);
+
+        adapter.setState(`${listUuid}.contentHtml`, contentHtml, true);
+        adapter.setState(`${listUuid}.contentHtmlNoHead`, `<table>${contentHtml.split(`</thead>`)[1]}`, true);
+        adapter.setState(`${listUuid}.recentContentHtml`, recentContentHtml, true);
+        adapter.setState(`${listUuid}.recentContentHtmlNoHead`, `<table>${recentContentHtml.split(`</thead>`)[1]}`, true);
         adapter.setState(`${listUuid}.count`, data.purchase.length, true);
     }).catch(e => {
         adapter.log.warn(e);
@@ -122,7 +128,11 @@ function pollList(listUuid) {
     bring.getAllUsersFromList(listUuid).then(data => {
         adapter.log.debug(`[DATA] Users from ${listUuid} loaded: ${JSON.stringify(data)}`);
         adapter.setState(`${listUuid}.users`, JSON.stringify(data.users), true);
-        adapter.setState(`${listUuid}.usersHtml`, tableify(data.users), true);
+
+        const usersHtml = tableify(data.users);
+
+        adapter.setState(`${listUuid}.usersHtml`, usersHtml, true);
+        adapter.setState(`${listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
     }).catch(e => {
         adapter.log.warn(e);
     });
@@ -221,6 +231,48 @@ async function pollAllLists() {
                 role: `list.html`,
                 name: `Users`,
                 desc: `Users of ${entry.name}`,
+                read: true,
+                write: false,
+                type: `string`,
+                def: `[]`
+            },
+            native: {}
+        }));
+
+        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.contentHtmlNoHead`, {
+            type: `state`,
+            common: {
+                role: `list.html`,
+                name: `Content`,
+                desc: `Content of ${entry.name} w/o header`,
+                read: true,
+                write: false,
+                type: `string`,
+                def: `[]`
+            },
+            native: {}
+        }));
+
+        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.recentContentHtmlNoHead`, {
+            type: `state`,
+            common: {
+                role: `list.html`,
+                name: `Recent Content`,
+                desc: `Recent Content of ${entry.name} w/o header`,
+                read: true,
+                write: false,
+                type: `string`,
+                def: `[]`
+            },
+            native: {}
+        }));
+
+        promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.usersHtmlNoHead`, {
+            type: `state`,
+            common: {
+                role: `list.html`,
+                name: `Users`,
+                desc: `Users of ${entry.name} w/o header`,
                 read: true,
                 write: false,
                 type: `string`,

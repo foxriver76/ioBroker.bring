@@ -33,21 +33,23 @@ For a description of the created states, see below.
 ### Shopping lists
 For every shopping list a channel with the following states will be created:
 
-* *list*.content / *list*.contentHtml
+* *list*.content / *list*.contentHtml/NoHead
 
     |Data type|Permission|                                                                       
     |:---:|:---:|
     |string|R|
 
-   *Read only json/html string formatted as a list or html table. Contains the items which are currently on your shopping list.*
+   *Read only json/html string formatted as a list or html table. Contains the items which are currently on your shopping list.
+   The NoHead Html tables are w/o table headers.*
    
-* *list*.recentContent / *list*.recentContentHtml
+* *list*.recentContent / *list*.recentContentHtml/NoHead
 
     |Data type|Permission|                                                                       
     |:---:|:---:|
     |string|R|
 
-   *Read only json/html string formatted as a list or html table. Contains the items which were recently on your shopping list.*
+   *Read only json/html string formatted as a list or html table. Contains the items which were recently on your shopping list.
+   The NoHead Html tables are w/o table headers.*
    
 * *list*.removeItem
 
@@ -72,14 +74,15 @@ For every shopping list a channel with the following states will be created:
    *Note, that everything behind the comma describes the specification. 
    The state will be acknowledged when the command is acknowledged by the Bring! API.*
     
-* *list*.users / *list*.usersHtml
+* *list*.users / *list*.usersHtml/NoHead
 
     |Data type|Permission|                                                                       
     |:---:|:---:|
     |string|R|
 
    *Read only json/html string formatted as a list or html table. Contains the users which are part of the shopping list, 
-   as well as their email address.*
+   as well as their email address.
+   The NoHead Html tables are w/o table headers.*
    
 * *list*.count
 
@@ -88,6 +91,10 @@ For every shopping list a channel with the following states will be created:
     |number|R|
 
    *Read only number, which represents the number of contained items of the list.*
+   
+### 0.0.8
+* (foxriver76) add html states w/o header
+* (foxriver76) minor fixes
    
 ### 0.0.7
 * (foxriver76) fixed a potential memory leak by setTimeout functions
