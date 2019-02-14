@@ -92,6 +92,9 @@ For every shopping list a channel with the following states will be created:
 
    *Read only number, which represents the number of contained items of the list.*
    
+### 0.0.10
+* (foxriver76) set info.connection state to false, when cannot get data
+   
 ### 0.0.9
 * (foxriver76) also update no head states on normal polling
 * (foxriver76) fix bug where polling could grow exponentially

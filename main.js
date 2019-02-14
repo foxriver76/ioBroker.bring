@@ -58,9 +58,11 @@ function startAdapter(options) {
         if (method === `removeItem`) {
             try {
                 await bring.removeItem(listId, state.val);
+                ensureOnlineState(true);
                 adapter.log.info(`[REMOVE] Removed ${state.val} from ${listId}`);
                 adapter.setState(id, state.val, true);
             } catch (e) {
+                ensureOnlineState(false);
                 adapter.log.warn(e);
             }
         } else if (method === `saveItem`) {
@@ -68,9 +70,11 @@ function startAdapter(options) {
                 const item = state.val.split(`,`)[0].trim() || state.val;
                 const specification = state.val.includes(`,`) ? state.val.substring(state.val.indexOf(`,`) + 1).trim() : ``;
                 await bring.saveItem(listId, item, specification);
+                ensureOnlineState(true);
                 adapter.log.info(`[SAVE] Saved ${item} (${specification}) to ${listId}`);
                 adapter.setState(id, state.val, true);
             } catch (e) {
+                ensureOnlineState(false);
                 adapter.log.warn(e);
             }
         } // endElseIf
@@ -108,34 +112,37 @@ async function main() {
 
 function pollList(listUuid) {
     adapter.log.debug(`[POLL] Poll specific list: ${listUuid}`);
-    bring.getItems(listUuid).then(data => {
-        adapter.log.debug(`[DATA] Items from ${listUuid} loaded: ${JSON.stringify(data)}`);
-        adapter.setState(`${listUuid}.content`, JSON.stringify(data.purchase), true);
-        adapter.setState(`${listUuid}.recentContent`, JSON.stringify(data.recently), true);
 
-        const contentHtml = tableify(data.purchase);
-        const recentContentHtml = tableify(data.recently);
+    try {
+        bring.getItems(listUuid).then(data => {
+            adapter.log.debug(`[DATA] Items from ${listUuid} loaded: ${JSON.stringify(data)}`);
+            adapter.setState(`${listUuid}.content`, JSON.stringify(data.purchase), true);
+            adapter.setState(`${listUuid}.recentContent`, JSON.stringify(data.recently), true);
 
-        adapter.setState(`${listUuid}.contentHtml`, contentHtml, true);
-        adapter.setState(`${listUuid}.contentHtmlNoHead`, contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml, true);
-        adapter.setState(`${listUuid}.recentContentHtml`, recentContentHtml, true);
-        adapter.setState(`${listUuid}.recentContentHtmlNoHead`, recentContentHtml.includes(`</thead>`) ? `<table>${recentContentHtml.split(`</thead>`)[1]}` : recentContentHtml, true);
-        adapter.setState(`${listUuid}.count`, data.purchase.length, true);
-    }).catch(e => {
+            const contentHtml = tableify(data.purchase);
+            const recentContentHtml = tableify(data.recently);
+
+            adapter.setState(`${listUuid}.contentHtml`, contentHtml, true);
+            adapter.setState(`${listUuid}.contentHtmlNoHead`, contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml, true);
+            adapter.setState(`${listUuid}.recentContentHtml`, recentContentHtml, true);
+            adapter.setState(`${listUuid}.recentContentHtmlNoHead`, recentContentHtml.includes(`</thead>`) ? `<table>${recentContentHtml.split(`</thead>`)[1]}` : recentContentHtml, true);
+            adapter.setState(`${listUuid}.count`, data.purchase.length, true);
+        });
+
+        bring.getAllUsersFromList(listUuid).then(data => {
+            ensureOnlineState(true);
+            adapter.log.debug(`[DATA] Users from ${listUuid} loaded: ${JSON.stringify(data)}`);
+            adapter.setState(`${listUuid}.users`, JSON.stringify(data.users), true);
+
+            const usersHtml = tableify(data.users);
+
+            adapter.setState(`${listUuid}.usersHtml`, usersHtml, true);
+            adapter.setState(`${listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
+        });
+    } catch (e) {
         adapter.log.warn(e);
-    });
-
-    bring.getAllUsersFromList(listUuid).then(data => {
-        adapter.log.debug(`[DATA] Users from ${listUuid} loaded: ${JSON.stringify(data)}`);
-        adapter.setState(`${listUuid}.users`, JSON.stringify(data.users), true);
-
-        const usersHtml = tableify(data.users);
-
-        adapter.setState(`${listUuid}.usersHtml`, usersHtml, true);
-        adapter.setState(`${listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
-    }).catch(e => {
-        adapter.log.warn(e);
-    });
+        ensureOnlineState(false);
+    } // endTryCatch
 } // endPollList
 
 async function pollAllLists() {
@@ -144,8 +151,9 @@ async function pollAllLists() {
     try {
         const bringLists = await bring.loadLists();
 
-
         adapter.log.debug(`[DATA] Lists loaded: ${JSON.stringify(bringLists)}`);
+
+        ensureOnlineState(true);
 
         for (const entry of bringLists.lists) {
             const promises = [];
@@ -355,6 +363,7 @@ async function pollAllLists() {
         } // endFor
     } catch (e) {
         adapter.log.warn(e);
+        ensureOnlineState(false);
     } // endTryCatch
 
     if (polling.all) clearTimeout(polling.all);
@@ -377,6 +386,15 @@ async function tryLogin() {
         loginTimeout = setTimeout(tryLogin, 30000);
     } // endCatch
 } // endTryLogin
+
+async function ensureOnlineState(onlineState) {
+    try {
+        const currentState = await adapter.getStateAsync(`info.connection`);
+        if (currentState !== onlineState) adapter.setState(`info.connection`, onlineState, true);
+    } catch (e) {
+        adapter.setState(`info.connection`, onlineState, true);
+    } // endTryCatch
+} // endEnsureOnlineState
 
 if (module && module.parent) {
     module.exports = startAdapter;

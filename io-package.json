@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "0.0.9",
+        "version": "0.0.10",
         "news": {
+            "0.0.10": {
+                "en": "set info.connection state to false, when cannot get data",
+                "de": "Setze den Status von info.connection auf false, wenn keine Daten abgerufen werden können",
+                "ru": "установить состояние info.connection в false, когда не удается получить данные",
+                "pt": "defina state.connection state como false, quando não puder obter dados",
+                "nl": "set info.connection state to false, when can not get data",
+                "fr": "définir l'état info.connection sur false, lorsqu'il est impossible d'obtenir des données",
+                "it": "imposta lo stato info.connection su false, quando non è possibile ottenere i dati",
+                "es": "establezca el estado de info.connection en falso, cuando no pueda obtener datos",
+                "pl": "ustaw stan info.connection na false, kiedy nie można uzyskać danych",
+                "zh-cn": "将info.connection状态设置为false，何时无法获取数据"
+            },
             "0.0.9": {
                 "en": "also updating no head states on normal polling, important bugfixes and handle no internet connection error",
                 "de": "Es werden auch NoHead Zustände beim normalen Polling aktualisiert, wichtige Bugfixes und keine Internetverbindungsfehler behandelt",
