@@ -7,12 +7,12 @@ Der Bring! Adapter ermöglicht die Einbindung aller Bring! Einkaufslisten eines 
 ## Überblick
 
 ### Bring!
-Bei Bring! handelt es sich um eine Applikation für mobile Endgeräte sowie Web-App um Einkaufslisten, kollaborativ zu 
+Bei Bring! handelt es sich um eine Applikation für mobile Endgeräte sowie Web-App, um Einkaufslisten kollaborativ zu 
 nutzen. So kann im Haushalt gemeinsam eine Einkaufsliste genutzt werden und wird automatisch mit den anderen Mitgliedern
 der Liste synchronisiert.
 
 ### Bring! Adapter
-Der Bring! Adapter findet nach Anmeldung mittels E-Mail und Passwort des Bring! Accounts automatisch alle Listen
+Der Bring! Adapter findet nach Anmeldung mittels E-Mail Adresse und Passwort des Bring! Accounts automatisch alle Listen
 des entsprechenden Nutzers. 
 <br/>
 Der Adapter legt automatisch alle Listen in Form von Channels an und bietet neben der Darstellung der Liste als JSON 
