@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "0.0.10",
+        "version": "1.0.0",
         "news": {
+            "1.0.0": {
+                "en": "stable release",
+                "de": "stabile Version",
+                "ru": "стабильный выпуск",
+                "pt": "versão estável",
+                "nl": "stabiele vrijlating",
+                "fr": "version stable",
+                "it": "rilascio stabile",
+                "es": "lanzamiento estable",
+                "pl": "wersja stabilna",
+                "zh-cn": "稳定释放"
+            },
             "0.0.10": {
                 "en": "set info.connection state to false, when cannot get data",
                 "de": "Setze den Status von info.connection auf false, wenn keine Daten abgerufen werden können",

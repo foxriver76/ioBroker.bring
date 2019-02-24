@@ -91,6 +91,11 @@ For every shopping list a channel with the following states will be created:
     |number|R|
 
    *Read only number, which represents the number of contained items of the list.*
+
+## Changelog
+
+### 1.0.0
+* (foxriver76) stable release
    
 ### 0.0.10
 * (foxriver76) set info.connection state to false, when cannot get data
