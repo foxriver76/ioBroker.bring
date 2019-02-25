@@ -91,8 +91,20 @@ For every shopping list a channel with the following states will be created:
     |number|R|
 
    *Read only number, which represents the number of contained items of the list.*
+   
+* *list*.messageTrigger
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |button|R/W|
+    
+    *If you press this button, the shopping list will be sent to the configured instances, e. g. Pushover, Telegram 
+    or/and E-Mail*
 
 ## Changelog
+
+### 1.1.0
+* (foxriver76) add possibility to send messages
 
 ### 1.0.0
 * (foxriver76) stable release

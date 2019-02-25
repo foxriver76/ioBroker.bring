@@ -1,4 +1,14 @@
 {
+    "All Receiver": "Весь приемник",
     "E-mail address": "Адрес электронной почты",
-    "Password": "пароль"
+    "Notifications": "Уведомления",
+    "Password": "пароль",
+    "device ID (optional)": "Идентификатор устройства (необязательно)",
+    "email instance": "E-Mail Instance",
+    "email receiver": "E-Mail Receiver",
+    "email sender": "E-Mail Sender",
+    "notifications type": "Тип уведомлений",
+    "pushover instance": "Pushover Instance",
+    "telegram instance": "Telegram Instance",
+    "telegram receiver": "Telegram Receiver"
 }

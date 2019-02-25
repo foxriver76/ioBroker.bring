@@ -1,4 +1,14 @@
 {
+    "All Receiver": "Alle Empfänger",
     "E-mail address": "E-Mail Adresse",
-    "Password": "Passwort"
+    "Notifications": "Benachrichtigungen",
+    "Password": "Passwort",
+    "device ID (optional)": "Device ID (optional)",
+    "email instance": "E-Mail Instanz",
+    "email receiver": "E-Mail Empfänger",
+    "email sender": "E-Mail Absender",
+    "notifications type": "Benachrichtigungsart",
+    "pushover instance": "Pushover Instanz",
+    "telegram instance": "Telegram Instanz",
+    "telegram receiver": "Telegram Empfänger"
 }

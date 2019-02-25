@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "news": {
+            "1.1.0": {
+                "en": "add possibility to send messages",
+                "de": "Möglichkeit hinzufügen, Nachrichten zu senden",
+                "ru": "добавить возможность отправлять сообщения",
+                "pt": "adicionar possibilidade de enviar mensagens",
+                "nl": "mogelijkheid toevoegen om berichten te verzenden",
+                "fr": "ajouter la possibilité d'envoyer des messages",
+                "it": "aggiungere la possibilità di inviare messaggi",
+                "es": "Añadir posibilidad de enviar mensajes.",
+                "pl": "dodaj możliwość wysyłania wiadomości",
+                "zh-cn": "增加发送消息的可能性"
+            },
             "1.0.0": {
                 "en": "stable release",
                 "de": "stabile Version",
@@ -129,7 +141,15 @@
     },
     "native": {
         "mail": "",
-        "password": ""
+        "password": "",
+        "notificationsType": "E-Mail",
+        "emailInstance": "",
+        "telegramInstance": "",
+        "pushoverInstance": "",
+        "emailSender": "",
+        "emailReceiver": "",
+        "telegramReceiver": "",
+        "pushoverDeviceID": ""
     },
     "protectedNative": [
         "mail",

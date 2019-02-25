@@ -66,6 +66,16 @@
                         });
                     }
                 });
+
+                showOrHide(settings);
+                $('#notificationsType').on('change', function () {
+                    showOrHide(settings);
+                });
+
+                $('#telegramInstance').on('change', function () {
+                    fillTelegramUser(settings['telegramReceiver'], $(this).val());
+                });
+
                 onChange(false);
                 M.updateTextFields();  // function Materialize.updateTextFields(); to reinitialize all the Materialize labels on the page if you are dynamically adding inputs.
             });
@@ -86,29 +96,149 @@
             });
             callback(obj);
         }
+
+        function showOrHide(settings) {
+            switch ($('#notificationsType').val()) {
+                case 'E-Mail':
+                    $('.email').show();
+                    $('.pushover').hide();
+                    $('.telegram').hide();
+                    $('#notificationsType').val('E-Mail').select();
+                    getAdapterInstances('email', function (instances) {
+                        fillInstances('emailInstance', instances, settings['emailInstance']);
+                    });
+                    break;
+                case 'Telegram':
+                    $('.email').hide();
+                    $('.pushover').hide();
+                    $('.telegram').show();
+                    $('#notificationsType').val('Telegram').select();
+                    getAdapterInstances('telegram', function (instances) {
+                        fillInstances('telegramInstance', instances, settings['telegramInstance']);
+                        fillTelegramUser(settings['telegramReceiver'], settings['telegramInstance']);
+                    });
+                    break;
+                case 'Pushover':
+                    $('.email').hide();
+                    $('.pushover').show();
+                    $('.telegram').hide();
+                    $('#notificationsType').val('Pushover').select();
+                    getAdapterInstances('pushover', function (instances) {
+                        fillInstances('pushoverInstance', instances, settings['pushoverInstance']);
+                    });
+                    break;
+            }
+        }
+
+        function fillInstances(id, arr, val) {
+            var $sel = $('#' + id);
+            $sel.html('<option value="">' + _('none') + '</option>');
+            for (var i = 0; i < arr.length; i++) {
+                var _id = arr[i]._id.replace('system.adapter.', '');
+                $sel.append('<option value="' + _id + '"' + (_id === val ? ' selected' : '') + '>' + _id + '</option>');
+            }
+            $sel.select();
+        }
+
+        function fillTelegramUser(id, instance) {
+            sendTo(null, 'getTelegramUsers', instance, function (obj) {
+                var users = obj.replace(/[{}"\\]/g, "").split(',');
+                var $sel = $('#telegramReceiver');
+                $sel.html('<option value="allTelegramUsers">' + _('All Receiver') + '</option>');
+
+                users.forEach(function (val) {
+                    val = val.split(':');
+                    $('#telegramReceiver').append('<option value="' + val[1] + '"' + (id === val[1] ? ' selected' : '') + '>' + val[1] + '</option>');
+                });
+                $sel.select();
+            });
+        }
     </script>
 </head>
 <body>
 <!-- you have to put your config page in a div with id adapter-container -->
 <div class="m adapter-container">
     <div class="row">
-        <!-- Forms are the standard way to receive user inputted data.
-     Learn more http://materializecss.com/forms.html-->
-        <div class="row">
-            <div class="input-field col s6">
-                <img src="bring.png" class="logo">
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col s5"><a href="#tab-main" class="translate active">Main settings</a></li>
+                <li class="tab col s5"><a href="#tab-notifications" class="translate">Notifications</a></li>
+            </ul>
+        </div>
+        <div id="tab-main" class="col s12 page">
+            <div class="row">
+                <div class="input-field col s6">
+                    <img src="bring.png" class="logo">
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12 m6 l4">
+                    <input class="value validate" id="mail" data-crypt="1" type="email">
+                    <label for="mail" class="translate">E-mail address</label>
+                    <span class="helper-text" data-error="Invalid Email"></span>
+                </div>
+                <div class="input-field col s12 m6 l4">
+                    <input class="value" id="password" data-crypt="1" type="password">
+                    <label for="password" class="translate">Password</label>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="input-field col s12 m6 l4">
-            <input class="value validate" id="mail" data-crypt="1" type="email">
-            <label for="mail" class="translate">E-mail address</label>
-            <span class="helper-text" data-error="Invalid Email"></span>
-        </div>
-        <div class="input-field col s12 m6 l4">
-            <input class="value" id="password" data-crypt="1" type="password">
-            <label for="password" class="translate">Password</label>
+        <div id="tab-notifications" class="col s12 page">
+            <div class="row">
+            </div>
+            <div class="row">
+                <div class="input-field col s11 m2">
+                    <select class="value" id="notificationsType">
+                        <option value="E-Mail" class="translate">E-Mail</option>
+                        <option value="Telegram" class="translate">Telegram</option>
+                        <option value="Pushover" class="translate">Pushover</option>
+                    </select>
+                    <label for="notificationsType" class="translate">notifications type</label>
+                </div>
+            </div>
+            <!-- Telegram -->
+            <div class="row telegram">
+                <div class="input-field col s12 m6 l3 telegram">
+                    <select id="telegramInstance" class="value"></select>
+                    <label for="telegramInstance" class="translate">telegram instance</label>
+                </div>
+                <div class="input-field col s12 m6 l3 telegram">
+                    <select class="value" id="telegramReceiver"></select>
+                    <label class="translate" for="telegramReceiver">telegram receiver</label>
+                </div>
+            </div>
+            <!-- Pushover -->
+            <div class="row pushover">
+                <div class="input-field col s12 m6 l3 pushover">
+                    <select id="pushoverInstance" class="value"></select>
+                    <label for="pushoverInstance" class="translate">pushover instance</label>
+                </div>
+            </div>
+            <div class="row pushover">
+                <div class="input-field col s12 m6 l3 pushover">
+                    <input class="value" id="pushoverDeviceID" type="text">
+                    <label for="pushoverDeviceID" class="translate">device ID (optional)</label>
+                </div>
+            </div>
+            <!-- email -->
+            <div class="row email">
+                <div class="input-field col s12 m6 l3 email">
+                    <input class="value validate" id="emailReceiver" type="text">
+                    <label for="emailReceiver" class="translate">email receiver</label>
+                    <span class="helper-text" data-error="Invalid Email"></span>
+                </div>
+                <div class="input-field col s12 m6 l3 email">
+                    <input class="value validate" id="emailSender" type="text">
+                    <label for="emailSender" class="translate">email sender</label>
+                    <span class="helper-text" data-error="Invalid Email"></span>
+                </div>
+            </div>
+            <div class="row email">
+                <div class="input-field col s12 m6 l3 email">
+                    <select id="emailInstance" class="value"></select>
+                    <label for="emailInstance" class="translate">email instance</label>
+                </div>
+            </div>
         </div>
     </div>
 </div>

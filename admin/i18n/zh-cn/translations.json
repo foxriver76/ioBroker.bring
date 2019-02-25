@@ -1,4 +1,14 @@
 {
+    "All Receiver": "所有接收者",
     "E-mail address": "电子邮件地址",
-    "Password": "密码"
+    "Notifications": "通知",
+    "Password": "密码",
+    "device ID (optional)": "设备ID（可选）",
+    "email instance": "电子邮件实例",
+    "email receiver": "电子邮件接收器",
+    "email sender": "电子邮件发件人",
+    "notifications type": "通知类型",
+    "pushover instance": "Pushover实例",
+    "telegram instance": "电报实例",
+    "telegram receiver": "电报接收器"
 }

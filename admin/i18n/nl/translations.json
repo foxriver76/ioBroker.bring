@@ -1,4 +1,14 @@
 {
+    "All Receiver": "All Receiver",
     "E-mail address": "E-mailadres",
-    "Password": "Wachtwoord"
+    "Notifications": "meldingen",
+    "Password": "Wachtwoord",
+    "device ID (optional)": "Apparaat-ID (optioneel)",
+    "email instance": "E-mailinstantie",
+    "email receiver": "E-mailontvanger",
+    "email sender": "E-mail afzender",
+    "notifications type": "Meldingen Type",
+    "pushover instance": "Pushover Instance",
+    "telegram instance": "Telegram-instantie",
+    "telegram receiver": "Telegram-ontvanger"
 }

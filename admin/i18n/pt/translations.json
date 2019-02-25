@@ -1,4 +1,14 @@
 {
+    "All Receiver": "Todo o receptor",
     "E-mail address": "Endereço de e-mail",
-    "Password": "Senha"
+    "Notifications": "Notificações",
+    "Password": "Senha",
+    "device ID (optional)": "ID do dispositivo (opcional)",
+    "email instance": "Instância de email",
+    "email receiver": "Receptor de e-mail",
+    "email sender": "Remetente de e-mail",
+    "notifications type": "Tipo de Notificações",
+    "pushover instance": "Instância de Pushover",
+    "telegram instance": "Instância de telegrama",
+    "telegram receiver": "Receptor de telegrama"
 }

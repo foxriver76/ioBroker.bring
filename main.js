@@ -26,6 +26,22 @@ function startAdapter(options) {
 
     adapter = new utils.Adapter(options);
 
+    adapter.on(`message`, obj => {
+        if (obj && obj.command === `getTelegramUsers`) {
+            adapter.getForeignState(`${obj.message}.communicate.users`, (err, state) => {
+                if (err) adapter.log.error(err);
+                if (state && state.val) {
+                    try {
+                        adapter.sendTo(obj.from, obj.command, state.val, obj.callback);
+                    } catch (err) {
+                        adapter.log.error(err);
+                        adapter.log.error(`Cannot parse stored user ID's from Telegram!`);
+                    }
+                }
+            });
+        }
+    });
+
     adapter.on(`unload`, callback => {
         try {
             adapter.log.info(`[END] Stopping Bring! adapter...`);
@@ -77,6 +93,56 @@ function startAdapter(options) {
                 ensureOnlineState(false);
                 adapter.log.warn(e);
             }
+        } else if (method === `messageTrigger`) {
+            let shoppingList;
+            try {
+                shoppingList = await adapter.getStateAsync(`${adapter.namespace}.${listId}.contentHtml`);
+                shoppingList = shoppingList.val;
+                adapter.log.warn(shoppingList);
+            } catch (e) {
+                adapter.log.error(`Error sending shopping list: ${e}`);
+            }
+
+            if (adapter.config.telegramInstance) {
+                try {
+                    if (adapter.config.telegramReceiver === `allTelegramUsers`) {
+                        await adapter.sendToAsync(adapter.config.telegramInstance, `send`, {text: `Einkaufsliste\n ${shoppingList}`});
+                    } else {
+                        await adapter.sendToAsync(adapter.config.telegramInstance, `send`, {
+                            user: adapter.config.telegramReceiver,
+                            text: `Einkaufsliste\n ${shoppingList}`
+                        });
+                    }
+                    adapter.log.info(`Sent shopping list to ${adapter.config.telegramInstance}`);
+                } catch (e) {
+                    adapter.log.error(`Error sending shopping list to ${adapter.config.telegramInstance}: ${e}`);
+                }
+            } // endIf
+
+            if (adapter.config.pushoverInstance) {
+                try {
+                    await adapter.sendToAsync(adapter.config.pushoverInstance, `send`,
+                        {message: shoppingList, title: `Einkaufsliste`, device: adapter.config.pushoverDeviceID});
+                    adapter.log.info(`Sent shopping list to ${adapter.config.pushoverInstance}`);
+                } catch (e) {
+                    adapter.log.error(`Error sending shopping list to ${adapter.config.pushoverInstance}: ${e}`);
+                }
+            } // endIf
+
+            if (adapter.config.emailInstance) {
+                try {
+                    await adapter.sendToAsync(adapter.config.emailInstance, `send`,
+                        {
+                            text: shoppingList,
+                            subject: `Einkaufsliste`,
+                            to: adapter.config.emailReceiver,
+                            from: adapter.config.emailSender
+                        });
+                    adapter.log.info(`Sent shopping list to ${adapter.config.emailInstance}`);
+                } catch (e) {
+                    adapter.log.error(`Error sending shopping list to ${adapter.config.emailInstance}: ${e}`);
+                }
+            } // endIf
         } // endElseIf
 
         if (!polling[listId]) polling[listId] = setTimeout(() => {
@@ -330,6 +396,19 @@ async function pollAllLists() {
                     write: false,
                     type: `number`,
                     def: ``
+                },
+                native: {}
+            }));
+
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.messageTrigger`, {
+                type: `state`,
+                common: {
+                    role: `button`,
+                    name: `Message Trigger`,
+                    desc: `Send Message to configured Instance`,
+                    read: true,
+                    write: true,
+                    type: `boolean`
                 },
                 native: {}
             }));

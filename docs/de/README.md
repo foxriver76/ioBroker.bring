@@ -146,3 +146,12 @@ Für jede Einkaufsliste wird ein Channel mit den folgenden Objekten angelegt:
     |number|R|
 
    *Read only number, welcher anzeigt, wie viele Gegenstände sich derzeit auf der Einkaufsliste befinden.*
+   
+* *list*.messageTrigger
+
+    |Datentyp|Berechtigung|                                                                       
+    |:---:|:---:|
+    |button|R/W|
+    
+    *Bei Betätigung des Buttons, wird eine Nachricht mittels Pushover, E-Mail und/oder Telegram and die konfigurierten
+     Instanzen versendet, welche die aktuelle Einkaufsliste enthält.*
