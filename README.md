@@ -105,6 +105,7 @@ For every shopping list a channel with the following states will be created:
 
 ### 1.1.0
 * (foxriver76) add possibility to send messages
+* (foxriver76) respect in app list renaming / recreate channel on name change
 
 ### 1.0.0
 * (foxriver76) stable release

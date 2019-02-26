@@ -7,9 +7,10 @@
 'use strict';
 
 const utils = require(`@iobroker/adapter-core`);
-const crypto = require(__dirname + `/lib/crypto`);
-const Bring = require(__dirname + `/lib/bring`);
+const crypto = require(`${__dirname}/lib/crypto`);
+const Bring = require(`${__dirname}/lib/bring`);
 const tableify = require(`tableify`);
+const i18nHelper = require(`${__dirname}/lib/i18nHelper`);
 let adapter;
 
 let mail;
@@ -17,12 +18,11 @@ let password;
 let bring;
 const polling = {};
 let loginTimeout;
+let lang;
 
 function startAdapter(options) {
     options = options || {};
-    Object.assign(options, {
-        name: `bring`
-    });
+    options = {...options, ...{name: `bring`}};
 
     adapter = new utils.Adapter(options);
 
@@ -52,8 +52,10 @@ function startAdapter(options) {
         } // endTryCatch
     });
 
-    adapter.on(`ready`, () => {
-        adapter.getForeignObjectAsync(`system.config`).then(obj => {
+    adapter.on(`ready`, async () => {
+
+        try {
+            const obj = await adapter.getForeignObjectAsync(`system.config`);
             if (obj && obj.native && obj.native.secret) {
                 password = crypto.decrypt(obj.native.secret, adapter.config.password);
                 mail = crypto.decrypt(obj.native.secret, adapter.config.mail);
@@ -61,8 +63,15 @@ function startAdapter(options) {
                 password = crypto.decrypt(`Zgfr56gFe87jJOM`, adapter.config.password);
                 mail = crypto.decrypt(`Zgfr56gFe87jJOM`, adapter.config.mail);
             } // endElse
-            main();
-        });
+
+            lang = (obj && obj.common && obj.common.language) ? obj.common.language : `en`;
+        } catch (e) {
+            lang = `en`;
+            password = crypto.decrypt(`Zgfr56gFe87jJOM`, adapter.config.password);
+            mail = crypto.decrypt(`Zgfr56gFe87jJOM`, adapter.config.mail);
+        } // endTryCatch
+
+        main();
     });
 
     adapter.on(`stateChange`, async (id, state) => {
@@ -94,23 +103,27 @@ function startAdapter(options) {
                 adapter.log.warn(e);
             }
         } else if (method === `messageTrigger`) {
-            let shoppingList;
+            let shoppingList = ``;
             try {
-                shoppingList = await adapter.getStateAsync(`${adapter.namespace}.${listId}.contentHtml`);
-                shoppingList = shoppingList.val;
-                adapter.log.warn(shoppingList);
+                let jsonShoppingList = await adapter.getStateAsync(`${adapter.namespace}.${listId}.content`);
+                jsonShoppingList = JSON.parse(jsonShoppingList.val);
+                for (const entry of jsonShoppingList) {
+                    shoppingList = `${shoppingList}${entry.specification ? entry.specification : i18nHelper.noDescription[lang]} - ${entry.name}\n`;
+                } // endFor
             } catch (e) {
                 adapter.log.error(`Error sending shopping list: ${e}`);
+                return;
             }
 
             if (adapter.config.telegramInstance) {
                 try {
                     if (adapter.config.telegramReceiver === `allTelegramUsers`) {
-                        await adapter.sendToAsync(adapter.config.telegramInstance, `send`, {text: `Einkaufsliste\n ${shoppingList}`});
+                        await adapter.sendToAsync(adapter.config.telegramInstance, `send`, {text: `*${i18nHelper.shoppingList[lang]}*\n${shoppingList}`, parse_mode: `Markdown`});
                     } else {
                         await adapter.sendToAsync(adapter.config.telegramInstance, `send`, {
                             user: adapter.config.telegramReceiver,
-                            text: `Einkaufsliste\n ${shoppingList}`
+                            text: `*${i18nHelper.shoppingList[lang]}*\n${shoppingList}`,
+                            parse_mode: `Markdown`
                         });
                     }
                     adapter.log.info(`Sent shopping list to ${adapter.config.telegramInstance}`);
@@ -122,7 +135,7 @@ function startAdapter(options) {
             if (adapter.config.pushoverInstance) {
                 try {
                     await adapter.sendToAsync(adapter.config.pushoverInstance, `send`,
-                        {message: shoppingList, title: `Einkaufsliste`, device: adapter.config.pushoverDeviceID});
+                        {message: shoppingList, title: i18nHelper.shoppingList[lang], device: adapter.config.pushoverDeviceID});
                     adapter.log.info(`Sent shopping list to ${adapter.config.pushoverInstance}`);
                 } catch (e) {
                     adapter.log.error(`Error sending shopping list to ${adapter.config.pushoverInstance}: ${e}`);
@@ -134,7 +147,7 @@ function startAdapter(options) {
                     await adapter.sendToAsync(adapter.config.emailInstance, `send`,
                         {
                             text: shoppingList,
-                            subject: `Einkaufsliste`,
+                            subject: i18nHelper.shoppingList[lang],
                             to: adapter.config.emailReceiver,
                             from: adapter.config.emailSender
                         });
@@ -224,13 +237,28 @@ async function pollAllLists() {
         for (const entry of bringLists.lists) {
             const promises = [];
 
-            promises.push(adapter.setObjectNotExistsAsync(entry.listUuid, {
-                type: `channel`,
-                common: {
-                    name: entry.name
-                },
-                native: {}
-            }));
+            try {
+                const existingList = await adapter.getObjectAsync(entry.listUuid);
+
+                // Lists can change name in the App
+                if (existingList.common.name !== entry.name) {
+                    promises.push(adapter.setObjectAsync(entry.listUuid, {
+                        type: `channel`,
+                        common: {
+                            name: entry.name
+                        },
+                        native: {}
+                    }));
+                } // endIf
+            } catch (e) {
+                promises.push(adapter.setObjectNotExistsAsync(entry.listUuid, {
+                    type: `channel`,
+                    common: {
+                        name: entry.name
+                    },
+                    native: {}
+                }));
+            } // endTryCatch
 
             promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.content`, {
                 type: `state`,

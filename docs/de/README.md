@@ -31,12 +31,26 @@ Nach Abschluss der Installation einer Adapterinstanz öffnet sich automatisch ei
 ## Konfiguration
 
 
-![Adapter Configuration](media/config.png "Adapterkonfiguration")<span style="color:grey">*Admin Oberfläche*</span>
+![Adapter Configuration](media/config.png "Haupteinstellungen")<span style="color:grey">*Tab Haupteinstellungen*</span>
 
 | Feld         | Beschreibung |                                                                       
 |:-------------|:-------------|
 |E-Mail Adresse|E-Mail Adresse des Bring! Accounts|
 |Passwort|Passwort des zugehörigen Accounts|
+
+![Adapter Notifications](media/notifications.png "Benachrichtigungen")<span style="color:grey">*Tab Benachrichtigungen*</span>
+
+Falls es gewünscht ist, Benachrichtigungen per Mail zu erhalten, kann dies im Tab __Benachrichtigungen__ konfiguriert 
+werden. Bei Betätigung des `messageTrigger` Buttons einer Liste, wird diese Liste an die konfigurierten Empfänger versendet.
+
+| Feld         | Beschreibung |                                                                       
+|:-------------|:-------------|
+|Benachrichtigungsart|Art der Benachrichtigung (E-Mail, Pushover, Telegram|
+|E-Mail Empfänger|Empfänger der Mail|
+|Telegram Empfänger|Empfänger der Telegram Nachricht|
+|E-Mail Absender|Absender Adresse der E-Mail|
+|Device ID (optional)| Pushover Device ID des Empfängers|
+|E-Mail/Pushover/Telegram Instanz|Instanz zum versenden der Nachricht|
 
 Nach Abschluss der Konfiguration wird der Konfigurationsdialog mit `SPEICHERN UND SCHLIEßEN` verlassen. 
 Dadurch efolgt im Anschluß ein Neustart des Adapters.
