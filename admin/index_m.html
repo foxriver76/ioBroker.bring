@@ -60,16 +60,17 @@
                         var val = $key.data('crypt') && settings[id] ? decrypt(secret, settings[id]) : settings[id];
                         // do not call onChange direct, because onChange could expect some arguments
                         $key.val(val).change(function () {
-                            onChange();
+                            if ($(this).attr('id') !== 'notificationsType')
+                                onChange();
                         }).keyup(function () {
                             onChange();
                         });
                     }
                 });
 
-                showOrHide(settings);
+                showOrHide();
                 $('#notificationsType').on('change', function () {
-                    showOrHide(settings);
+                    showOrHide();
                 });
 
                 $('#telegramInstance').on('change', function () {
@@ -79,6 +80,39 @@
                 onChange(false);
                 M.updateTextFields();  // function Materialize.updateTextFields(); to reinitialize all the Materialize labels on the page if you are dynamically adding inputs.
             });
+
+            function showOrHide() {
+                switch ($('#notificationsType').val()) {
+                    case 'E-Mail':
+                        $('.email').show();
+                        $('.pushover').hide();
+                        $('.telegram').hide();
+                        $('#notificationsType').val('E-Mail').select();
+                        getAdapterInstances('email', function (instances) {
+                            fillInstances('emailInstance', instances, ($('#emailInstance').val() !== null) ? $('#emailInstance').val() : settings['emailInstance']);
+                        });
+                        break;
+                    case 'Telegram':
+                        $('.email').hide();
+                        $('.pushover').hide();
+                        $('.telegram').show();
+                        $('#notificationsType').val('Telegram').select();
+                        getAdapterInstances('telegram', function (instances) {
+                            fillInstances('telegramInstance', instances, ($('#telegramInstance').val() !== null) ? $('#telegramInstance').val() : settings['telegramInstance']);
+                            fillTelegramUser($('#telegramReceiver').val() ? $('#telegramReceiver').val() : settings['telegramReceiver'], settings['telegramInstance']);
+                        });
+                        break;
+                    case 'Pushover':
+                        $('.email').hide();
+                        $('.pushover').show();
+                        $('.telegram').hide();
+                        $('#notificationsType').val('Pushover').select();
+                        getAdapterInstances('pushover', function (instances) {
+                            fillInstances('pushoverInstance', instances, ($('#pushoverInstance').val() !== null) ? $('#pushoverInstance').val() : settings['pushoverInstance']);
+                        });
+                        break;
+                }
+            }
         } // endLoad
 
         // ... and the function save has to exist.
@@ -95,39 +129,6 @@
                 }
             });
             callback(obj);
-        }
-
-        function showOrHide(settings) {
-            switch ($('#notificationsType').val()) {
-                case 'E-Mail':
-                    $('.email').show();
-                    $('.pushover').hide();
-                    $('.telegram').hide();
-                    $('#notificationsType').val('E-Mail').select();
-                    getAdapterInstances('email', function (instances) {
-                        fillInstances('emailInstance', instances, settings['emailInstance']);
-                    });
-                    break;
-                case 'Telegram':
-                    $('.email').hide();
-                    $('.pushover').hide();
-                    $('.telegram').show();
-                    $('#notificationsType').val('Telegram').select();
-                    getAdapterInstances('telegram', function (instances) {
-                        fillInstances('telegramInstance', instances, settings['telegramInstance']);
-                        fillTelegramUser(settings['telegramReceiver'], settings['telegramInstance']);
-                    });
-                    break;
-                case 'Pushover':
-                    $('.email').hide();
-                    $('.pushover').show();
-                    $('.telegram').hide();
-                    $('#notificationsType').val('Pushover').select();
-                    getAdapterInstances('pushover', function (instances) {
-                        fillInstances('pushoverInstance', instances, settings['pushoverInstance']);
-                    });
-                    break;
-            }
         }
 
         function fillInstances(id, arr, val) {
