@@ -50,7 +50,7 @@ werden. Bei Betätigung des `messageTrigger` Buttons einer Liste, wird diese Lis
 |Telegram Empfänger|Empfänger der Telegram Nachricht|
 |E-Mail Absender|Absender Adresse der E-Mail|
 |Device ID (optional)| Pushover Device ID des Empfängers|
-|E-Mail/Pushover/Telegram Instanz|Instanz zum versenden der Nachricht|
+|E-Mail/Pushover/Telegram Instanz|Instanz zum Versenden der Nachricht|
 
 Nach Abschluss der Konfiguration wird der Konfigurationsdialog mit `SPEICHERN UND SCHLIEßEN` verlassen. 
 Dadurch efolgt im Anschluß ein Neustart des Adapters.
