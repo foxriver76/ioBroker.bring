@@ -112,6 +112,9 @@ For every shopping list a channel with the following states will be created:
 
 ## Changelog
 
+### 1.2.1
+* (foxriver76) uri encode login request because it can contain special character
+
 ### 1.2.0
 * (foxriver76) added state which contains a speakable enumeration of each shopping list
 

@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.2.0",
+        "version": "1.2.1",
         "news": {
+            "1.2.1": {
+                "en": "uri encode login request because it can contain special character",
+                "de": "Anmeldeanforderung für die URI-Codierung, da Sonderzeichen enthalten sein",
+                "ru": "URI кодировать запрос на вход в систему, потому что он может содержать специальный символ",
+                "pt": "uri codifica o pedido de login porque pode conter caracteres especiais",
+                "nl": "uri codeert inlogaanvraag omdat het een speciaal teken kan bevatten",
+                "fr": "uri encoder la demande de connexion car il peut contenir des caractères spéciaux",
+                "it": "uri codifica la richiesta di accesso perché può contenere caratteri speciali",
+                "es": "uri codificar solicitud de inicio de sesión, ya que puede contener caracteres especiales",
+                "pl": "uri koduje żądanie logowania, ponieważ może zawierać znak specjalny",
+                "zh-cn": "uri编码登录请求，因为它可以包含特殊字符"
+            },
             "1.2.0": {
                 "en": "added state which contains a speakable enumeration of each shopping list",
                 "de": "hinzugefügter Zustand, der eine sprechbare Aufzählung jeder Einkaufsliste enthält",
