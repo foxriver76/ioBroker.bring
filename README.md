@@ -99,9 +99,21 @@ For every shopping list a channel with the following states will be created:
     |button|R/W|
     
     *If you press this button, the shopping list will be sent to the configured instances, e. g. Pushover, Telegram 
-    or/and E-Mail*
+    or/and E-Mail.*
+    
+* *list*.enumSentence
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R|
+    
+    *Read only string, which contains an enumeration of the shopping list items in a speakable form.
+    This can be used e. g. for voice output via smart assistants.*
 
 ## Changelog
+
+### 1.2.0
+* (foxriver76) added state which contains a speakable enumeration of each shopping list
 
 ### 1.1.0
 * (foxriver76) add possibility to send messages

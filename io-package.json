@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.1.0",
+        "version": "1.2.0",
         "news": {
+            "1.2.0": {
+                "en": "added state which contains a speakable enumeration of each shopping list",
+                "de": "hinzugefügter Zustand, der eine sprechbare Aufzählung jeder Einkaufsliste enthält",
+                "ru": "добавленное состояние, которое содержит понятное перечисление каждого списка покупок",
+                "pt": "estado adicionado que contém uma enumeração falável de cada lista de compras",
+                "nl": "toegevoegde status die een sprekende opsomming van elke boodschappenlijst bevat",
+                "fr": "état ajouté qui contient une énumération parlable de chaque liste de courses",
+                "it": "stato aggiunto che contiene un'enumerazione leggibile di ogni lista della spesa",
+                "es": "Estado agregado que contiene una enumeración hablable de cada lista de compras.",
+                "pl": "dodano stan, który zawiera wyraźne wyliczenie każdej listy zakupów",
+                "zh-cn": "添加状态，其中包含每个购物清单的可说明的枚举"
+            },
             "1.1.0": {
                 "en": "add possibility to send messages",
                 "de": "Möglichkeit hinzufügen, Nachrichten zu senden",

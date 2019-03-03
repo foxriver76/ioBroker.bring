@@ -118,7 +118,10 @@ function startAdapter(options) {
             if (adapter.config.telegramInstance) {
                 try {
                     if (adapter.config.telegramReceiver === `allTelegramUsers`) {
-                        await adapter.sendToAsync(adapter.config.telegramInstance, `send`, {text: `*${i18nHelper.shoppingList[lang]}*\n${shoppingList}`, parse_mode: `Markdown`});
+                        await adapter.sendToAsync(adapter.config.telegramInstance, `send`, {
+                            text: `*${i18nHelper.shoppingList[lang]}*\n${shoppingList}`,
+                            parse_mode: `Markdown`
+                        });
                     } else {
                         await adapter.sendToAsync(adapter.config.telegramInstance, `send`, {
                             user: adapter.config.telegramReceiver,
@@ -135,7 +138,11 @@ function startAdapter(options) {
             if (adapter.config.pushoverInstance) {
                 try {
                     await adapter.sendToAsync(adapter.config.pushoverInstance, `send`,
-                        {message: shoppingList, title: i18nHelper.shoppingList[lang], device: adapter.config.pushoverDeviceID});
+                        {
+                            message: shoppingList,
+                            title: i18nHelper.shoppingList[lang],
+                            device: adapter.config.pushoverDeviceID
+                        });
                     adapter.log.info(`Sent shopping list to ${adapter.config.pushoverInstance}`);
                 } catch (e) {
                     adapter.log.error(`Error sending shopping list to ${adapter.config.pushoverInstance}: ${e}`);
@@ -201,6 +208,20 @@ function pollList(listUuid) {
             const contentHtml = tableify(data.purchase);
             const recentContentHtml = tableify(data.recently);
 
+            // create na enumeration sentence e. g. for smart assistants
+            let enumSentence = ``;
+
+            data.purchase.forEach((value, index) => {
+                if (index === data.purchase.length - 1 && data.purchase.length > 1) {
+                    enumSentence += ` ${i18nHelper.conjunction[lang]} ${value.name}`;
+                } else if (index !== data.purchase.length - 2 && data.purchase.length > 1) {
+                    enumSentence += `${value.name}, `;
+                } else {
+                    enumSentence += value.name;
+                } // endElse
+            });
+
+            adapter.setState(`${listUuid}.enumSentence`, enumSentence, true);
             adapter.setState(`${listUuid}.contentHtml`, contentHtml, true);
             adapter.setState(`${listUuid}.contentHtmlNoHead`, contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml, true);
             adapter.setState(`${listUuid}.recentContentHtml`, recentContentHtml, true);
@@ -441,6 +462,19 @@ async function pollAllLists() {
                 native: {}
             }));
 
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.enumSentence`, {
+                type: `state`,
+                common: {
+                    role: `text`,
+                    name: `Enum Sentence`,
+                    desc: `A enum-like sentence containing the shopping list items`,
+                    read: true,
+                    write: false,
+                    type: `string`
+                },
+                native: {}
+            }));
+
             await Promise.all(promises);
 
             bring.getItems(entry.listUuid).then(data => {
@@ -451,6 +485,20 @@ async function pollAllLists() {
                 const contentHtml = tableify(data.purchase);
                 const recentContentHtml = tableify(data.recently);
 
+                // create na enumeration sentence e. g. for smart assistants
+                let enumSentence = ``;
+
+                data.purchase.forEach((value, index) => {
+                    if (index === data.purchase.length - 1 && data.purchase.length > 1) {
+                        enumSentence += ` ${i18nHelper.conjunction[lang]} ${value.name}`;
+                    } else if (index !== data.purchase.length - 2 && data.purchase.length > 1) {
+                        enumSentence += `${value.name}, `;
+                    } else {
+                        enumSentence += value.name;
+                    } // endElse
+                });
+
+                adapter.setState(`${entry.listUuid}.enumSentence`, enumSentence, true);
                 adapter.setState(`${entry.listUuid}.contentHtml`, contentHtml, true);
                 adapter.setState(`${entry.listUuid}.contentHtmlNoHead`, contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml, true);
                 adapter.setState(`${entry.listUuid}.recentContentHtml`, recentContentHtml, true);

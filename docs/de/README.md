@@ -169,3 +169,12 @@ Für jede Einkaufsliste wird ein Channel mit den folgenden Objekten angelegt:
     
     *Bei Betätigung des Buttons, wird eine Nachricht mittels Pushover, E-Mail und/oder Telegram and die konfigurierten
      Instanzen versendet, welche die aktuelle Einkaufsliste enthält.*
+     
+* *list*.enumSentence
+
+    |Datentyp|Berechtigung|                                                                       
+    |:---:|:---:|
+    |string|R|
+    
+    *Nur lesbarer String, welcher eine Auflistung der aktuellen Gegenstände in sprechbarer Form enthält. 
+    Eignet sich z. B. zur Sprachausgabe via Sprachassistenten.*
