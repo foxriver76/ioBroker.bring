@@ -140,6 +140,18 @@
                 "es": "Eliminar ID",
                 "pl": "Usuń identyfikator",
                 "zh-cn": "删除ID"
+            },
+            "text-for-adding": {
+                "en": "Placeholder for adding",
+                "de": "Platzhalter zum Hinzufügen",
+                "ru": "Заполнитель для добавления",
+                "pt": "Placeholder para adicionar",
+                "nl": "Tijdelijke aanduiding voor toevoegen",
+                "fr": "Espace réservé pour l'ajout",
+                "it": "Segnaposto per l'aggiunta",
+                "es": "Marcador de posición para añadir",
+                "pl": "Symbol zastępczy do dodania",
+                "zh-cn": "占位符用于添加"
             }
         });
     }
@@ -268,7 +280,7 @@
         type="text/ejs"
         class="vis-tpl"
         data-vis-prev='<img src="widgets/shopping-list/img/shopping-list.png"></img>'
-        data-vis-attrs="oid-list;oid-save;oid-remove;"
+        data-vis-attrs="oid-list;oid-save;oid-remove;text-for-adding/text"
         data-vis-set="bring"
         data-vis-type="ctrl"
         data-vis-name="bring-shopping-list">
@@ -279,7 +291,7 @@
         <% } %>
         <div class="vis-widget <%== this.data.attr('class') %>" style="width:230px; height:210px;min-width:145px" id="<%= this.data.attr('wid') %>" >
         <div class="row" style="padding-right:15px;">
-        <input type="text" placeholder="Hinzufügen" id="save" class="white-text" name="addArticle" data-save="<%= this.data['oid-save']; %>" style="height: 30px; width: 80%; min-width: 116px"
+        <input type="text" placeholder="<%= this.data['text-for-adding'] %>" id="save" class="white-text" name="addArticle" data-save="<%= this.data['oid-save']; %>" style="height: 30px; width: 80%; min-width: 116px"
         onkeypress="vis.binds['bring'].onkeypress(this)" data-list="<%= this.data['oid-list']; %>" data-remove="<%= this.data['oid-remove']; %>">
                 <a id="addButton" class="btn-floating waves-effect waves-light teal accent-4" style="float: right;text-align: center"><i class="material-icons table-button-add">add</i></a>
         </div>
