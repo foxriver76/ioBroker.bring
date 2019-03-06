@@ -150,7 +150,7 @@
     vis.binds['bring'] = {
         onclick: function (el) {
             var $el = $(el);
-            var item = $el.data('item').replace('_', ' ');
+            var item = $el.data('item').replace(/_/g, ' ');
             var oidRemove = $el.data('remove');
             if (oidRemove) {
                 vis.setValue(oidRemove, item);
@@ -191,10 +191,10 @@
 
         // add item instant to widget
         var html = '<div class="bring-item" style="background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
-            'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + item.replace(' ', '_') +
+            'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + item.replace(/ /g, '_') +
             ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
-            'data-list="' + stateId + '" data-item=' + item.replace(' ', '_') + '> ' +
-            '<img src="https://web.getbring.com/assets/images/items/' + item.toLowerCase().replace(' ', '_') + '.png" ' +
+            'data-list="' + stateId + '" data-item=' + item.replace(/ /g, '_') + '> ' +
+            '<img src="https://web.getbring.com/assets/images/items/' + item.toLowerCase().replace(/ /g, '_') + '.png" ' +
             'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + item.substring(0, 1).toLowerCase() +'.png\'" ' +
             'alt=' +  item + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + item + '" > ' +
             '<p style="font-size: 0.7em; width: 100%">' + item + '</p></div>';
@@ -214,10 +214,10 @@
             oidRemove = $(this).data('remove');
             newList = JSON.parse(vis.states[stateId + '.val']);
             var stillOnList = false;
-            knownList.push(this.id.replace('_', ' '));
+            knownList.push(this.id.replace(/_/g, ' '));
 
             for (var i = 0; i < newList.length; i++) {
-                if (newList[i].name === this.id.replace('_', ' ')) {
+                if (newList[i].name === this.id.replace(/_/g, ' ')) {
                     stillOnList = true;
                 } // endIf
             } // endFor
@@ -237,12 +237,12 @@
 
         for (var k = 0; k < newItems.length; k++) {
             var html = '<div class="bring-item" style="background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
-                'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + newItems[k].replace(' ', '_') +
+                'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + newItems[k].replace(/ /g, '_') +
                 ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
-                'data-list="' + stateId + '" data-item=' + newItems[k].replace(' ', '_') + '> ' +
-                '<img src="https://web.getbring.com/assets/images/items/' + newItems[k].toLowerCase().replace(' ', '_') + '.png" ' +
+                'data-list="' + stateId + '" data-item=' + newItems[k].replace(/ /g, '_') + '> ' +
+                '<img src="https://web.getbring.com/assets/images/items/' + newItems[k].toLowerCase().replace(/ /g, '_') + '.png" ' +
                 'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + newItems[k].substring(0, 1).toLowerCase() +'.png\'" ' +
-            'alt=' +  newItems[k] + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + newItems[k].replace(' ', '_') + '" > ' +
+            'alt=' +  newItems[k] + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + newItems[k].replace(/ /g, '_') + '" > ' +
             '<p style="font-size: 0.7em; width: 100%">' + newItems[k] + '</p></div>';
 
             $('#shoppinglist').append(html);
@@ -268,7 +268,7 @@
         <% } %>
         <div class="vis-widget <%== this.data.attr('class') %>" style="width:230px; height:210px;min-width:145px" id="<%= this.data.attr('wid') %>" >
         <div class="row" style="padding-right:15px;">
-        <input type="text" id="save" class="white-text" name="addArticle" data-save="<%= this.data['oid-save']; %>" style="height: 30px; width: 80%; min-width: 116px"
+        <input type="text" placeholder="Hinzufügen" id="save" class="white-text" name="addArticle" data-save="<%= this.data['oid-save']; %>" style="height: 30px; width: 80%; min-width: 116px"
         onkeypress="vis.binds['bring'].onkeypress(this)" data-list="<%= this.data['oid-list']; %>" data-remove="<%= this.data['oid-remove']; %>">
                 <a id="addButton" class="btn-floating waves-effect waves-light teal accent-4" style="float: right;text-align: center"><i class="material-icons table-button-add">add</i></a>
         </div>
@@ -278,12 +278,12 @@
               <% for (var i = 0; i < productArrayJSON.length; i++) {%>
                   <% var name = productArrayJSON[i].name; %>
                   <div class="bring-item" style="background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px;
-                  min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=<%= name.replace(' ', '_') %>
+                  min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=<%= name.replace(/ /g, '_') %>
                                     onclick="vis.binds['bring'].onclick(this)" data-remove="<%= this.data['oid-remove'] %>"
-                                     data-list="<%= this.data['oid-list'] %>" data-item= <%= name.replace(' ', '_') %> >
-                      <img src="https://web.getbring.com/assets/images/items/<%= name.toLowerCase().replace(' ', '_') %>.png"
+                                     data-list="<%= this.data['oid-list'] %>" data-item= <%= name.replace(/ /g, '_') %> >
+                      <img src="https://web.getbring.com/assets/images/items/<%= name.toLowerCase().replace(/ /g, '_') %>.png"
                       onerror="this.src='https://web.getbring.com/assets/images/items/<%= name.substring(0, 1).toLowerCase(); %>.png'"
-                      alt=<%= name %> align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-<%= name.replace(' ', '_') %>" >
+                      alt=<%= name %> align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-<%= name.replace(/ /g, '_') %>" >
                       <p style="font-size: 0.7em; width: 100%"> <%= name %> </p>
                   </div>
               <% } %>
