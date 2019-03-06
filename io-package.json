@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.2.1",
+        "version": "1.3.0",
         "news": {
+            "1.3.0": {
+                "en": "added widget",
+                "de": "Widget hinzugefügt",
+                "ru": "добавлен виджет",
+                "pt": "widget adicionado",
+                "nl": "toegevoegde widget",
+                "fr": "widget ajouté",
+                "it": "aggiunto widget",
+                "es": "widget añadido",
+                "pl": "dodano widżet",
+                "zh-cn": "添加小部件"
+            },
             "1.2.1": {
                 "en": "uri encode login request because it can contain special character",
                 "de": "Anmeldeanforderung für die URI-Codierung, da Sonderzeichen enthalten sein",

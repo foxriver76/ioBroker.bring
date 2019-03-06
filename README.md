@@ -112,6 +112,9 @@ For every shopping list a channel with the following states will be created:
 
 ## Changelog
 
+### 1.3.0
+* (foxriver76) added widget
+
 ### 1.2.1
 * (foxriver76) uri encode login request because it can contain special character
 

@@ -7,8 +7,9 @@
 -->
 
 <!-- here you can include so many js-files as you want -->
-<!--script type="text/javascript" src="widgets/template/js/template.js"></script-->
-
+<!--script type="text/javascript" src="widgets/js/materialize.js"></script-->
+<!--link rel="stylesheet" type="text/css" href="widgets/css/materialize.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"-->
 <!-- the full description of format in data-vis-attrs can be found here:
     https://github.com/ioBroker/ioBroker.vis/blob/master/www/js/visEditInspect.js#L39
 
@@ -143,6 +144,8 @@
         });
     }
 
+    var registered = false;
+
     // Binding to communicate with ejs script
     vis.binds['bring'] = {
         onclick: function (el) {
@@ -154,11 +157,44 @@
             }
 
             $el.remove();
+        },
+        onkeypress: function (event) {
+            if (registered) return;
+            $('#save').keypress(function (event) {
+                if (event.which !== 13) return;
+                saveItem();
+            });
+
+            $('#addButton').click(function () {
+                saveItem();
+            });
+            registered = true;
         }
     };
 
-    function checkItems(cb) {
+    function saveItem () {
+        var $save = $('#save');
+        var saveId = $save.data('save');
+        var item = $save.val();
+        $save.val('');
+        vis.setValue(saveId, item);
+        var stateId = $save.data('list');
+        var oidRemove = $save.data('remove');
 
+        // add item instant to widget
+        var html = '<div class="bring-item" style="background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
+            'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + item +
+            ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
+            'data-list="' + stateId + '" data-item=' + item + '> ' +
+            '<img src="https://web.getbring.com/assets/images/items/' + item.toLowerCase() + '.png" ' +
+            'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + item.substring(0, 1).toLowerCase() +'.png\'" ' +
+            'alt=' +  item + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + item + '" > ' +
+            '<p style="font-size: 0.7em; width: 100%">' + item + '</p></div>';
+
+        $('#shoppinglist').append(html);
+    }
+
+    function checkItems(cb) {
         var newItems = [];
         var knownList = [];
         var newList = [];
@@ -217,8 +253,18 @@
         data-vis-set="bring"
         data-vis-type="ctrl"
         data-vis-name="bring-shopping-list">
-    <div class="vis-widget <%== this.data.attr('class') %>" style="width:230px; height:210px;" id="<%= this.data.attr('wid') %>" >
-        <div class="template-class vis-widget-body <%== this.data.attr('class') %>" style="padding:2px" id="shoppinglist">
+        <% if (!vis.editMode) { %>
+            <% /* We are only loading CSS if we are productive, otherwise edit mode will be destroyed */ %>
+            <link rel="stylesheet" type="text/css" href="widgets/css/materialize.css">
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <% } %>
+        <div class="vis-widget <%== this.data.attr('class') %>" style="width:230px; height:210px;text-align: center" id="<%= this.data.attr('wid') %>" >
+        <div class="row" style="padding-right:10px;">
+        <input type="text" id="save" class="white-text" name="addArticle" data-save="<%= this.data['oid-save'] %>" style="height: 30px; width: 80%; min-width: 116px"
+        onkeypress="vis.binds['bring'].onkeypress(this)" data-list="<% this.data['oid-list']; %>" data-remove="<% this.data['oid-remove']; %>">
+                <a id="addButton" class="btn-floating waves-effect waves-light teal accent-4" style="float: right;text-align: center"><i class="material-icons table-button-add">add</i></a>
+        </div>
+        <div class="template-class vis-widget-body <%== this.data.attr('class') %>" style="padding:2px margin-top: 30px" id="shoppinglist">
               <% var productArray = vis.states[this.data.attr('oid-list') + '.val']; %>
               <% var productArrayJSON = JSON.parse(productArray); %>
               <% for (var i = 0; i < productArrayJSON.length; i++) {%>
