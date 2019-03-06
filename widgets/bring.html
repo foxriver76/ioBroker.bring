@@ -188,14 +188,19 @@
         // set state in backend
         vis.setValue(saveId, item);
         var oidRemove = $save.data('remove');
+        var alternative = item.substring(0, 1).toLowerCase();
+        if (/^(ä|ö|ü)/g.test(alternative)) {
+            alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
+        }
 
         // add item instant to widget
         var html = '<div class="bring-item" style="background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
             'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + item.replace(/ /g, '_') +
             ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
             'data-list="' + stateId + '" data-item=' + item.replace(/ /g, '_') + '> ' +
-            '<img src="https://web.getbring.com/assets/images/items/' + item.toLowerCase().replace(/ /g, '_') + '.png" ' +
-            'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + item.substring(0, 1).toLowerCase() +'.png\'" ' +
+            '<img src="https://web.getbring.com/assets/images/items/' + item.toLowerCase().replace(/ /g, '_')
+                .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
+            'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative +'.png\'" ' +
             'alt=' +  item + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + item + '" > ' +
             '<p style="font-size: 0.7em; width: 100%">' + item + '</p></div>';
 
@@ -235,13 +240,19 @@
             } // endIf
         } // endFor
 
+        var alternative;
         for (var k = 0; k < newItems.length; k++) {
+            alternative = newItems[k].substring(0, 1).toLowerCase();
+            if (/^(ä|ö|ü)/g.test(alternative)) {
+                alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
+            }
             var html = '<div class="bring-item" style="background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
                 'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + newItems[k].replace(/ /g, '_') +
                 ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
                 'data-list="' + stateId + '" data-item=' + newItems[k].replace(/ /g, '_') + '> ' +
-                '<img src="https://web.getbring.com/assets/images/items/' + newItems[k].toLowerCase().replace(/ /g, '_') + '.png" ' +
-                'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + newItems[k].substring(0, 1).toLowerCase() +'.png\'" ' +
+                '<img src="https://web.getbring.com/assets/images/items/' + newItems[k].toLowerCase().replace(/ /g, '_')
+                    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
+                'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative +'.png\'" ' +
             'alt=' +  newItems[k] + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + newItems[k].replace(/ /g, '_') + '" > ' +
             '<p style="font-size: 0.7em; width: 100%">' + newItems[k] + '</p></div>';
 
@@ -277,12 +288,17 @@
               <% var productArrayJSON = JSON.parse(productArray); %>
               <% for (var i = 0; i < productArrayJSON.length; i++) {%>
                   <% var name = productArrayJSON[i].name; %>
+                  <% var alternative = name.substring(0, 1).toLowerCase(); %>
+                  <% if (/^(ä|ö|ü)/g.test(alternative)) { %>
+                    <% alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue'); %>
+                  <% } %>
                   <div class="bring-item" style="background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px;
                   min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=<%= name.replace(/ /g, '_') %>
                                     onclick="vis.binds['bring'].onclick(this)" data-remove="<%= this.data['oid-remove'] %>"
                                      data-list="<%= this.data['oid-list'] %>" data-item= <%= name.replace(/ /g, '_') %> >
-                      <img src="https://web.getbring.com/assets/images/items/<%= name.toLowerCase().replace(/ /g, '_') %>.png"
-                      onerror="this.src='https://web.getbring.com/assets/images/items/<%= name.substring(0, 1).toLowerCase(); %>.png'"
+                      <img src="https://web.getbring.com/assets/images/items/<%= name.toLowerCase().replace(/ /g, '_')
+                       .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') %>.png"
+                      onerror="this.src='https://web.getbring.com/assets/images/items/<%= alternative; %>.png'"
                       alt=<%= name %> align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-<%= name.replace(/ /g, '_') %>" >
                       <p style="font-size: 0.7em; width: 100%"> <%= name %> </p>
                   </div>
