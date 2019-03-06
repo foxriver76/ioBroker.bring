@@ -194,7 +194,7 @@
         }
 
         // add item instant to widget
-        var html = '<div class="bring-item" style="background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
+        var html = '<div class="bring-item" style="overflow: hidden; background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
             'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + item.replace(/ /g, '_') +
             ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
             'data-list="' + stateId + '" data-item=' + item.replace(/ /g, '_') + '> ' +
@@ -202,7 +202,7 @@
                 .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
             'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative +'.png\'" ' +
             'alt=' +  item + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + item + '" > ' +
-            '<p style="font-size: 0.7em; width: 100%">' + item + '</p></div>';
+            '<p style="word-wrap: break-word; font-size: 0.8em; width: 100%">' + item + '</p></div>';
 
         $('#shoppinglist').append(html);
     }
@@ -246,7 +246,7 @@
             if (/^(ä|ö|ü)/g.test(alternative)) {
                 alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
             }
-            var html = '<div class="bring-item" style="background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
+            var html = '<div class="bring-item" style="overflow: hidden; background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
                 'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + newItems[k].replace(/ /g, '_') +
                 ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
                 'data-list="' + stateId + '" data-item=' + newItems[k].replace(/ /g, '_') + '> ' +
@@ -254,7 +254,7 @@
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
                 'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative +'.png\'" ' +
             'alt=' +  newItems[k] + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + newItems[k].replace(/ /g, '_') + '" > ' +
-            '<p style="font-size: 0.7em; width: 100%">' + newItems[k] + '</p></div>';
+            '<p style="word-wrap: break-word; font-size: 0.8em; width: 100%">' + newItems[k] + '</p></div>';
 
             $('#shoppinglist').append(html);
         }
@@ -292,7 +292,7 @@
                   <% if (/^(ä|ö|ü)/g.test(alternative)) { %>
                     <% alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue'); %>
                   <% } %>
-                  <div class="bring-item" style="background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px;
+                  <div class="bring-item" style="overflow: hidden; background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px;
                   min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=<%= name.replace(/ /g, '_') %>
                                     onclick="vis.binds['bring'].onclick(this)" data-remove="<%= this.data['oid-remove'] %>"
                                      data-list="<%= this.data['oid-list'] %>" data-item= <%= name.replace(/ /g, '_') %> >
@@ -300,7 +300,7 @@
                        .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') %>.png"
                       onerror="this.src='https://web.getbring.com/assets/images/items/<%= alternative; %>.png'"
                       alt=<%= name %> align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-<%= name.replace(/ /g, '_') %>" >
-                      <p style="font-size: 0.7em; width: 100%"> <%= name %> </p>
+                      <p style="word-wrap: break-word; font-size: 0.8em; width: 100%"> <%= name %> </p>
                   </div>
               <% } %>
               <% var that = this %>
