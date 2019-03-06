@@ -157,6 +157,56 @@
         }
     };
 
+    function checkItems(cb) {
+
+        var newItems = [];
+        var knownList = [];
+        var newList = [];
+        var oidRemove = '';
+        var stateId = '';
+
+        $('.bring-item').each(function (index) {
+            stateId = $(this).data('list');
+            oidRemove = $(this).data('remove');
+            newList = JSON.parse(vis.states[stateId + '.val']);
+            var stillOnList = false;
+            knownList.push(this.id);
+
+            for (var i = 0; i < newList.length; i++) {
+                if (newList[i].name === this.id) {
+                    stillOnList = true;
+                } // endIf
+            } // endFor
+
+            if (!stillOnList) {
+                $(this).remove();
+            }
+        });
+
+        for (var j = 0; j < newList.length; j++) {
+            var itemName = newList[j].name;
+            if (knownList.indexOf(itemName) < 0) {
+                // new Item found
+                newItems.push(itemName);
+            } // endIf
+        } // endFor
+
+        for (var k = 0; k < newItems.length; k++) {
+            var html = '<div class="bring-item" style="background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
+                'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + newItems[k] +
+                ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
+                'data-list="' + stateId + '" data-item=' + newItems[k] + '> ' +
+                '<img src="https://web.getbring.com/assets/images/items/' + newItems[k].toLowerCase() + '.png" ' +
+                'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + newItems[k].substring(0, 1).toLowerCase() +'.png\'" ' +
+            'alt=' +  newItems[k] + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + newItems[k] + '" > ' +
+            '<p style="font-size: 0.7em; width: 100%">' + newItems[k] + '</p></div>';
+
+            $('#shoppinglist').append(html);
+        }
+
+        if (cb && typeof cb === 'function') cb(newItems);
+    } // endCheckItems
+
 </script>
 
 <script id="tplBringShoppingList"
@@ -168,20 +218,23 @@
         data-vis-type="ctrl"
         data-vis-name="bring-shopping-list">
     <div class="vis-widget <%== this.data.attr('class') %>" style="width:230px; height:210px;" id="<%= this.data.attr('wid') %>" >
-        <div class="template-class vis-widget-body <%== this.data.attr('class') %>" style="padding:2px" >
+        <div class="template-class vis-widget-body <%== this.data.attr('class') %>" style="padding:2px" id="shoppinglist">
               <% var productArray = vis.states[this.data.attr('oid-list') + '.val']; %>
               <% var productArrayJSON = JSON.parse(productArray); %>
               <% for (var i = 0; i < productArrayJSON.length; i++) {%>
                   <% var name = productArrayJSON[i].name; %>
                   <div class="bring-item" style="background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px;
                   min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=<%= name %>
-                                    onclick="vis.binds['bring'].onclick(this)" data-remove="<%= this.data['oid-remove'] %>" data-item= <%= name %> >
+                                    onclick="vis.binds['bring'].onclick(this)" data-remove="<%= this.data['oid-remove'] %>"
+                                     data-list="<%= this.data['oid-list'] %>" data-item= <%= name %> >
                       <img src="https://web.getbring.com/assets/images/items/<%= name.toLowerCase() %>.png"
                       onerror="this.src='https://web.getbring.com/assets/images/items/<%= name.substring(0, 1).toLowerCase(); %>.png'"
-                      alt=<%= productArrayJSON[i].name %> align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-<%= name %>" >
+                      alt=<%= name %> align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-<%= name %>" >
                       <p style="font-size: 0.7em; width: 100%"> <%= name %> </p>
                   </div>
               <% } %>
+              <% var that = this %>
+              <% setInterval(checkItems, 15000); %>
         </div>
     </div>
 </script>

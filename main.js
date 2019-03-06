@@ -169,7 +169,7 @@ function startAdapter(options) {
             pollList(listId);
             if (polling[listId]) clearTimeout(polling[listId]);
             polling[listId] = null;
-        }, 5000);
+        }, 1000);
     });
 
     return adapter;
