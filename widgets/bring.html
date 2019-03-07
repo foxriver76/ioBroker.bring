@@ -189,6 +189,8 @@
         var saveId = $save.data('save');
         var item = $save.val();
         $save.val('');
+        // return on empty form
+        if (item === '') return;
         var stateId = $save.data('list');
 
         // if item is already on list --> return
