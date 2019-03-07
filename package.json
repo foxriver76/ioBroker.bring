@@ -47,7 +47,8 @@
 	"scripts": {
 		"test:unit": "node_modules/.bin/mocha test/unitAdapter --exit",
 		"test:package": "node_modules/.bin/mocha test/packageFiles --exit",
-		"test:integration": "node_modules/.bin/mocha test/integrationAdapter --exit"
+		"test:integration": "node_modules/.bin/mocha test/integrationAdapter --exit",
+		"test": "node node_modules/mocha/bin/mocha --exit"
 	},
 	"bugs": {
 		"url": "https://github.com/foxriver76/ioBroker.bring/issues"
