@@ -201,13 +201,16 @@
 
         // if item is already on list --> return
         var currentList = JSON.parse(vis.states[stateId + '.val']);
-        var existence =  document.getElementById(item.replace(/ /g, '_'));
-        for (var i = 0; i < currentList.length; i++) {
-            if (currentList[i].name === item || existence !== null) return;
-        }
+        var itemWoDescription = item.split(',')[0];
+        var existence =  document.getElementById(itemWoDescription.replace(/ /g, '_'));
 
-        // set state in backend
+        // set state in backend - do this before existence check because desciption may have changed
         vis.setValue(saveId, item);
+
+        for (var i = 0; i < currentList.length; i++) {
+            if (currentList[i].name === itemWoDescription || existence !== null) return;
+        }
+        // after we have set state in vis, we remove description
         var oidRemove = $save.data('remove');
         var alternative = item.substring(0, 1).toLowerCase();
         if (/^(ä|ö|ü)/g.test(alternative)) {
@@ -221,14 +224,14 @@
 
         // add item instant to widget
         var html = '<div class="bring-item" style="overflow: hidden; background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
-            'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + item.replace(/ /g, '_') +
+            'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + itemWoDescription.replace(/ /g, '_') +
             ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
-            'data-list="' + stateId + '" data-item=' + item.replace(/ /g, '_') + '> ' +
-            '<img src="https://web.getbring.com/assets/images/items/' + item.toLowerCase().replace(/ /g, '_')
+            'data-list="' + stateId + '" data-item=' + itemWoDescription.replace(/ /g, '_') + '> ' +
+            '<img src="https://web.getbring.com/assets/images/items/' + itemWoDescription.toLowerCase().replace(/ /g, '_')
                 .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
             'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative +'.png\'" ' +
             'alt=' +  item + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + item + '" > ' +
-            '<p style="word-wrap: break-word; font-size: 0.8em; width: 100%">' + item + '</p></div>';
+            '<p style="word-wrap: break-word; font-size: 0.8em; width: 100%">' + itemWoDescription + '</p></div>';
 
         $('#shoppinglist').append(html);
     }
