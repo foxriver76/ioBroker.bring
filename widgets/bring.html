@@ -202,13 +202,15 @@
         // if item is already on list --> return
         var currentList = JSON.parse(vis.states[stateId + '.val']);
         var itemWoDescription = item.split(',')[0];
+        var description = (item.split(',').length > 1) ? item.substring(item.indexOf(',') + 1).trim() : '';
         var existence =  document.getElementById(itemWoDescription.replace(/ /g, '_'));
+        var currentDesc = existence ? existence.getAttribute('data-desc'): null;
 
         // set state in backend - do this before existence check because desciption may have changed
         vis.setValue(saveId, item);
 
         for (var i = 0; i < currentList.length; i++) {
-            if (currentList[i].name === itemWoDescription || existence !== null) return;
+            if ((currentList[i].name === itemWoDescription && currentList[i].specification === description) || (existence !== null && (description === currentDesc))) return;
         }
         // after we have set state in vis, we remove description
         var oidRemove = $save.data('remove');
@@ -222,22 +224,30 @@
             addedLastFiveSeconds[item] = false;
         }, 5000);
 
+        // if item is there but description changed, remove item
+        if (currentDesc !== null && (description !== currentDesc)) existence && existence.parentNode && existence.parentNode.removeChild(existence);
         // add item instant to widget
-        var html = '<div class="bring-item" style="overflow: hidden; background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
+        var html = '<div class="bring-item" data-desc="' + description + '" style="overflow: hidden; background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
             'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + itemWoDescription.replace(/ /g, '_') +
             ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
             'data-list="' + stateId + '" data-item=' + itemWoDescription.replace(/ /g, '_') + '> ' +
-            '<img src="https://web.getbring.com/assets/images/items/' + itemWoDescription.toLowerCase().replace(/ /g, '_')
+            '<img src="https://web.getbring.com/assets/images/items/' + item.toLowerCase().replace(/ /g, '_')
                 .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
             'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative +'.png\'" ' +
-            'alt=' +  item + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + item + '" > ' +
-            '<p style="word-wrap: break-word; font-size: 0.8em; width: 100%">' + itemWoDescription + '</p></div>';
+            'alt=' +  itemWoDescription + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + itemWoDescription.replace(/ /g, '_') + '" > ' +
+            '<div style="max-height:30px; overflow:hidden; margin-top: -5px">' +
+            '<p style="word-wrap: break-word; font-size: 0.8em;">' + itemWoDescription + '</p>' +
+            '</div>' +
+            '<div style="max-height:25px; overflow:hidden; margin-top: -10px;">' +
+            '<p style="word-wrap: break-word; font-size: 0.7em;">' + description + '</p>' +
+            '</div></div>';
 
         $('#shoppinglist').append(html);
     }
 
     function checkItems(cb) {
         var newItems = [];
+        var spec = [];
         var knownList = [];
         var newList = [];
         var oidRemove = '';
@@ -268,9 +278,11 @@
 
         for (var j = 0; j < newList.length; j++) {
             var itemName = newList[j].name;
+            var specification = newList[j].specification;
             if (knownList.indexOf(itemName) < 0) {
                 // new Item found
                 newItems.push(itemName);
+                spec.push(specification);
             } // endIf
         } // endFor
 
@@ -284,13 +296,18 @@
             }
             var html = '<div class="bring-item" style="overflow: hidden; background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
                 'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + newItems[k].replace(/ /g, '_') +
-                ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
+                ' onclick="vis.binds[\'bring\'].onclick(this)" data-desc="' + spec[k] + '" data-remove="' + oidRemove + '"' +
                 'data-list="' + stateId + '" data-item=' + newItems[k].replace(/ /g, '_') + '> ' +
                 '<img src="https://web.getbring.com/assets/images/items/' + newItems[k].toLowerCase().replace(/ /g, '_')
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
                 'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative +'.png\'" ' +
             'alt=' +  newItems[k] + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + newItems[k].replace(/ /g, '_') + '" > ' +
-            '<p style="word-wrap: break-word; font-size: 0.8em; width: 100%">' + newItems[k] + '</p></div>';
+            '<div style="max-height:30px; overflow:hidden; margin-top: -5px">' +
+                '<p style="word-wrap: break-word; font-size: 0.8em;">' + newItem[k] + '</p>' +
+                '</div>' +
+                '<div style="max-height:25px; overflow:hidden; margin-top: -10px;">' +
+                '<p style="word-wrap: break-word; font-size: 0.7em;">' + spec[k] + '</p>' +
+                '</div></div>';
 
             $('#shoppinglist').append(html);
         }
@@ -324,11 +341,12 @@
               <% var productArrayJSON = JSON.parse(productArray); %>
               <% for (var i = 0; i < productArrayJSON.length; i++) {%>
                   <% var name = productArrayJSON[i].name; %>
+                  <% var specification = productArrayJSON[i].specification.trim(); %>
                   <% var alternative = name.substring(0, 1).toLowerCase(); %>
                   <% if (/^(ä|ö|ü)/g.test(alternative)) { %>
                     <% alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue'); %>
                   <% } %>
-                  <div class="bring-item" style="overflow: hidden; background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px;
+                  <div class="bring-item" data-desc="<%= specification %>" style="overflow: hidden; background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px;
                   min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=<%= name.replace(/ /g, '_') %>
                                     onclick="vis.binds['bring'].onclick(this)" data-remove="<%= this.data['oid-remove'] %>"
                                      data-list="<%= this.data['oid-list'] %>" data-item= <%= name.replace(/ /g, '_') %> >
@@ -336,7 +354,12 @@
                        .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') %>.png"
                       onerror="this.src='https://web.getbring.com/assets/images/items/<%= alternative; %>.png'"
                       alt=<%= name %> align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-<%= name.replace(/ /g, '_') %>" >
-                      <p style="word-wrap: break-word; font-size: 0.8em; width: 100%"> <%= name %> </p>
+                      <div style="max-height:30px; overflow:hidden; margin-top: -5px">
+                        <p style="word-wrap: break-word; font-size: 0.8em;"> <%= name %> </p>
+                      </div>
+                      <div style="max-height:25px; overflow:hidden; margin-top: -10px;">
+                        <p style="word-wrap: break-word; font-size: 0.7em;"> <%= specification %> </p>
+                      </div>
                   </div>
               <% } %>
               <% var that = this %>
