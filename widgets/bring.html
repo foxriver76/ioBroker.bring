@@ -157,6 +157,8 @@
     }
 
     var registered = false;
+    var addedLastFiveSeconds = [];
+    var removedLastFiveSeconds = [];
 
     // Binding to communicate with ejs script
     vis.binds['bring'] = {
@@ -207,6 +209,11 @@
             alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
         }
 
+        addedLastFiveSeconds[item] = true;
+        setTimeout(function () {
+            addedLastFiveSeconds[item] = false;
+        }, 5000);
+
         // add item instant to widget
         var html = '<div class="bring-item" style="overflow: hidden; background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
             'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + item.replace(/ /g, '_') +
@@ -241,8 +248,13 @@
                 } // endIf
             } // endFor
 
-            if (!stillOnList) {
+            // if item is not on list anymore and is not newly added --> remove
+            if (!stillOnList && !(addedLastFiveSeconds[this.id.replace(/_/g, ' ')])) {
                 $(this).remove();
+                removedLastFiveSeconds[this.id] = true;
+                setTimeout(function() {
+                    removedLastFiveSeconds[this.id] = false;
+                }, 5000);
             }
         });
 
@@ -256,6 +268,8 @@
 
         var alternative;
         for (var k = 0; k < newItems.length; k++) {
+            // if item was rm recently backend doesn't know yet so do not add it again
+            if (removedLastFiveSeconds[newItems[k]]) continue;
             alternative = newItems[k].substring(0, 1).toLowerCase();
             if (/^(ä|ö|ü)/g.test(alternative)) {
                 alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
