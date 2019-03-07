@@ -166,9 +166,13 @@
             var $el = $(el);
             var item = $el.data('item').replace(/_/g, ' ');
             var oidRemove = $el.data('remove');
-            if (oidRemove) {
-                vis.setValue(oidRemove, item);
-            }
+
+            vis.setValue(oidRemove, item);
+
+            removedLastFiveSeconds[item] = true;
+            setTimeout(function() {
+                removedLastFiveSeconds[item] = false;
+            }, 5000);
 
             $el.remove();
         },
@@ -197,8 +201,9 @@
 
         // if item is already on list --> return
         var currentList = JSON.parse(vis.states[stateId + '.val']);
+        var existence =  document.getElementById(item.replace(/ /g, '_'));
         for (var i = 0; i < currentList.length; i++) {
-            if (currentList[i].name === item) return;
+            if (currentList[i].name === item || existence !== null) return;
         }
 
         // set state in backend
