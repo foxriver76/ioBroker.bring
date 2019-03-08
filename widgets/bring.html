@@ -8,8 +8,7 @@
 
 <!-- here you can include so many js-files as you want -->
 <!--script type="text/javascript" src="widgets/js/materialize.js"></script-->
-<!--link rel="stylesheet" type="text/css" href="widgets/css/materialize.css">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"-->
+<link rel="stylesheet" type="text/css" href="widgets/css/stylesheet.css">
 <!-- the full description of format in data-vis-attrs can be found here:
     https://github.com/ioBroker/ioBroker.vis/blob/master/www/js/visEditInspect.js#L39
 
@@ -170,7 +169,7 @@
             vis.setValue(oidRemove, item);
 
             removedLastFiveSeconds[item] = true;
-            setTimeout(function() {
+            setTimeout(function () {
                 removedLastFiveSeconds[item] = false;
             }, 5000);
 
@@ -190,7 +189,7 @@
         }
     };
 
-    function saveItem () {
+    function saveItem() {
         var $save = $('#save');
         var saveId = $save.data('save');
         var item = $save.val();
@@ -203,8 +202,8 @@
         var currentList = JSON.parse(vis.states[stateId + '.val']);
         var itemWoDescription = item.split(',')[0];
         var description = (item.split(',').length > 1) ? item.substring(item.indexOf(',') + 1).trim() : '';
-        var existence =  document.getElementById(itemWoDescription.replace(/ /g, '_'));
-        var currentDesc = existence ? existence.getAttribute('data-desc'): null;
+        var existence = document.getElementById(itemWoDescription.replace(/ /g, '_'));
+        var currentDesc = existence ? existence.getAttribute('data-desc') : null;
 
         // set state in backend - do this before existence check because desciption may have changed
         vis.setValue(saveId, item);
@@ -227,18 +226,17 @@
         // if item is there but description changed, remove item
         if (currentDesc !== null && (description !== currentDesc)) existence && existence.parentNode && existence.parentNode.removeChild(existence);
         // add item instant to widget
-        var html = '<div class="bring-item" data-desc="' + description + '" style="overflow: hidden; background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
-            'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + itemWoDescription.replace(/ /g, '_') +
+        var html = '<div class="bring-item" data-desc="' + description + '" id=' + itemWoDescription.replace(/ /g, '_') +
             ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
-            'data-list="' + stateId + '" data-item=' + itemWoDescription.replace(/ /g, '_') + '> ' +
+            ' data-list="' + stateId + '" data-item=' + itemWoDescription.replace(/ /g, '_') + '> ' +
             '<img src="https://web.getbring.com/assets/images/items/' + item.toLowerCase().replace(/ /g, '_')
                 .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
-            'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative +'.png\'" ' +
-            'alt=' +  itemWoDescription + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + itemWoDescription.replace(/ /g, '_') + '" > ' +
-            '<div style="max-height:30px; overflow:hidden; margin-top: -5px">' +
+            'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
+            'alt=' + itemWoDescription + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + itemWoDescription.replace(/ /g, '_') + '" > ' +
+            '<div style="max-height: 30px; overflow: hidden; margin-top: -5px">' +
             '<p style="word-wrap: break-word; font-size: 0.8em;">' + itemWoDescription + '</p>' +
             '</div>' +
-            '<div style="max-height:25px; overflow:hidden; margin-top: -10px;">' +
+            '<div style="max-height: 25px; overflow: hidden; margin-top: -10px;">' +
             '<p style="word-wrap: break-word; font-size: 0.7em;">' + description + '</p>' +
             '</div></div>';
 
@@ -270,7 +268,7 @@
             if (!stillOnList && !(addedLastFiveSeconds[this.id.replace(/_/g, ' ')])) {
                 $(this).remove();
                 removedLastFiveSeconds[this.id] = true;
-                setTimeout(function() {
+                setTimeout(function () {
                     removedLastFiveSeconds[this.id] = false;
                 }, 5000);
             }
@@ -294,18 +292,17 @@
             if (/^(ä|ö|ü)/g.test(alternative)) {
                 alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
             }
-            var html = '<div class="bring-item" style="overflow: hidden; background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px; ' +
-                'min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=' + newItems[k].replace(/ /g, '_') +
+            var html = '<div class="bring-item" id=' + newItems[k].replace(/ /g, '_') +
                 ' onclick="vis.binds[\'bring\'].onclick(this)" data-desc="' + spec[k] + '" data-remove="' + oidRemove + '"' +
                 'data-list="' + stateId + '" data-item=' + newItems[k].replace(/ /g, '_') + '> ' +
                 '<img src="https://web.getbring.com/assets/images/items/' + newItems[k].toLowerCase().replace(/ /g, '_')
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
-                'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative +'.png\'" ' +
-            'alt=' +  newItems[k] + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + newItems[k].replace(/ /g, '_') + '" > ' +
-            '<div style="max-height:30px; overflow:hidden; margin-top: -5px">' +
-                '<p style="word-wrap: break-word; font-size: 0.8em;">' + newItem[k] + '</p>' +
+                'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
+                'alt=' + newItems[k] + ' align="center" style="height: 50px; max-width: 90%; padding-top: 20px" id="img-' + newItems[k].replace(/ /g, '_') + '" > ' +
+                '<div style="max-height:30px; overflow:hidden; margin-top: -5px">' +
+                '<p style="word-wrap: break-word; font-size: 0.8em;">' + newItems[k] + '</p>' +
                 '</div>' +
-                '<div style="max-height:25px; overflow:hidden; margin-top: -10px;">' +
+                '<div style="max-height: 25px; overflow: hidden; margin-top: -10px;">' +
                 '<p style="word-wrap: break-word; font-size: 0.7em;">' + spec[k] + '</p>' +
                 '</div></div>';
 
@@ -325,18 +322,13 @@
         data-vis-set="bring"
         data-vis-type="ctrl"
         data-vis-name="bring-shopping-list">
-        <% if (!vis.editMode) { %>
-            <% /* We are only loading CSS if we are productive, otherwise edit mode will be destroyed */ %>
-            <link rel="stylesheet" type="text/css" href="widgets/css/materialize.css">
-            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <% } %>
         <div class="vis-widget <%== this.data.attr('class') %>" style="width:230px; height:210px;min-width:145px" id="<%= this.data.attr('wid') %>" >
-        <div class="row" style="padding-right:15px;">
-        <input type="text" placeholder="<%= this.data['text-for-adding'] %>" id="save" class="white-text" name="addArticle" data-save="<%= this.data['oid-save']; %>" style="height: 30px; width: 80%; min-width: 116px"
-        onkeypress="vis.binds['bring'].onkeypress(this)" data-list="<%= this.data['oid-list']; %>" data-remove="<%= this.data['oid-remove']; %>">
-                <a id="addButton" class="btn-floating waves-effect waves-light teal accent-4" style="float: right;text-align: center"><i class="material-icons table-button-add">add</i></a>
+        <div class="row" style="padding-right:10px; height: 45px; margin-bottom: 10px">
+            <input type="text" placeholder="<%= this.data['text-for-adding'] %>" id="save" class="addArticleText" name="addArticle" data-save="<%= this.data['oid-save']; %>" style="height: 30px; width: 80%; min-width: 116px"
+            onkeypress="vis.binds['bring'].onkeypress(this)" data-list="<%= this.data['oid-list']; %>" data-remove="<%= this.data['oid-remove']; %>">
+            <input type="image" src="widgets/shopping-list/img/add.svg" id="addButton" class="addButton"/>
         </div>
-        <div class="template-class vis-widget-body <%== this.data.attr('class') %>" style="padding:2px margin-top: 30px" id="shoppinglist">
+        <div class="template-class vis-widget-body <%== this.data.attr('class') %>" style="padding: 2px margin-top: 30px" id="shoppinglist">
               <% var productArray = vis.states[this.data.attr('oid-list') + '.val']; %>
               <% var productArrayJSON = JSON.parse(productArray); %>
               <% for (var i = 0; i < productArrayJSON.length; i++) {%>
@@ -346,8 +338,7 @@
                   <% if (/^(ä|ö|ü)/g.test(alternative)) { %>
                     <% alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue'); %>
                   <% } %>
-                  <div class="bring-item" data-desc="<%= specification %>" style="overflow: hidden; background-color: #EE524F; float: left; text-align: center; margin: 2px; padding: 2px;
-                  min-width:116px; max-width:116px; min-height: 98px; max-height: 98px" id=<%= name.replace(/ /g, '_') %>
+                  <div class="bring-item" data-desc="<%= specification %>" id=<%= name.replace(/ /g, '_') %>
                                     onclick="vis.binds['bring'].onclick(this)" data-remove="<%= this.data['oid-remove'] %>"
                                      data-list="<%= this.data['oid-list'] %>" data-item= <%= name.replace(/ /g, '_') %> >
                       <img src="https://web.getbring.com/assets/images/items/<%= name.toLowerCase().replace(/ /g, '_')
@@ -366,4 +357,5 @@
               <% setInterval(checkItems, 15000); %>
         </div>
     </div>
+
 </script>
