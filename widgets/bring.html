@@ -7,8 +7,7 @@
 -->
 
 <!-- here you can include so many js-files as you want -->
-<!--script type="text/javascript" src="widgets/js/materialize.js"></script-->
-<link rel="stylesheet" type="text/css" href="widgets/css/stylesheet.css">
+<link rel="stylesheet" type="text/css" href="widgets/bring/css/stylesheet.css">
 <!-- the full description of format in data-vis-attrs can be found here:
     https://github.com/ioBroker/ioBroker.vis/blob/master/www/js/visEditInspect.js#L39
 
@@ -317,27 +316,28 @@
 <script id="tplBringShoppingList"
         type="text/ejs"
         class="vis-tpl"
-        data-vis-prev='<img src="widgets/shopping-list/img/shopping-list.png"></img>'
-        data-vis-attrs="oid-list;oid-save;oid-remove;text-for-adding/text"
+        data-vis-prev='<img src="widgets/bring/img/shopping-list.png"></img>'
+        data-vis-attrs="oid-list/id,list.json;oid-save/id,text;oid-remove/id,text;text-for-adding/text"
         data-vis-set="bring"
         data-vis-type="ctrl"
+        data-vis-update-style="true"
         data-vis-name="bring-shopping-list">
         <div class="vis-widget <%== this.data.attr('class') %>" style="width:230px; height:210px;min-width:145px" id="<%= this.data.attr('wid') %>" >
         <div class="row" style="padding-right:10px; height: 45px; margin-bottom: 10px">
             <input type="text" placeholder="<%= this.data['text-for-adding'] %>" id="save" class="addArticleText" name="addArticle" data-save="<%= this.data['oid-save']; %>"
             onkeypress="vis.binds['bring'].onkeypress(this)" data-list="<%= this.data['oid-list']; %>" data-remove="<%= this.data['oid-remove']; %>">
-            <input type="image" src="widgets/shopping-list/img/add.svg" id="addButton" class="addButton"/>
+            <input type="image" src="widgets/bring/img/add.svg" id="addButton" class="addButton"/>
         </div>
         <div class="template-class vis-widget-body <%== this.data.attr('class') %>" style="padding: 2px margin-top: 30px" id="shoppinglist">
-              <% var productArray = vis.states[this.data.attr('oid-list') + '.val']; %>
-              <% var productArrayJSON = JSON.parse(productArray); %>
-              <% for (var i = 0; i < productArrayJSON.length; i++) {%>
-                  <% var name = productArrayJSON[i].name; %>
-                  <% var specification = productArrayJSON[i].specification.trim(); %>
-                  <% var alternative = name.substring(0, 1).toLowerCase(); %>
-                  <% if (/^(ä|ö|ü)/g.test(alternative)) { %>
-                    <% alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue'); %>
-                  <% } %>
+              <% var productArray = vis.states[this.data.attr('oid-list') + '.val'];
+                 var productArrayJSON = JSON.parse(productArray);
+                 for (var i = 0; i < productArrayJSON.length; i++) {
+                    var name = productArrayJSON[i].name;
+                    var specification = productArrayJSON[i].specification.trim();
+                    var alternative = name.substring(0, 1).toLowerCase();
+                    if (/^(ä|ö|ü)/g.test(alternative)) {
+                        alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
+                 } %>
                   <div class="bring-item" data-desc="<%= specification %>" id=<%= name.replace(/ /g, '_') %>
                                     onclick="vis.binds['bring'].onclick(this)" data-remove="<%= this.data['oid-remove'] %>"
                                      data-list="<%= this.data['oid-list'] %>" data-item= <%= name.replace(/ /g, '_') %> >
@@ -353,7 +353,6 @@
                       </div>
                   </div>
               <% } %>
-              <% var that = this %>
               <% setInterval(checkItems, 15000); %>
         </div>
     </div>
