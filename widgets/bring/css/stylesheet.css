@@ -45,3 +45,31 @@
     min-height: 116px;
     max-height: 116px;
 }
+
+.item-name-div {
+    max-height: 30px;
+    overflow: hidden;
+    margin-top: -5px
+}
+
+.item-name {
+    word-wrap: break-word;
+    font-size: 0.8em;
+}
+
+.item-desc-div {
+    max-height: 25px;
+    overflow: hidden;
+    margin-top: -10px;
+}
+
+.item-desc {
+    word-wrap: break-word;
+    font-size: 0.7em;
+}
+
+.item-image {
+    height: 50px;
+    max-width: 90%;
+    padding-top: 20px;
+}
