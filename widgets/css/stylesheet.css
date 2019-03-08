@@ -6,7 +6,7 @@
     float: right;
     height: 40px;
     width: 40px;
-    margin-right: 5px;
+    margin-top: 5px;
 }
 
 .addButton:hover {
@@ -25,6 +25,9 @@
     caret-color: rgba(250, 250, 250, 0.7);
     font-size: 1.1em;
     color: white;
+    height: 30px;
+    width: calc(100% - 70px);
+    min-width: 116px
 }
 
 .addArticleText::placeholder {
