@@ -226,15 +226,15 @@
         // add item instant to widget
         var html = '<div class="bring-item" data-desc="' + description + '" id=' + itemWoDescription.replace(/ /g, '_') +
             ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
-            ' data-list="' + stateId + '" data-item=' + itemWoDescription.replace(/ /g, '_') + '> ' +
+            ' data-list="' + stateId + '" data-item="' + itemWoDescription.replace(/ /g, '_') + '"> ' +
             '<img src="https://web.getbring.com/assets/images/items/' + item.toLowerCase().replace(/ /g, '_')
                 .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
             'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
-            'alt=' + itemWoDescription + ' align="center" class="item-image" id="img-' + itemWoDescription.replace(/ /g, '_') + '" > ' +
-            '<div class="item-name-div">' +
+            'alt=' + itemWoDescription + ' align="center" class="item-image" id="img-' + itemWoDescription.replace(/ /g, '_') + '"> ' +
+            '<div class="item-name">' +
             '<p class="item-name">' + itemWoDescription + '</p>' +
             '</div>' +
-            '<div class="item-desc-div">' +
+            '<div class="item-desc">' +
             '<p class="item-desc">' + description + '</p>' +
             '</div></div>';
 
@@ -292,15 +292,15 @@
             }
             var html = '<div class="bring-item" id=' + newItems[k].replace(/ /g, '_') +
                 ' onclick="vis.binds[\'bring\'].onclick(this)" data-desc="' + spec[k] + '" data-remove="' + oidRemove + '"' +
-                'data-list="' + stateId + '" data-item=' + newItems[k].replace(/ /g, '_') + '> ' +
+                'data-list="' + stateId + '" data-item="' + newItems[k].replace(/ /g, '_') + '"> ' +
                 '<img src="https://web.getbring.com/assets/images/items/' + newItems[k].toLowerCase().replace(/ /g, '_')
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
                 'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
-                'alt=' + newItems[k] + ' align="center" class="item-image" id="img-' + newItems[k].replace(/ /g, '_') + '" > ' +
-                '<div class="item-name-div">' +
+                'alt=' + newItems[k] + ' align="center" class="item-image" id="img-' + newItems[k].replace(/ /g, '_') + '"> ' +
+                '<div class="item-name">' +
                 '<p class="item-name">' + newItems[k] + '</p>' +
                 '</div>' +
-                '<div class="item-desc-div">' +
+                '<div class="item-desc">' +
                 '<p class="item-desc">' + spec[k] + '</p>' +
                 '</div></div>';
 
@@ -327,34 +327,36 @@
             onkeypress="vis.binds['bring'].onkeypress(this)" data-list="<%= this.data['oid-list']; %>" data-remove="<%= this.data['oid-remove']; %>">
             <input type="image" src="widgets/bring/img/add.svg" id="addButton" class="addButton"/>
         </div>
-        <div class="template-class vis-widget-body <%== this.data.attr('class') %>" style="padding: 2px margin-top: 30px" id="shoppinglist">
-              <% /* if no list id configured yet, stop here */
-                 if (!vis.states[this.data.attr('oid-list') + '.val']) return;
-                 var productArray = vis.states[this.data.attr('oid-list') + '.val'];
-                 var productArrayJSON = JSON.parse(productArray);
-                 for (var i = 0; i < productArrayJSON.length; i++) {
-                    var name = productArrayJSON[i].name;
-                    var specification = productArrayJSON[i].specification.trim();
-                    var alternative = name.substring(0, 1).toLowerCase();
-                    if (/^(ä|ö|ü)/g.test(alternative)) {
-                        alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
-                    } %>
-                  <div class="bring-item" data-desc="<%= specification %>" id=<%= name.replace(/ /g, '_') %>
-                                    onclick="vis.binds['bring'].onclick(this)" data-remove="<%= this.data['oid-remove'] %>"
-                                     data-list="<%= this.data['oid-list'] %>" data-item= <%= name.replace(/ /g, '_') %> >
-                      <img src="https://web.getbring.com/assets/images/items/<%= name.toLowerCase().replace(/ /g, '_')
-                       .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') %>.png"
-                      onerror="this.src='https://web.getbring.com/assets/images/items/<%= alternative; %>.png'"
-                      alt=<%= name %> align="center" class="item-image" id="img-<%= name.replace(/ /g, '_') %>" >
-                      <div class="item-name-div">
-                        <p class= "item-name"> <%= name %> </p>
+        <div class="template-class vis-widget-body <%== this.data.attr('class') %>">
+              <div id="shoppinglist" style="min-width: 100%; padding: 2px;">
+                  <% /* if no list id configured yet, stop here */
+                     if (!vis.states[this.data.attr('oid-list') + '.val']) return;
+                     var productArray = vis.states[this.data.attr('oid-list') + '.val'];
+                     var productArrayJSON = JSON.parse(productArray);
+                     for (var i = 0; i < productArrayJSON.length; i++) {
+                        var name = productArrayJSON[i].name;
+                        var specification = productArrayJSON[i].specification.trim();
+                        var alternative = name.substring(0, 1).toLowerCase();
+                        if (/^(ä|ö|ü)/g.test(alternative)) {
+                            alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
+                        } %>
+                      <div class="bring-item" data-desc="<%= specification %>" id=<%= name.replace(/ /g, '_') %>
+                                        onclick="vis.binds['bring'].onclick(this)" data-remove="<%= this.data['oid-remove'] %>"
+                                         data-list="<%= this.data['oid-list'] %>" data-item="<%= name.replace(/ /g, '_') %>" >
+                          <img src="https://web.getbring.com/assets/images/items/<%= name.toLowerCase().replace(/ /g, '_')
+                           .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') %>.png"
+                          onerror="this.src='https://web.getbring.com/assets/images/items/<%= alternative; %>.png'"
+                          alt=<%= name %> align="center" class="item-image" id="img-<%= name.replace(/ /g, '_') %>">
+                          <div class="item-name">
+                            <p class= "item-name"> <%= name %> </p>
+                          </div>
+                          <div class="item-desc">
+                            <p class="item-desc"> <%= specification %> </p>
+                          </div>
                       </div>
-                      <div class="item-desc-div">
-                        <p class="item-desc"> <%= specification %> </p>
-                      </div>
-                  </div>
-              <% } %>
-              <% setInterval(checkItems, 15000); %>
+                  <% } %>
+                  <% setInterval(checkItems, 15000); %>
+              </div>
         </div>
     </div>
 

@@ -46,24 +46,24 @@
     max-height: 116px;
 }
 
-.item-name-div {
+div.item-name {
     max-height: 30px;
     overflow: hidden;
     margin-top: -5px
 }
 
-.item-name {
+p.item-name {
     word-wrap: break-word;
     font-size: 0.8em;
 }
 
-.item-desc-div {
+div.item-desc {
     max-height: 25px;
     overflow: hidden;
     margin-top: -10px;
 }
 
-.item-desc {
+p.item-desc {
     word-wrap: break-word;
     font-size: 0.7em;
 }
