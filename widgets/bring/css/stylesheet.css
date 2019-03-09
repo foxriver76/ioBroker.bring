@@ -46,6 +46,18 @@
     max-height: 116px;
 }
 
+.bring-recent-item {
+    overflow: hidden;
+    background-color: #4faba2;
+    float: left;
+    text-align: center;
+    margin: 2px;
+    min-width: 116px;
+    max-width: 116px;
+    min-height: 116px;
+    max-height: 116px;
+}
+
 div.item-name {
     max-height: 30px;
     overflow: hidden;
