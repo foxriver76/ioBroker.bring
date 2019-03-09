@@ -266,14 +266,14 @@
         var spec = [];
         var knownList = [];
         var knownSpec = [];
-        var newList = [];
+        var stateId = $('#save').data('list');
+        var newList = JSON.parse(vis.states[stateId + '.val']);
         var oidRemove = '';
         var stateId = '';
 
         $('.bring-item').each(function () {
             stateId = $(this).data('list');
             oidRemove = $(this).data('remove');
-            newList = JSON.parse(vis.states[stateId + '.val']);
             var stillOnList = false;
             knownList.push(this.id.replace(/_/g, ' '));
             knownSpec.push($(this).data('desc').toString());
@@ -344,14 +344,14 @@
         var spec = [];
         var knownList = [];
         var knownSpec = [];
-        var newList = [];
+        var stateId = $('#save').data('recent');
+        var newList = JSON.parse(vis.states[stateId + '.val']);
         var oidRemove = '';
         var stateId = '';
 
         $('.bring-recent-item').each(function (index) {
             stateId = $(this).data('list');
             oidRemove = $(this).data('remove');
-            newList = JSON.parse(vis.states[stateId + '.val']);
             var stillOnList = false;
             var itemIdFixed = this.id.substring(this.id.indexOf('_') + 1).replace(/_/g, ' ');
             knownList.push(itemIdFixed);
@@ -364,7 +364,7 @@
                 } // endIf
             } // endFor
 
-            // if item is not on list anymore and is not newly added --> remove
+            // if item is not on list anymore --> remove
             if (!stillOnList) {
                 $(this).remove();
                 /*removedLastFiveSeconds[this.id] = true;
@@ -393,7 +393,6 @@
         var alternative;
         for (var k = 0; k < newItems.length; k++) {
             // if item was rm recently backend doesn't know yet so do not add it again
-            if (removedLastFiveSeconds[newItems[k]]) continue;
             alternative = newItems[k].substring(0, 1).toLowerCase();
             if (/^(ä|ö|ü)/g.test(alternative)) {
                 alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
@@ -430,7 +429,7 @@
         <div class="vis-widget <%== this.data.attr('class') %>" style="width:230px; height:210px;min-width:145px" id="<%= this.data.attr('wid') %>" >
         <div style="height: 45px; margin-bottom: 10px; padding-right: 10px;">
             <input type="text" placeholder="<%= this.data['text-for-adding'] %>" id="save" class="addArticleText" name="addArticle" data-save="<%= this.data['oid-save']; %>"
-            onkeypress="vis.binds['bring'].onkeypress(this)" data-list="<%= this.data['oid-list']; %>" data-remove="<%= this.data['oid-remove']; %>">
+            onkeypress="vis.binds['bring'].onkeypress(this)" data-recent="<%= this.data['oid-recent']; %>" data-list="<%= this.data['oid-list']; %>" data-remove="<%= this.data['oid-remove']; %>">
             <input type="image" src="widgets/bring/img/add.svg" id="addButton" class="addButton"/>
         </div>
         <div class="template-class vis-widget-body <%== this.data.attr('class') %>">
