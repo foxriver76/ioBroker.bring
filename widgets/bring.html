@@ -127,16 +127,16 @@
                 "zh-cn": "保存ID"
             },
             "oid-remove": {
-                "en": "Remove ID",
-                "de": "Entfernen ID",
-                "ru": "Удалить ID",
-                "pt": "Remover ID",
-                "nl": "ID verwijderen",
-                "fr": "Supprimer l'ID",
-                "it": "Rimuovi ID",
-                "es": "Eliminar ID",
-                "pl": "Usuń identyfikator",
-                "zh-cn": "删除ID"
+                "en": "Move to recent content ID",
+                "de": "Bewege zu kürzlich hinzugefügt ID",
+                "ru": "Перейти к последнему идентификатору контента",
+                "pt": "Mover para o ID do conteúdo recente",
+                "nl": "Verplaatsen naar recente inhoud-ID",
+                "fr": "Déplacer vers l'ID de contenu récent",
+                "it": "Passa all'ID contenuto recente",
+                "es": "Mover a la ID de contenido reciente",
+                "pl": "Przejdź do ostatniego identyfikatora treści",
+                "zh-cn": "移至最近的内容ID"
             },
             "oid-recent": {
                 "en": "Recent Content ID",
@@ -161,6 +161,18 @@
                 "es": "Marcador de posición para añadir",
                 "pl": "Symbol zastępczy do dodania",
                 "zh-cn": "占位符用于添加"
+            },
+            "max-height-recent": {
+                "en": "Maximium height for recent items list in px",
+                "de": "Maximale Höhe für die Liste der kürzlich hinzugefügten Artikel in px",
+                "ru": "Максимальная высота списка последних элементов в пикселях",
+                "pt": "Altura máxima para lista de itens recentes em px",
+                "nl": "Maximum hoogte voor recente itemslijst in px",
+                "fr": "Hauteur maximale pour la liste des éléments récents en px",
+                "it": "Altezza massima per l'elenco di articoli recenti in px",
+                "es": "Altura máxima para la lista de artículos recientes en px",
+                "pl": "Maksymalna wysokość ostatniej listy elementów w px",
+                "zh-cn": "px中最近项目列表的最大高度"
             }
         });
     }
@@ -187,6 +199,15 @@
                 }, 5000);
 
                 $el.remove();
+
+                // now we add this item to recent content
+                $el.addClass('bring-recent-item').removeClass('bring-item');
+                var prevData = $el.data('item');
+                $el.removeAttr('data-item');
+                var prevId = $el.attr('id');
+                $el.attr('id', 'recent_' + prevId);
+                $el.attr('data-recentitem', prevData);
+                $('#recentlist').prepend($el);
             } else {
                 var recentItem = $el.data('recentitem').replace(/_/g, ' ');
                 var desc = $el.data('desc').toString();
@@ -232,7 +253,8 @@
         vis.setValue(saveId, item + (desc ? ',' + desc : ''));
 
         for (var i = 0; i < currentList.length; i++) {
-            if ((currentList[i].name === itemWoDescription && currentList[i].specification === description) || (existence !== null && (description === currentDesc))) return;
+            if (((currentList[i].name === itemWoDescription && currentList[i].specification === description) && !removedLastFiveSeconds[itemWoDescription])
+                || (existence !== null && (description === currentDesc))) return;
         }
         // after we have set state in vis, we remove description
         var oidRemove = $save.data('remove');
@@ -422,15 +444,17 @@
         type="text/ejs"
         class="vis-tpl"
         data-vis-prev='<img src="widgets/bring/img/shopping-list.png"></img>'
-        data-vis-attrs="oid-list/id,list.json;oid-save/id,text;oid-remove/id,text;oid-recent/id,list.json;text-for-adding/text"
+        data-vis-attrs="oid-list/id,list.json;oid-save/id,text;oid-remove/id,text;oid-recent/id,list.json;text-for-adding/text;
+                        max-height-recent/number;"
         data-vis-set="bring"
         data-vis-type="ctrl"
         data-vis-update-style="true"
         data-vis-name="bring-shopping-list">
         <div class="vis-widget <%== this.data.attr('class') %>" style="width:230px; height:210px;min-width:145px" id="<%= this.data.attr('wid') %>" >
         <div style="height: 45px; margin-bottom: 10px; padding-right: 10px;">
-            <input type="text" placeholder="<%= this.data['text-for-adding'] %>" id="save" class="addArticleText" name="addArticle" data-save="<%= this.data['oid-save']; %>"
-            onkeypress="vis.binds['bring'].onkeypress(this)" data-recent="<%= this.data['oid-recent']; %>" data-list="<%= this.data['oid-list']; %>" data-remove="<%= this.data['oid-remove']; %>">
+            <input type="text" placeholder="<%= this.data['text-for-adding'] %>" id="save" class="addArticleText" name="addArticle"
+            data-save="<%= this.data['oid-save']; %>" onkeypress="vis.binds['bring'].onkeypress(this)" data-recent="<%= this.data['oid-recent']; %>"
+            data-list="<%= this.data['oid-list']; %>" data-remove="<%= this.data['oid-remove']; %>">
             <input type="image" src="widgets/bring/img/add.svg" id="addButton" class="addButton"/>
         </div>
         <div class="template-class vis-widget-body <%== this.data.attr('class') %>">
@@ -454,17 +478,17 @@
                           onerror="this.src='https://web.getbring.com/assets/images/items/<%= alternative; %>.png'"
                           alt=<%= name %> align="center" class="item-image" id="img-<%= name.replace(/ /g, '_') %>">
                           <div class="item-name">
-                            <p class= "item-name"> <%= name %> </p>
+                            <p class= "item-name"><%= name %></p>
                           </div>
                           <div class="item-desc">
-                            <p class="item-desc"> <%= specification %> </p>
+                            <p class="item-desc"><%= specification %></p>
                           </div>
                       </div>
                   <% } %>
               </div>
               <div style="clear: both;"></div>
               <hr style="margin-top: 5px; margin-bottom:5px;width:70%;text-align:center;">
-              <div id="recentlist" style="min-width: 100%; padding: 2px;">
+              <div id="recentlist" style="min-width: 100%; padding: 2px; max-height: <%= this.data['max-height-recent'] ? this.data['max-height-recent'] + 'px' : 'auto' %>; overflow: hidden;">
                  <% /* if no recent id configured yet, stop here */
                  if (!vis.states[this.data.attr('oid-recent') + '.val']) return;
                  var recentProductArray = vis.states[this.data.attr('oid-recent') + '.val'];
@@ -482,12 +506,12 @@
                           <img src="https://web.getbring.com/assets/images/items/<%= recentName.toLowerCase().replace(/ /g, '_')
                            .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') %>.png"
                           onerror="this.src='https://web.getbring.com/assets/images/items/<%= recentAlternative; %>.png'"
-                          alt=<%= name %> align="center" class="item-image" id="img-remove-<%= name.replace(/ /g, '_') %>">
+                          alt="<%= recentName %>" align="center" class="item-image" id="img-<%= recentName.replace(/ /g, '_') %>">
                           <div class="item-name">
-                            <p class= "item-name"> <%= recentName %> </p>
+                            <p class= "item-name"><%= recentName %></p>
                           </div>
                           <div class="item-desc">
-                            <p class="item-desc"> <%= recentSpecification %> </p>
+                            <p class="item-desc"><%= recentSpecification %></p>
                           </div>
                       </div>
                 <% } %>
@@ -495,4 +519,6 @@
         </div>
     </div>
     <% setInterval(checkItems, 15000); %>
+
+
 </script>
