@@ -168,6 +168,7 @@
     var registered = false;
     var addedLastFiveSeconds = [];
     var removedLastFiveSeconds = [];
+    var removedRecentLastFiveSeconds = [];
 
     // Binding to communicate with ejs script
     vis.binds['bring'] = {
@@ -189,6 +190,10 @@
             } else {
                 var recentItem = $el.data('recentitem').replace(/_/g, ' ');
                 var desc = $el.data('desc').toString();
+                removedRecentLastFiveSeconds[recentItem] = true;
+                setTimeout(function () {
+                    removedRecentLastFiveSeconds[recentItem] = false;
+                }, 5000);
                 $el.remove();
                 saveItem(recentItem, desc);
             } // endElse
@@ -361,11 +366,11 @@
             } // endFor
 
             // if item is not on list anymore --> remove
-            if (!stillOnList) {
+            if (!stillOnList && !removedRecentLastFiveSeconds[itemIdFixed]) {
                 $(this).remove();
-                /*removedLastFiveSeconds[this.id] = true;
+                /*removedRecentLastFiveSeconds[this.id] = true;
                 setTimeout(function () {
-                    removedLastFiveSeconds[this.id] = false;
+                    removedRecentLastFiveSeconds[this.id] = false;
                 }, 5000);*/
             }
         });
