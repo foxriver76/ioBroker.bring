@@ -57,7 +57,17 @@ For every shopping list a channel with the following states will be created:
     |:---:|:---:|
     |string|R/W|
 
-   *Select an item which should be removed from the shopping list. 
+   *Select an item which should be removed from the shopping list and recent content list. 
+   The state will be acknowledged when the command is acknowledged by the Bring! API.*
+   
+   
+* *list*.moveToRecentContent
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R/W|
+
+   *Select an item which should be moved or added to recent content list. 
    The state will be acknowledged when the command is acknowledged by the Bring! API.*
    
 * *list*.saveItem

@@ -129,6 +129,15 @@ Für jede Einkaufsliste wird ein Channel mit den folgenden Objekten angelegt:
    *Mit diesem State kann ein Gegenstand von der Einkaufsliste entfernt werden. 
    Der State wird bestätigt, sobald das Kommando von der Bring! API bestätigt wurde.*
    
+* *list*.moveToRecentContent
+
+    |Datentyp|Berechtigung|                                                                       
+    |:---:|:---:|
+    |string|R/W|
+
+   *Mit diesem State kann ein Gegenstand zur recentContent Liste bewegt bzw. hinzugefügt werden. 
+   Der State wird bestätigt, sobald das Kommando von der Bring! API bestätigt wurde.*
+   
 * *list*.saveItem
 
     |Datentyp|Berechtigung|                                                                       

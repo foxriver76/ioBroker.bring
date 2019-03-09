@@ -163,6 +163,16 @@ function startAdapter(options) {
                     adapter.log.error(`Error sending shopping list to ${adapter.config.emailInstance}: ${e}`);
                 }
             } // endIf
+        } else if (method === `moveToRecentContent`) {
+            try {
+                await bring.moveToRecentList(listId, state.val);
+                ensureOnlineState(true);
+                adapter.log.info(`[MOVE] Moved ${state.val} to recent content of ${listId}`);
+                adapter.setState(id, state.val, true);
+            } catch (e) {
+                ensureOnlineState(false);
+                adapter.log.warn(e);
+            }
         } // endElseIf
 
         if (!polling[listId]) polling[listId] = setTimeout(() => {
@@ -413,6 +423,20 @@ async function pollAllLists() {
                     role: `text`,
                     name: `Remove Item`,
                     desc: `Remove item from List`,
+                    read: true,
+                    write: true,
+                    type: `string`,
+                    def: ``
+                },
+                native: {}
+            }));
+
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.moveToRecentContent`, {
+                type: `state`,
+                common: {
+                    role: `text`,
+                    name: `Move to Recent List`,
+                    desc: `Move or add item to Recent Content List`,
                     read: true,
                     write: true,
                     type: `string`,
