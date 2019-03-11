@@ -8,7 +8,7 @@
 
 const utils = require(`@iobroker/adapter-core`);
 const crypto = require(`${__dirname}/lib/crypto`);
-const Bring = require(`${__dirname}/lib/bring`);
+const Bring = require(`bring-shopping`);
 const tableify = require(`tableify`);
 const i18nHelper = require(`${__dirname}/lib/i18nHelper`);
 let adapter;

@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.3.0",
+        "version": "1.3.1",
         "news": {
+            "1.3.1": {
+                "en": "outsourced api module",
+                "de": "API-Modul ausgelagert",
+                "ru": "внешний API-модуль",
+                "pt": "módulo api terceirizado",
+                "nl": "uitbestede api-module",
+                "fr": "module d'api externalisé",
+                "it": "modulo API esternalizzato",
+                "es": "módulo api subcontratado",
+                "pl": "outsourcing modułu api",
+                "zh-cn": "外包api模块"
+            },
             "1.3.0": {
                 "en": "added widget",
                 "de": "Widget hinzugefügt",

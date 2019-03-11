@@ -122,6 +122,9 @@ For every shopping list a channel with the following states will be created:
 
 ## Changelog
 
+### 1.3.1
+* (foxriver76) api module outsourced
+
 ### 1.3.0
 * (foxriver76) added widget
 * (foxriver76) add possibility to move items to recentContent
