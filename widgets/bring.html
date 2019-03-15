@@ -164,7 +164,7 @@
             },
             "max-height-recent": {
                 "en": "Maximium height for recent items list in px",
-                "de": "Maximale Höhe für die Liste der kürzlich hinzugefügten Artikel in px",
+                "de": "Max. Höhe der Liste der kürzlich hinzugefügten Artikel in px",
                 "ru": "Максимальная высота списка последних элементов в пикселях",
                 "pt": "Altura máxima para lista de itens recentes em px",
                 "nl": "Maximum hoogte voor recente itemslijst in px",
@@ -173,6 +173,18 @@
                 "es": "Altura máxima para la lista de artículos recientes en px",
                 "pl": "Maksymalna wysokość ostatniej listy elementów w px",
                 "zh-cn": "px中最近项目列表的最大高度"
+            },
+            "max-width-item": {
+                "en": "Max Width per Item in px",
+                "de": "Max. Breite pro Artikel in px",
+                "ru": "Максимальная ширина на элемент в пикселях",
+                "pt": "Largura máxima por item em px",
+                "nl": "Max. Breedte per artikel in px",
+                "fr": "Largeur maximum par élément en px",
+                "it": "Larghezza massima per oggetto in px",
+                "es": "Ancho Máximo por Artículo en px",
+                "pl": "Maksymalna szerokość na element w px",
+                "zh-cn": "每个项目的最大宽度（以px为单位）"
             }
         });
     }
@@ -236,6 +248,7 @@
     function saveItem(item, desc) {
         var $save = $('#save');
         var saveId = $save.data('save');
+        var maxWidth = $save.data('maxwidth');
         item = item ? item : $save.val();
         $save.val('');
         // return on empty form
@@ -273,11 +286,12 @@
         // add item instant to widget
         var html = '<div class="bring-item" data-desc="' + description + '" id=' + itemWoDescription.replace(/ /g, '_') +
             ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
+            'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px;"' +
             ' data-list="' + stateId + '" data-item="' + itemWoDescription.replace(/ /g, '_') + '"> ' +
             '<img src="https://web.getbring.com/assets/images/items/' + item.toLowerCase().replace(/ /g, '_')
                 .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
             'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
-            'alt=' + itemWoDescription + ' align="center" class="item-image" id="img-' + itemWoDescription.replace(/ /g, '_') + '"> ' +
+            'alt=' + itemWoDescription + ' align="center" class="item-image" id="img-' + itemWoDescription.replace(/ /g, '_') + '"' + '>' +
             '<div class="item-name">' +
             '<p class="item-name">' + itemWoDescription + '</p>' +
             '</div>' +
@@ -293,7 +307,9 @@
         var spec = [];
         var knownList = [];
         var knownSpec = [];
-        var stateId = $('#save').data('list');
+        var $save = $('#save');
+        var stateId = $save.data('list');
+        var maxWidth = $save.data('maxwidth');
         var newList = JSON.parse(vis.states[stateId + '.val']);
         var oidRemove = '';
 
@@ -346,11 +362,12 @@
             }
             var html = '<div class="bring-item" id=' + newItems[k].replace(/ /g, '_') +
                 ' onclick="vis.binds[\'bring\'].onclick(this)" data-desc="' + spec[k] + '" data-remove="' + oidRemove + '"' +
+                'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px;">' +
                 'data-list="' + stateId + '" data-item="' + newItems[k].replace(/ /g, '_') + '"> ' +
                 '<img src="https://web.getbring.com/assets/images/items/' + newItems[k].toLowerCase().replace(/ /g, '_')
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
                 'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
-                'alt=' + newItems[k] + ' align="center" class="item-image" id="img-' + newItems[k].replace(/ /g, '_') + '"> ' +
+                'alt=' + newItems[k] + ' align="center" class="item-image" id="img-' + newItems[k].replace(/ /g, '_') + '"'+ '>' +
                 '<div class="item-name">' +
                 '<p class="item-name">' + newItems[k] + '</p>' +
                 '</div>' +
@@ -369,7 +386,9 @@
         var spec = [];
         var knownList = [];
         var knownSpec = [];
-        var stateId = $('#save').data('recent');
+        var $save = $('#save');
+        var stateId = $save.data('recent');
+        var maxWidth = $save.data('maxwidth');
         var newList = JSON.parse(vis.states[stateId + '.val']);
         var oidRemove = '';
 
@@ -422,11 +441,12 @@
             }
             var html = '<div class="bring-recent-item" id="recent_' + newItems[k].replace(/ /g, '_') + '"' +
                 ' onclick="vis.binds[\'bring\'].onclick(this)" data-desc="' + spec[k] + '" data-remove="' + oidRemove + '"' +
+                'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px;">' +
                 'data-list="' + stateId + '" data-recentitem="' + newItems[k].replace(/ /g, '_') + '"> ' +
                 '<img src="https://web.getbring.com/assets/images/items/' + newItems[k].toLowerCase().replace(/ /g, '_')
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
                 'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
-                'alt=' + newItems[k] + ' align="center" class="item-image" id="img-' + newItems[k].replace(/ /g, '_') + '"> ' +
+                'alt=' + newItems[k] + ' align="center" class="item-image" id="img-' + newItems[k].replace(/ /g, '_') + '"' + '>' +
                 '<div class="item-name">' +
                 '<p class="item-name">' + newItems[k] + '</p>' +
                 '</div>' +
@@ -445,7 +465,7 @@
         class="vis-tpl"
         data-vis-prev='<img src="widgets/bring/img/shopping-list.png"></img>'
         data-vis-attrs="oid-list/id,list.json;oid-save/id,text;oid-remove/id,text;oid-recent/id,list.json;text-for-adding/text;
-                        max-height-recent/number;"
+                        max-height-recent/number;max-width-item[116]/number"
         data-vis-set="bring"
         data-vis-type="ctrl"
         data-vis-update-style="true"
@@ -454,7 +474,8 @@
         <div style="height: 45px; margin-bottom: 10px; padding-right: 10px;">
             <input type="text" placeholder="<%= this.data['text-for-adding'] %>" id="save" class="addArticleText" name="addArticle"
             data-save="<%= this.data['oid-save']; %>" onkeypress="vis.binds['bring'].onkeypress(this)" data-recent="<%= this.data['oid-recent']; %>"
-            data-list="<%= this.data['oid-list']; %>" data-remove="<%= this.data['oid-remove']; %>">
+            data-list="<%= this.data['oid-list']; %>" data-remove="<%= this.data['oid-remove']; %>"
+            data-maxwidth="<%= this.data['max-width-item']; %>">
             <input type="image" src="widgets/bring/img/add.svg" id="addButton" class="addButton"/>
         </div>
         <div class="template-class vis-widget-body <%== this.data.attr('class') %>">
@@ -472,7 +493,8 @@
                         } %>
                       <div class="bring-item" data-desc="<%= specification %>" id=<%= name.replace(/ /g, '_') %>
                                         onclick="vis.binds['bring'].onclick(this)" data-remove="<%= this.data['oid-remove'] %>"
-                                         data-list="<%= this.data['oid-list'] %>" data-item="<%= name.replace(/ /g, '_') %>" >
+                                         data-list="<%= this.data['oid-list'] %>" data-item="<%= name.replace(/ /g, '_') %>"
+                                         style="max-width: <%= this.data['max-width-item'] %>px; min-width: <%= this.data['max-width-item'] %>px;">
                           <img src="https://web.getbring.com/assets/images/items/<%= name.toLowerCase().replace(/ /g, '_')
                            .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') %>.png"
                           onerror="this.src='https://web.getbring.com/assets/images/items/<%= alternative; %>.png'"
@@ -502,11 +524,12 @@
                     } %>
                     <div class="bring-recent-item" data-desc="<%= recentSpecification %>" id="recent_<%= recentName.replace(/ /g, '_')%>"
                                         onclick="vis.binds['bring'].onclick(this)" data-remove="<%= this.data['oid-remove'] %>"
-                                         data-list="<%= this.data['oid-recent'] %>" data-recentitem="<%= recentName.replace(/ /g, '_') %>" >
+                                         data-list="<%= this.data['oid-recent'] %>" data-recentitem="<%= recentName.replace(/ /g, '_') %>"
+                                         style="max-width: <%= this.data['max-width-item'] %>px; min-width: <%= this.data['max-width-item'] %>px;" >
                           <img src="https://web.getbring.com/assets/images/items/<%= recentName.toLowerCase().replace(/ /g, '_')
                            .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') %>.png"
                           onerror="this.src='https://web.getbring.com/assets/images/items/<%= recentAlternative; %>.png'"
-                          alt="<%= recentName %>" align="center" class="item-image" id="img-<%= recentName.replace(/ /g, '_') %>">
+                          alt="<%= recentName %>" class="item-image" id="img-<%= recentName.replace(/ /g, '_') %>">
                           <div class="item-name">
                             <p class= "item-name"><%= recentName %></p>
                           </div>
@@ -519,6 +542,5 @@
         </div>
     </div>
     <% setInterval(checkItems, 15000); %>
-
 
 </script>
