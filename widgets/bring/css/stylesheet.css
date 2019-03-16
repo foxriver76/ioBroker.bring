@@ -59,12 +59,12 @@
 }
 
 div.item-name {
-    max-height: 30px;
+    max-height: 28px;
     overflow: hidden;
     margin-top: -5px
 }
 
-p.item-name {
+.item-name p {
     word-wrap: break-word;
     font-size: 0.8em;
 }
@@ -75,7 +75,7 @@ div.item-desc {
     margin-top: -10px;
 }
 
-p.item-desc {
+.item-desc p {
     word-wrap: break-word;
     font-size: 0.7em;
 }
