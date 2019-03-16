@@ -122,6 +122,9 @@ For every shopping list a channel with the following states will be created:
 
 ## Changelog
 
+### 1.3.2
+* (foxriver76) enable configuration of width for items in widget
+
 ### 1.3.1
 * (foxriver76) api module outsourced
 
