@@ -175,16 +175,16 @@
                 "zh-cn": "px中最近项目列表的最大高度"
             },
             "max-width-item": {
-                "en": "Max Width per Item in px",
-                "de": "Max. Breite pro Artikel in px",
-                "ru": "Максимальная ширина на элемент в пикселях",
-                "pt": "Largura máxima por item em px",
-                "nl": "Max. Breedte per artikel in px",
-                "fr": "Largeur maximum par élément en px",
-                "it": "Larghezza massima per oggetto in px",
-                "es": "Ancho Máximo por Artículo en px",
-                "pl": "Maksymalna szerokość na element w px",
-                "zh-cn": "每个项目的最大宽度（以px为单位）"
+                "en": "Width and Height per Item in px",
+                "de": "Breite und Höhe pro Artikel in px",
+                "ru": "Ширина и высота на элемент в пикселях",
+                "pt": "Largura e altura por item em px",
+                "nl": "Breedte en hoogte per item in px",
+                "fr": "Largeur et hauteur par élément en px",
+                "it": "Larghezza e Altezza per Articolo in px",
+                "es": "Ancho y alto por articulo en px",
+                "pl": "Szerokość i wysokość na element w px",
+                "zh-cn": "px中每个项目的宽度和高度"
             }
         });
     }
@@ -283,21 +283,27 @@
 
         // if item is there but description changed, remove item
         if (currentDesc !== null && (description !== currentDesc)) existence && existence.parentNode && existence.parentNode.removeChild(existence);
+        // if item exists in recent items --> remove it because it is now on active items list
+        $('#recent_' + itemWoDescription.replace(/ /g, '_')).remove();
         // add item instant to widget
         var html = '<div class="bring-item" data-desc="' + description + '" id=' + itemWoDescription.replace(/ /g, '_') +
             ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
-            'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px;"' +
+            'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px; ' +
+            'max-height: ' + maxWidth + 'px; min-height: ' + maxWidth + 'px;"' +
             ' data-list="' + stateId + '" data-item="' + itemWoDescription.replace(/ /g, '_') + '"> ' +
             '<img src="https://web.getbring.com/assets/images/items/' + item.toLowerCase().replace(/ /g, '_')
                 .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
             'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
-            'alt=' + itemWoDescription + ' align="center" class="item-image" id="img-' + itemWoDescription.replace(/ /g, '_') + '"' + '>' +
-            '<div class="item-name">' +
-            '<p class="item-name">' + itemWoDescription + '</p>' +
+            'alt=' + itemWoDescription + ' class="item-image" id="img-' + itemWoDescription.replace(/ /g, '_') + '"' +
+        'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
+            '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
+        'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
+        '<p style="font-size: calc(0.112 * ' + maxWidth + 'px);">' + itemWoDescription + '</p>' +
             '</div>' +
-            '<div class="item-desc">' +
-            '<p class="item-desc">' + description + '</p>' +
-            '</div></div>';
+            '<div class="item-desc" style="max-height: calc(0.2155 * ' + maxWidth + 'px);' +
+        'margin-top:calc(-0.0862 * ' + maxWidth + 'px);">' +
+        '<p style="font-size: calc(0.0948 * ' + maxWidth + 'px);">' + description + '</p>' +
+        '</div></div>';
 
         $('#shoppinglist').append(html);
     }
@@ -360,19 +366,24 @@
             if (/^(ä|ö|ü)/g.test(alternative)) {
                 alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
             }
-            var html = '<div class="bring-item" id=' + newItems[k].replace(/ /g, '_') +
-                ' onclick="vis.binds[\'bring\'].onclick(this)" data-desc="' + spec[k] + '" data-remove="' + oidRemove + '"' +
-                'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px;">' +
-                'data-list="' + stateId + '" data-item="' + newItems[k].replace(/ /g, '_') + '"> ' +
+
+            var html = '<div class="bring-item" data-desc="' + spec[k] + '" id=' + newItems[k].replace(/ /g, '_') +
+                ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
+                'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px; ' +
+                'max-height: ' + maxWidth + 'px; min-height: ' + maxWidth + 'px;"' +
+                ' data-list="' + stateId + '" data-item="' + newItems[k].replace(/ /g, '_') + '"> ' +
                 '<img src="https://web.getbring.com/assets/images/items/' + newItems[k].toLowerCase().replace(/ /g, '_')
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
                 'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
-                'alt=' + newItems[k] + ' align="center" class="item-image" id="img-' + newItems[k].replace(/ /g, '_') + '"'+ '>' +
-                '<div class="item-name">' +
-                '<p class="item-name">' + newItems[k] + '</p>' +
+                'alt=' + newItems[k] + ' class="item-image" id="img-' + newItems[k].replace(/ /g, '_') + '"' +
+                'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
+                '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
+                'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
+                '<p style="font-size: calc(0.112 * ' + maxWidth + 'px);">' + newItems[k] + '</p>' +
                 '</div>' +
-                '<div class="item-desc">' +
-                '<p class="item-desc">' + spec[k] + '</p>' +
+                '<div class="item-desc" style="max-height: calc(0.2155 * ' + maxWidth + 'px);' +
+                'margin-top:calc(-0.0862 * ' + maxWidth + 'px);">' +
+                '<p style="font-size: calc(0.0948 * ' + maxWidth + 'px);">' + spec[k] + '</p>' +
                 '</div></div>';
 
             $('#shoppinglist').append(html);
@@ -439,19 +450,23 @@
             if (/^(ä|ö|ü)/g.test(alternative)) {
                 alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
             }
-            var html = '<div class="bring-recent-item" id="recent_' + newItems[k].replace(/ /g, '_') + '"' +
-                ' onclick="vis.binds[\'bring\'].onclick(this)" data-desc="' + spec[k] + '" data-remove="' + oidRemove + '"' +
-                'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px;">' +
-                'data-list="' + stateId + '" data-recentitem="' + newItems[k].replace(/ /g, '_') + '"> ' +
+            var html = '<div class="bring-recent-item" data-desc="' + spec[k] + '" id="recent_' + newItems[k].replace(/ /g, '_') + '"' +
+                ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
+                'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px; ' +
+                'max-height: ' + maxWidth + 'px; min-height: ' + maxWidth + 'px;"' +
+                ' data-list="' + stateId + '" data-recentitem="' + newItems[k].replace(/ /g, '_') + '"> ' +
                 '<img src="https://web.getbring.com/assets/images/items/' + newItems[k].toLowerCase().replace(/ /g, '_')
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
                 'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
-                'alt=' + newItems[k] + ' align="center" class="item-image" id="img-' + newItems[k].replace(/ /g, '_') + '"' + '>' +
-                '<div class="item-name">' +
-                '<p class="item-name">' + newItems[k] + '</p>' +
+                'alt=' + newItems[k] + ' class="item-image" id="img-' + newItems[k].replace(/ /g, '_') + '"' +
+                'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
+                '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
+                'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
+                '<p style="font-size: calc(0.112 * ' + maxWidth + 'px);">' + newItems[k] + '</p>' +
                 '</div>' +
-                '<div class="item-desc">' +
-                '<p class="item-desc">' + spec[k] + '</p>' +
+                '<div class="item-desc" style="max-height: calc(0.2155 * ' + maxWidth + 'px);' +
+                'margin-top:calc(-0.0862 * ' + maxWidth + 'px);">' +
+                '<p style="font-size: calc(0.0948 * ' + maxWidth + 'px);">' + spec[k] + '</p>' +
                 '</div></div>';
 
             $('#recentlist').append(html);
@@ -494,16 +509,20 @@
                       <div class="bring-item" data-desc="<%= specification %>" id=<%= name.replace(/ /g, '_') %>
                                         onclick="vis.binds['bring'].onclick(this)" data-remove="<%= this.data['oid-remove'] %>"
                                          data-list="<%= this.data['oid-list'] %>" data-item="<%= name.replace(/ /g, '_') %>"
-                                         style="max-width: <%= this.data['max-width-item'] %>px; min-width: <%= this.data['max-width-item'] %>px;">
+                                         style="max-width: <%= this.data['max-width-item'] %>px; min-width: <%= this.data['max-width-item'] %>px;
+                                         min-height: <%= this.data['max-width-item'] %>px; max-height: <%= this.data['max-width-item'] %>px;" >
                           <img src="https://web.getbring.com/assets/images/items/<%= name.toLowerCase().replace(/ /g, '_')
                            .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') %>.png"
                           onerror="this.src='https://web.getbring.com/assets/images/items/<%= alternative; %>.png'"
-                          alt=<%= name %> align="center" class="item-image" id="img-<%= name.replace(/ /g, '_') %>">
-                          <div class="item-name">
-                            <p class= "item-name"><%= name %></p>
+                          alt=<%= name %> class="item-image" id="img-<%= name.replace(/ /g, '_') %>"
+                          style="height: calc(0.43 * <%= this.data['max-width-item'] %>px); padding-top: calc(0.172 * <%= this.data['max-width-item'] %>px)">
+                          <div class="item-name" style="max-height: calc(0.2413 * <%= this.data['max-width-item'] %>px);
+                            margin-top: calc(-0.0431 * <%= this.data['max-width-item'] %>px);">
+                            <p style="font-size: calc(0.112 * <%= this.data['max-width-item'] %>px);"><%= name %></p>
                           </div>
-                          <div class="item-desc">
-                            <p class="item-desc"><%= specification %></p>
+                          <div class="item-desc" style="max-height: calc(0.2155 * <%= this.data['max-width-item'] %>px);
+                            margin-top:calc(-0.0862 * <%= this.data['max-width-item'] %>px);">
+                            <p style="font-size: calc(0.0948 * <%= this.data['max-width-item'] %>px);"><%= specification %></p>
                           </div>
                       </div>
                   <% } %>
@@ -525,16 +544,20 @@
                     <div class="bring-recent-item" data-desc="<%= recentSpecification %>" id="recent_<%= recentName.replace(/ /g, '_')%>"
                                         onclick="vis.binds['bring'].onclick(this)" data-remove="<%= this.data['oid-remove'] %>"
                                          data-list="<%= this.data['oid-recent'] %>" data-recentitem="<%= recentName.replace(/ /g, '_') %>"
-                                         style="max-width: <%= this.data['max-width-item'] %>px; min-width: <%= this.data['max-width-item'] %>px;" >
+                                         style="max-width: <%= this.data['max-width-item'] %>px; min-width: <%= this.data['max-width-item'] %>px;
+                                         min-height: <%= this.data['max-width-item'] %>px; max-height: <%= this.data['max-width-item'] %>px;" >
                           <img src="https://web.getbring.com/assets/images/items/<%= recentName.toLowerCase().replace(/ /g, '_')
                            .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') %>.png"
                           onerror="this.src='https://web.getbring.com/assets/images/items/<%= recentAlternative; %>.png'"
-                          alt="<%= recentName %>" class="item-image" id="img-<%= recentName.replace(/ /g, '_') %>">
-                          <div class="item-name">
-                            <p><%= recentName %></p>
+                          alt="<%= recentName %>" class="item-image" id="img-<%= recentName.replace(/ /g, '_') %>"
+                          style="height: calc(0.43 * <%= this.data['max-width-item'] %>px); padding-top: calc(0.172 * <%= this.data['max-width-item'] %>px)">
+                          <div class="item-name" style="max-height: calc(0.2413 * <%= this.data['max-width-item'] %>px);
+                            margin-top: calc(-0.0431 * <%= this.data['max-width-item'] %>px);">
+                            <p style="font-size: calc(0.112 * <%= this.data['max-width-item'] %>px);"><%= recentName %></p>
                           </div>
-                          <div class="item-desc">
-                            <p><%= recentSpecification %></p>
+                          <div class="item-desc" style="max-height: calc(0.2155 * <%= this.data['max-width-item'] %>px);
+                            margin-top:calc(-0.0862 * <%= this.data['max-width-item'] %>px);">
+                            <p style="font-size: calc(0.0948 * <%= this.data['max-width-item'] %>px);"><%= recentSpecification %></p>
                           </div>
                       </div>
                 <% } %>

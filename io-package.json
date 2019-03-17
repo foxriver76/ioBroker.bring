@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.3.2",
+        "version": "1.3.3",
         "news": {
+            "1.3.3": {
+                "en": "also change height and div sizes according to users specification and when item is on recent list and added by text input it is now instantly removed from recent list",
+                "de": "Ändern der Höhe un der div-Größe, entsprechend den Benutzerspezifikationen. Wenn sich das Element in der kürzlichen Liste befindet und durch Texteingabe hinzugefügt wird, wird es nun sofort aus der kürzlichen Liste entfernt",
+                "ru": "также изменяйте высоту и размеры div в соответствии со спецификацией пользователя, и когда элемент находится в недавнем списке и добавляется с помощью ввода текста, он немедленно удаляется из недавнего списка",
+                "pt": "também altere a altura e os tamanhos div de acordo com a especificação do usuário e quando o item estiver na lista recente e adicionado por entrada de texto, ele será instantaneamente removido da lista recente",
+                "nl": "verander ook de hoogte en div-maten volgens de gebruikersspecificatie en wanneer het item in de recente lijst staat en door tekstinvoer is toegevoegd, wordt het nu direct uit de recente lijst verwijderd",
+                "fr": "permet également de modifier la taille et la taille des divisions en fonction des spécifications de l'utilisateur. Lorsque l'élément est répertorié et ajouté par saisie de texte, il est instantanément supprimé de la liste récente.",
+                "it": "cambia anche l'altezza e le dimensioni div in base alle specifiche degli utenti e quando l'elemento si trova nell'elenco recente e aggiunto dall'input di testo, viene immediatamente rimosso dall'elenco recente",
+                "es": "también cambia la altura y los tamaños de div según la especificación de los usuarios y cuando el elemento está en la lista reciente y se agrega mediante entrada de texto, ahora se elimina instantáneamente de la lista reciente",
+                "pl": "zmieniaj także wysokość i rozmiary dywanów zgodnie ze specyfikacją użytkownika, a gdy element jest na ostatniej liście i dodawany przez wprowadzanie tekstu, jest natychmiast usuwany z listy",
+                "zh-cn": "还根据用户规格更改高度和div大小，当项目在最近列表中并通过文本输入添加时，它现在立即从最近的列表中删除"
+            },
             "1.3.2": {
                 "en": "enable configuration of width for items in widget",
                 "de": "Möglichkeit der Konfiguration der Breite für Elemente im Widget",

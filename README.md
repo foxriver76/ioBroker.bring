@@ -122,6 +122,10 @@ For every shopping list a channel with the following states will be created:
 
 ## Changelog
 
+### 1.3.3
+* (foxriver76) also change height and div sizes according to users specification
+* (foxriver76) when item is on recent list and added by text input it is now instantly removed from recent list
+
 ### 1.3.2
 * (foxriver76) enable configuration of width for items in widget
 
