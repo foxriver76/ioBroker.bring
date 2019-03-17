@@ -485,7 +485,7 @@
         data-vis-type="ctrl"
         data-vis-update-style="true"
         data-vis-name="bring-shopping-list">
-        <div class="vis-widget <%== this.data.attr('class') %>" style="width:230px; height:210px;min-width:145px" id="<%= this.data.attr('wid') %>" >
+        <div class="vis-widget <%== this.data.attr('class') %>" style="width:230px; height:210px; min-width:145px; padding-right: 2px" id="<%= this.data.attr('wid') %>" >
         <div style="height: 45px; margin-bottom: 10px; padding-right: 10px;">
             <input type="text" placeholder="<%= this.data['text-for-adding'] %>" id="save" class="addArticleText" name="addArticle"
             data-save="<%= this.data['oid-save']; %>" onkeypress="vis.binds['bring'].onkeypress(this)" data-recent="<%= this.data['oid-recent']; %>"
