@@ -121,6 +121,8 @@ For every shopping list a channel with the following states will be created:
     This can be used e. g. for voice output via smart assistants.*
 
 ## Changelog
+### 1.3.4
+* (foxriver76) add possibility to use this widget multiple times on same page
 
 ### 1.3.3
 * (foxriver76) also change height and div sizes according to users specification
