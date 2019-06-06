@@ -261,8 +261,9 @@
         // if item is already on list --> return
         var currentList = JSON.parse(vis.states[stateId + '.val']);
         var itemWoDescription = item.split(',')[0];
+        var itemWoDescriptionReplaced = itemWoDescription.replace(/ /g, '_');
         var description = desc ? desc : (item.split(',').length > 1) ? item.substring(item.indexOf(',') + 1).trim() : '';
-        var existence = document.getElementById(wid + '-' + itemWoDescription.replace(/ /g, '_'));
+        var existence = document.getElementById(wid + '-' + itemWoDescriptionReplaced);
         var currentDesc = existence ? existence.getAttribute('data-desc') : null;
 
         // set state in backend - do this before existence check because desciption may have changed
@@ -289,15 +290,15 @@
         // if item exists in recent items --> remove it because it is now on active items list
         $('#' + wid + '-recent_' + itemWoDescription.replace(/ /g, '_')).remove();
         // add item instant to widget
-        var html = '<div class="bring-item" data-desc="' + description + '" id=' + wid + '-' + itemWoDescription.replace(/ /g, '_') +
+        var html = '<div class="bring-item" data-desc="' + description + '" id=' + wid + '-' + itemWoDescriptionReplaced +
             ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
             'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px; ' +
             'max-height: ' + maxWidth + 'px; min-height: ' + maxWidth + 'px;"' +
             ' data-list="' + stateId + '" data-item="' + itemWoDescription.replace(/ /g, '_') + '"> ' +
-            '<img src="https://web.getbring.com/assets/images/items/' + itemWoDescription.toLowerCase().replace(/ /g, '_')
+            '<img src="https://web.getbring.com/assets/images/items/' + itemWoDescriptionReplaced.toLowerCase()
                 .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
             'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
-            'alt=' + itemWoDescription + ' class="item-image" id="' + wid + '-img-' + itemWoDescription.replace(/ /g, '_') + '"' +
+            'alt=' + itemWoDescription + ' class="item-image" id="' + wid + '-img-' + itemWoDescriptionReplaced + '"' +
         'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
             '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
         'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
@@ -373,15 +374,17 @@
                 alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
             }
 
-            var html = '<div class="bring-item" data-desc="' + spec[k] + '" id=' + wid + '-' + newItems[k].replace(/ /g, '_') +
+            var newItemReplaced = newItems[k].replace(/ /g, '_');
+
+            var html = '<div class="bring-item" data-desc="' + spec[k] + '" id=' + wid + '-' + newItemReplaced +
                 ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
                 'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px; ' +
                 'max-height: ' + maxWidth + 'px; min-height: ' + maxWidth + 'px;"' +
                 ' data-list="' + stateId + '" data-item="' + newItems[k].replace(/ /g, '_') + '"> ' +
-                '<img src="https://web.getbring.com/assets/images/items/' + newItems[k].toLowerCase().replace(/ /g, '_')
+                '<img src="https://web.getbring.com/assets/images/items/' + newItemReplaced.toLowerCase()
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
                 'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
-                'alt=' + newItems[k] + ' class="item-image" id="' + wid + '-img-' + newItems[k].replace(/ /g, '_') + '"' +
+                'alt=' + newItems[k] + ' class="item-image" id="' + wid + '-img-' + newItemReplaced + '"' +
                 'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
                 '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
                 'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
@@ -458,15 +461,18 @@
             if (/^(ä|ö|ü)/g.test(alternative)) {
                 alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
             }
-            var html = '<div class="bring-recent-item" data-desc="' + spec[k] + '" id="' + wid + '-recent_' + newItems[k].replace(/ /g, '_') + '"' +
+
+            var newItemReplaced = newItems[k].replace(/ /g, '_');
+
+            var html = '<div class="bring-recent-item" data-desc="' + spec[k] + '" id="' + wid + '-recent_' + newItemReplaced + '"' +
                 ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
                 'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px; ' +
                 'max-height: ' + maxWidth + 'px; min-height: ' + maxWidth + 'px;"' +
-                ' data-list="' + stateId + '" data-recentitem="' + newItems[k].replace(/ /g, '_') + '"> ' +
-                '<img src="https://web.getbring.com/assets/images/items/' + newItems[k].toLowerCase().replace(/ /g, '_')
+                ' data-list="' + stateId + '" data-recentitem="' + newItemReplaced + '"> ' +
+                '<img src="https://web.getbring.com/assets/images/items/' + newItemReplaced.toLowerCase()
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
                 'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
-                'alt=' + newItems[k] + ' class="item-image" id="' + wid + '-img-' + newItems[k].replace(/ /g, '_') + '"' +
+                'alt=' + newItems[k] + ' class="item-image" id="' + wid + '-img-' + newItemReplaced + '"' +
                 'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
                 '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
                 'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
