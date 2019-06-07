@@ -315,11 +315,11 @@
         var item = document.getElementById(wid + '-' + itemWoDescriptionReplaced);
         // resize item name
         var resizeText = item.getElementsByClassName('item-name')[0];
-        textFit(resizeText, {maxFontSize: 0.112 * maxWidth});
+        textFit(resizeText, {maxFontSize: 0.112 * maxWidth, detectMultiLine: false});
 
         // resize item desc
         var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
-        textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth});
+        textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
     }
 
     function checkItems(wid) {
@@ -407,10 +407,10 @@
             var item = document.getElementById(wid + '-' + newItemReplaced);
             // resize item name
             var resizeText = item.getElementsByClassName('item-name')[0];
-            textFit(resizeText, {maxFontSize: 0.112 * maxWidth});
+            textFit(resizeText, {maxFontSize: 0.112 * maxWidth, detectMultiLine: false});
             // resize item desc
             var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
-            textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth});
+            textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
         } // endFor
 
         checkRecentItems(wid);
@@ -500,10 +500,10 @@
             var item = document.getElementById(wid + '-recent_' + newItemReplaced);
             // resize item name
             var resizeText = item.getElementsByClassName('item-name')[0];
-            textFit(resizeText, {maxFontSize: 0.112 * maxWidth});
+            textFit(resizeText, {maxFontSize: 0.112 * maxWidth, detectMultiLine: false});
             // resize item desc
             var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
-            textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth});
+            textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
         }
     } // endCheckRecentItems
 
@@ -512,8 +512,8 @@
         var itemNamesResize = document.getElementsByClassName('item-name');
         var itemDescResize = document.getElementsByClassName('item-desc');
 
-        textFit(itemNamesResize, {maxFontSize: 0.112 * maxWidth});
-        textFit(itemDescResize, {maxFontSize: 0.0948 * maxWidth});
+        textFit(itemNamesResize, {maxFontSize: 0.112 * maxWidth, detectMultiLine: false});
+        textFit(itemDescResize, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
     } // endRenderPage
 
 </script>
