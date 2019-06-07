@@ -1,5 +1,5 @@
 <!--
-    ioBroker.vis template Widget-Set
+    ioBroker.vis Bring! Widget
 
     version: "0.0.1"
 
@@ -7,6 +7,7 @@
 -->
 
 <link rel="stylesheet" type="text/css" href="widgets/bring/css/stylesheet.css">
+<script type="text/javascript" src="widgets/bring/js/textFit.js"></script>
 <!-- the full description of format in data-vis-attrs can be found here:
     https://github.com/ioBroker/ioBroker.vis/blob/master/www/js/visEditInspect.js#L39
 
@@ -302,14 +303,23 @@
         'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
             '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
         'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
-        '<p style="font-size: calc(0.112 * ' + maxWidth + 'px);">' + itemWoDescription + '</p>' +
+        itemWoDescription +
             '</div>' +
             '<div class="item-desc" style="max-height: calc(0.2155 * ' + maxWidth + 'px);' +
-        'margin-top:calc(-0.0862 * ' + maxWidth + 'px);">' +
-        '<p style="font-size: calc(0.0948 * ' + maxWidth + 'px);">' + description + '</p>' +
+        'margin-top:calc(-0.0431 * ' + maxWidth + 'px);">' +
+        description +
         '</div></div>';
 
         $('#' + wid + '-shoppinglist').append(html);
+
+        var item = document.getElementById(wid + '-' + itemWoDescriptionReplaced);
+        // resize item name
+        var resizeText = item.getElementsByClassName('item-name')[0];
+        textFit(resizeText, {maxFontSize: 0.112 * maxWidth});
+
+        // resize item desc
+        var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
+        textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth});
     }
 
     function checkItems(wid) {
@@ -387,15 +397,21 @@
                 'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
                 '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
                 'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
-                '<p style="font-size: calc(0.112 * ' + maxWidth + 'px);">' + newItems[k] + '</p>' +
-                '</div>' +
+                newItems[k] + '</div>' +
                 '<div class="item-desc" style="max-height: calc(0.2155 * ' + maxWidth + 'px);' +
-                'margin-top:calc(-0.0862 * ' + maxWidth + 'px);">' +
-                '<p style="font-size: calc(0.0948 * ' + maxWidth + 'px);">' + spec[k] + '</p>' +
-                '</div></div>';
+                'margin-top:calc(-0.0431 * ' + maxWidth + 'px);">' +
+                spec[k] + '</div></div>';
 
             $('#' + wid + '-shoppinglist').append(html);
-        }
+
+            var item = document.getElementById(wid + '-' + newItemReplaced);
+            // resize item name
+            var resizeText = item.getElementsByClassName('item-name')[0];
+            textFit(resizeText, {maxFontSize: 0.112 * maxWidth});
+            // resize item desc
+            var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
+            textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth});
+        } // endFor
 
         checkRecentItems(wid);
     } // endCheckItems
@@ -474,16 +490,31 @@
                 'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
                 '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
                 'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
-                '<p style="font-size: calc(0.112 * ' + maxWidth + 'px);">' + newItems[k] + '</p>' +
-                '</div>' +
+                newItems[k] + '</div>' +
                 '<div class="item-desc" style="max-height: calc(0.2155 * ' + maxWidth + 'px);' +
-                'margin-top:calc(-0.0862 * ' + maxWidth + 'px);">' +
-                '<p style="font-size: calc(0.0948 * ' + maxWidth + 'px);">' + spec[k] + '</p>' +
-                '</div></div>';
+                'margin-top:calc(-0.0431 * ' + maxWidth + 'px);">' +
+                spec[k] + '</div></div>';
 
             $('#' + wid + '-recentlist').append(html);
+
+            var item = document.getElementById(wid + '-recent_' + newItemReplaced);
+            // resize item name
+            var resizeText = item.getElementsByClassName('item-name')[0];
+            textFit(resizeText, {maxFontSize: 0.112 * maxWidth});
+            // resize item desc
+            var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
+            textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth});
         }
     } // endCheckRecentItems
+
+    function renderPage(wid) {
+        var maxWidth = vis.widgets[wid].data['max-width-item'];
+        var itemNamesResize = document.getElementsByClassName('item-name');
+        var itemDescResize = document.getElementsByClassName('item-desc');
+
+        textFit(itemNamesResize, {maxFontSize: 0.112 * maxWidth});
+        textFit(itemDescResize, {maxFontSize: 0.0948 * maxWidth});
+    } // endRenderPage
 
 </script>
 
@@ -513,27 +544,28 @@
                         var name = productArrayJSON[i].name;
                         var specification = productArrayJSON[i].specification.trim();
                         var alternative = name.substring(0, 1).toLowerCase();
+                        var nameReplaced = name.replace(/ /g, '_');
                         if (/^(ä|ö|ü)/g.test(alternative)) {
                             alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
                         } %>
-                      <div class="bring-item" data-desc="<%= specification %>" id="<%= this.data.attr('wid')  %>-<%= name.replace(/ /g, '_') %>"
+                      <div class="bring-item" data-desc="<%= specification %>" id="<%= this.data.attr('wid')  %>-<%= nameReplaced %>"
                                         onclick="vis.binds['bring'].onclick(this)" data-remove="<%= this.data['oid-remove'] %>"
-                                         data-list="<%= this.data['oid-list'] %>" data-item="<%= name.replace(/ /g, '_') %>"
+                                         data-list="<%= this.data['oid-list'] %>" data-item="<%= nameReplaced %>"
                                          style="max-width: <%= this.data['max-width-item'] %>px; min-width: <%= this.data['max-width-item'] %>px;
                                          min-height: <%= this.data['max-width-item'] %>px; max-height: <%= this.data['max-width-item'] %>px;" >
-                          <img src="https://web.getbring.com/assets/images/items/<%= name.toLowerCase().replace(/ /g, '_')
+                          <img src="https://web.getbring.com/assets/images/items/<%= nameReplaced.toLowerCase()
                            .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') %>.png"
                           onerror="this.src='https://web.getbring.com/assets/images/items/<%= alternative; %>.png'"
                           alt=<%= name %> class="item-image" id="<%= this.data.attr('wid')  %>-img-<%= name.replace(/ /g, '_') %>"
                           style="height: calc(0.43 * <%= this.data['max-width-item'] %>px); padding-top: calc(0.172 * <%= this.data['max-width-item'] %>px)">
-                          <div class="item-name" style="max-height: calc(0.2413 * <%= this.data['max-width-item'] %>px);
-                            margin-top: calc(-0.0431 * <%= this.data['max-width-item'] %>px);">
-                            <p style="font-size: calc(0.112 * <%= this.data['max-width-item'] %>px);"><%= name %></p>
+                          <div class="item-name" style="max-height: 10%">
+                            <%= name %>
                           </div>
-                          <div class="item-desc" style="max-height: calc(0.2155 * <%= this.data['max-width-item'] %>px);
-                            margin-top:calc(-0.0862 * <%= this.data['max-width-item'] %>px);">
-                            <p style="font-size: calc(0.0948 * <%= this.data['max-width-item'] %>px);"><%= specification %></p>
+                          <% if (specification) { %>
+                          <div class="item-desc" style="max-height: calc(0.2155 * <%= this.data['max-width-item'] %>px);">
+                            <%= specification%>
                           </div>
+                          <% } %>
                       </div>
                   <% } %>
               </div>
@@ -561,20 +593,21 @@
                           onerror="this.src='https://web.getbring.com/assets/images/items/<%= recentAlternative; %>.png'"
                           alt="<%= recentName %>" class="item-image" id="<%= this.data.attr('wid')  %>-img-<%= recentName.replace(/ /g, '_') %>"
                           style="height: calc(0.43 * <%= this.data['max-width-item'] %>px); padding-top: calc(0.172 * <%= this.data['max-width-item'] %>px)">
-                          <div class="item-name" style="max-height: calc(0.2413 * <%= this.data['max-width-item'] %>px);
-                            margin-top: calc(-0.0431 * <%= this.data['max-width-item'] %>px);">
-                            <p style="font-size: calc(0.112 * <%= this.data['max-width-item'] %>px);"><%= recentName %></p>
+                          <div class="item-name" style="max-height: calc(0.2413 * <%= this.data['max-width-item'] %>px);">
+                            <%= recentName %>
                           </div>
-                          <div class="item-desc" style="max-height: calc(0.2155 * <%= this.data['max-width-item'] %>px);
-                            margin-top:calc(-0.0862 * <%= this.data['max-width-item'] %>px);">
-                            <p style="font-size: calc(0.0948 * <%= this.data['max-width-item'] %>px);"><%= recentSpecification %></p>
+                          <% if (recentSpecification) { %>
+                            <div class="item-desc" style="max-height: calc(0.2155 * <%= this.data['max-width-item'] %>px);">
+                                <%= recentSpecification %>
                           </div>
+                          <% } %>
                       </div>
                 <% } %>
               </div>
         </div>
     </div>
     <% var that = this; %>
+    <% setTimeout(function () {renderPage(that.data.attr('wid'))}, 50); %>
     <% setInterval(function () { %>
     <%=    checkItems(that.data.attr('wid')); %>
     <% }, 15000); %>

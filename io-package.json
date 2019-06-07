@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.3.4",
+        "version": "1.4.0",
         "news": {
+            "1.4.0": {
+                "en": "use textFit to fit longer text to widget + internal reworks for widget",
+                "de": "Verwenden Sie textFit, um längeren Text in das Widget einzufügen, sowie interne Überarbeitungen für das Widget",
+                "ru": "использовать textFit для подгонки длинного текста к виджету + внутренние изменения для виджета",
+                "pt": "use textFit para ajustar texto mais longo ao widget + retrabalho interno para widget",
+                "nl": "gebruik textFit om langere tekst aan widget + interne reworks voor widget aan te passen",
+                "fr": "utilisez textFit pour adapter du texte plus long au widget + retouches internes pour le widget",
+                "it": "usa textFit per adattare testo più lungo a widget + rielaborazioni interne per widget",
+                "es": "use textFit para ajustar texto más largo al widget + trabajos internos para el widget",
+                "pl": "użyj textFit, aby dopasować dłuższy tekst do widgetu + wewnętrzne przeróbki widgetu",
+                "zh-cn": "使用textFit将较长的文本适合小部件+内部重新构建小部件"
+            },
             "1.3.4": {
                 "en": "add possibility to use this widget multiple times on same page",
                 "de": "Möglichkeit hinzufügt, dieses Widget mehrmals auf derselben Seite zu verwenden",

@@ -15,6 +15,11 @@
     color: white;
 }
 
+span.textFitted {
+    font-weight: bold;
+    margin-left: 5%;
+}
+
 .addArticleText {
     background-color: transparent;
     border-width: 0 0 2px 0;
@@ -35,7 +40,6 @@
 }
 
 .bring-item {
-    overflow: hidden;
     background-color: #EE524F;
     float: left;
     text-align: center;
@@ -47,7 +51,6 @@
 }
 
 .bring-recent-item {
-    overflow: hidden;
     background-color: #4faba2;
     float: left;
     text-align: center;
@@ -61,8 +64,9 @@
 div.item-name {
     max-height: 28px;
     overflow: hidden;
-    margin-top: -5px;
+    margin-top: 0;
     padding: 0;
+    max-width: 95%;
 }
 
 .item-name p {
@@ -73,8 +77,9 @@ div.item-name {
 div.item-desc {
     max-height: 25px;
     overflow: hidden;
-    margin-top: -10px;
+    margin-top: 0;
     padding: 0;
+    max-width: 95%;
 }
 
 .item-desc p {
