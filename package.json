@@ -1,6 +1,6 @@
 {
 	"name": "iobroker.bring",
-	"version": "1.4.0",
+	"version": "1.5.0",
 	"engines": {
 		"node": ">=8.0.0"
 	},
@@ -30,7 +30,7 @@
 		"url": "https://github.com/foxriver76/ioBroker.bring"
 	},
 	"dependencies": {
-		"bring-shopping": "^1.0.0",
+		"bring-shopping": "^1.2.1",
 		"@iobroker/adapter-core": "^1.0.3",
 		"tableify": "^1.1.0"
 	},

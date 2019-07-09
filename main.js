@@ -17,6 +17,7 @@ let mail;
 let password;
 let bring;
 const polling = {};
+const listLang = {};
 let loginTimeout;
 let lang;
 
@@ -196,14 +197,25 @@ async function main() {
 
     await tryLogin();
 
-    /*
     try {
         const res = await bring.getUserSettings();
-        adapter.log.info(`[DATA] User settings loaded: ${JSON.stringify(res)}`);
+        adapter.log.debug(`[DATA] User settings loaded: ${JSON.stringify(res)}`);
+        for (const list of res.userlistsettings) {
+            // save the translation
+            if (list.usersettings[0].key === `listArticleLanguage`) {
+                adapter.log.debug(`[DATA] List settings: ${JSON.stringify(list)}`);
+                listLang[list.listUuid] = await bring.loadTranslations(list.usersettings[0].value);
+                adapter.log.debug(`[I18N] Saved ${list.usersettings[0].value} for ${list.listUuid} with: ${JSON.stringify(listLang[list.listUuid])}`); //test
+            } // endIf
+        } // endFor
     } catch (e) {
         adapter.log.warn(e);
     } // endTryCatch
-    */
+
+
+    // Start polling, this goes endless
+    pollAllLists();
+
 } // endMain
 
 function pollList(listUuid) {
@@ -499,7 +511,23 @@ async function pollAllLists() {
                 native: {}
             }));
 
+            promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.translation`, {
+                type: `state`,
+                common: {
+                    role: `json`,
+                    name: `JSON dictionary`,
+                    desc: `A dictionary to translate the swiss item names`,
+                    read: true,
+                    write: false,
+                    type: `string`
+                },
+                native: {}
+            }));
+
             await Promise.all(promises);
+
+            const dict = listLang[entry.listUuid] ? listLang[entry.listUuid] : await bring.loadTranslations(`de-DE`);
+            await adapter.setStateAsync(`${entry.listUuid}.translation`, JSON.stringify(dict), true);
 
             bring.getItems(entry.listUuid).then(data => {
                 adapter.log.debug(`[DATA] Items from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
@@ -555,7 +583,6 @@ async function tryLogin() {
         adapter.setState(`info.connection`, true, true);
         adapter.setState(`info.user`, bring.name, true);
         adapter.log.info(`[LOGIN] Successfully logged in as ${bring.name}`);
-        await pollAllLists();
         if (loginTimeout) clearTimeout(loginTimeout);
         return Promise.resolve();
     } catch (e) {

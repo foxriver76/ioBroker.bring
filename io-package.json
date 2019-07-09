@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.4.0",
+        "version": "1.5.0",
         "news": {
+            "1.5.0": {
+                "en": "usage of node-bring-api version 1.2.1, new state for translations",
+                "de": "Verwendung von Node-Bring-API Version 1.2.1, neuer Status für Übersetzungen",
+                "ru": "использование узла-принес-API версии 1.2.1, новое состояние для переводов",
+                "pt": "uso de node-bring-api versão 1.2.1, novo estado para traduções",
+                "nl": "gebruik van node-bring-api versie 1.2.1, nieuwe staat voor vertalingen",
+                "fr": "utilisation de node-bring-api version 1.2.1, nouvel état pour les traductions",
+                "it": "utilizzo di node-bring-api versione 1.2.1, nuovo stato per le traduzioni",
+                "es": "Uso de la versión 1.2.1 de node-bring-api, nuevo estado para traducciones",
+                "pl": "użycie węzła bring-api wersja 1.2.1, nowy stan dla tłumaczeń",
+                "zh-cn": "node-bring-api 1.2.1版的用法，翻译的新状态"
+            },
             "1.4.0": {
                 "en": "use textFit to fit longer text to widget + internal reworks for widget",
                 "de": "Verwenden Sie textFit, um längeren Text in das Widget einzufügen, sowie interne Überarbeitungen für das Widget",
@@ -158,18 +170,6 @@
                 "es": "Estados HTML añadidos sin encabezado y correcciones menores",
                 "pl": "dodano stany html bez nagłówka i drobnych poprawek",
                 "zh-cn": "添加了没有标题和次要修复的html状态"
-            },
-            "0.0.7": {
-                "en": "fixed a potential memory leak by setTimeout functions",
-                "de": "ein potentieller Speicherverlust durch setTimeout-Funktionen behoben",
-                "ru": "исправлена ​​потенциальная утечка памяти функциями setTimeout",
-                "pt": "corrigido um vazamento de memória potencial por funções setTimeout",
-                "nl": "een mogelijk geheugenlek opgelost door setTimeout-functies",
-                "fr": "correction d'une fuite de mémoire potentielle par les fonctions setTimeout",
-                "it": "risolto una potenziale perdita di memoria con le funzioni setTimeout",
-                "es": "arreglado una pérdida potencial de memoria por las funciones setTimeout",
-                "pl": "naprawiono potencjalny wyciek pamięci przez funkcje setTimeout",
-                "zh-cn": "通过setTimeout函数修复了潜在的内存泄漏"
             }
         },
         "title": "Bring!",

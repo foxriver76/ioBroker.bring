@@ -119,8 +119,21 @@ For every shopping list a channel with the following states will be created:
     
     *Read only string, which contains an enumeration of the shopping list items in a speakable form.
     This can be used e. g. for voice output via smart assistants.*
+    
+* *list*.translation
+
+    |Data type|Permission|                                                                       
+    |:---:|:---:|
+    |string|R|
+    
+    *Read only json string, which contains a dictionary to translate the swiss item names to the list language.*
 
 ## Changelog
+
+### 1.5.0 (2019-07-09)
+* (foxriver76) get translations according to list language
+* (foxriver76) translations will be stored in datapoint
+* (foxriver76) use bring-node-api at least 1.2.1
 
 ### 1.4.0 (2019-06-07)
 * (foxriver76) use textFit to fit text to one line in widget

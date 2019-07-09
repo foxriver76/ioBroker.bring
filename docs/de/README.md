@@ -187,3 +187,11 @@ Für jede Einkaufsliste wird ein Channel mit den folgenden Objekten angelegt:
     
     *Nur lesbarer String, welcher eine Auflistung der aktuellen Gegenstände in sprechbarer Form enthält. 
     Eignet sich z. B. zur Sprachausgabe via Sprachassistenten.*
+    
+* *list*.translation
+
+    |Datentyp|Berechtigung|                                                                       
+    |:---:|:---:|
+    |string|R|
+    
+    *Nur lesbarer JSON-String, der ein Wörterbuch zur Übersetzung der schweizerischen Namen in die Listensprache darstellt.
