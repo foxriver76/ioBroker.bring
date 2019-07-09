@@ -205,7 +205,7 @@ async function main() {
             if (list.usersettings[0].key === `listArticleLanguage`) {
                 adapter.log.debug(`[DATA] List settings: ${JSON.stringify(list)}`);
                 listLang[list.listUuid] = await bring.loadTranslations(list.usersettings[0].value);
-                adapter.log.debug(`[I18N] Saved ${list.usersettings[0].value} for ${list.listUuid} with: ${JSON.stringify(listLang[list.listUuid])}`); //test
+                adapter.log.debug(`[I18N] Saved ${list.usersettings[0].value} for ${list.listUuid} with: ${JSON.stringify(listLang[list.listUuid])}`);
             } // endIf
         } // endFor
     } catch (e) {
