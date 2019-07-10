@@ -281,7 +281,7 @@
         var currentDesc = existence ? existence.getAttribute('data-desc') : null;
         var nameFromDict = dict[wid][itemWoDescription] ? dict[wid][itemWoDescription] : itemWoDescription;
 
-        // set state in backend - do this before existence check because desciption may have changed
+        // set state in backend - do this before existence check because description may have changed
         vis.setValue(saveId, item + (desc ? ',' + desc : ''));
 
         for (var i = 0; i < currentList.length; i++) {
@@ -562,10 +562,17 @@
                      if (!vis.states[this.data.attr('oid-list') + '.val']) return;
                      var productArray = vis.states[this.data.attr('oid-list') + '.val'];
                      var productArrayJSON = JSON.parse(productArray);
+                     var translations = vis.states[this.data.attr('oid-translations') + '.val'];
+                     try {
+                        translations = JSON.parse(translations);
+                     } catch (e) {
+                        console.log('Cannot parse translations: ' + e);
+                     }
                      for (var i = 0; i < productArrayJSON.length; i++) {
                         var name = productArrayJSON[i].name;
                         var specification = productArrayJSON[i].specification.trim();
-                        var alternative = name.substring(0, 1).toLowerCase();
+                        var translatedName = translations[name] ? translations[name] : name;
+                        var alternative = translatedName.substring(0, 1).toLowerCase();
                         var nameReplaced = name.replace(/ /g, '_');
                         if (/^(ä|ö|ü)/g.test(alternative)) {
                             alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
@@ -581,7 +588,7 @@
                           alt=<%= name %> class="item-image" id="<%= this.data.attr('wid')  %>-img-<%= name.replace(/ /g, '_') %>"
                           style="height: calc(0.43 * <%= this.data['max-width-item'] %>px); padding-top: calc(0.172 * <%= this.data['max-width-item'] %>px)">
                           <div class="item-name" style="max-height: 10%">
-                            <%= name %>
+                            <%= translatedName %>
                           </div>
                           <% if (specification) { %>
                           <div class="item-desc" style="max-height: calc(0.2155 * <%= this.data['max-width-item'] %>px);">
@@ -598,10 +605,17 @@
                  if (!vis.states[this.data.attr('oid-recent') + '.val']) return;
                  var recentProductArray = vis.states[this.data.attr('oid-recent') + '.val'];
                  var recentProductArrayJSON = JSON.parse(recentProductArray);
+                 var translations = vis.states[this.data.attr('oid-translations') + '.val'];
+                 try {
+                    translations = JSON.parse(translations);
+                 } catch (e) {
+                    console.log('Cannot parse translations: ' + e);
+                 }
                  for (var j = 0; j < recentProductArrayJSON.length; j++) {
                     var recentName = recentProductArrayJSON[j].name;
                     var recentSpecification = recentProductArrayJSON[j].specification.trim();
-                    var recentAlternative = recentName.substring(0, 1).toLowerCase();
+                    var translatedRecentName = translations[recentName] ? translations[recentName] : recentName;
+                    var recentAlternative = translatedRecentName.substring(0, 1).toLowerCase();
                     if (/^(ä|ö|ü)/g.test(recentAlternative)) {
                         recentAlternative = recentAlternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
                     } %>
@@ -616,7 +630,7 @@
                           alt="<%= recentName %>" class="item-image" id="<%= this.data.attr('wid')  %>-img-<%= recentName.replace(/ /g, '_') %>"
                           style="height: calc(0.43 * <%= this.data['max-width-item'] %>px); padding-top: calc(0.172 * <%= this.data['max-width-item'] %>px)">
                           <div class="item-name" style="max-height: calc(0.2413 * <%= this.data['max-width-item'] %>px);">
-                            <%= recentName %>
+                            <%= translatedRecentName %>
                           </div>
                           <% if (recentSpecification) { %>
                             <div class="item-desc" style="max-height: calc(0.2155 * <%= this.data['max-width-item'] %>px);">
