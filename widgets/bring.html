@@ -186,6 +186,18 @@
                 "es": "Ancho y alto por articulo en px",
                 "pl": "Szerokość i wysokość na element w px",
                 "zh-cn": "px中每个项目的宽度和高度"
+            },
+            "oid-translations": {
+                "en": "Dictionary used for translations",
+                "de": "Wörterbuch für Übersetzungen",
+                "ru": "Словарь, используемый для переводов",
+                "pt": "Dicionário usado para traduções",
+                "nl": "Woordenboek gebruikt voor vertalingen",
+                "fr": "Dictionnaire utilisé pour les traductions",
+                "it": "Dizionario utilizzato per le traduzioni",
+                "es": "Diccionario utilizado para traducciones",
+                "pl": "Słownik używany do tłumaczeń",
+                "zh-cn": "用于翻译的字典"
             }
         });
     }
@@ -194,6 +206,7 @@
     var addedLastFiveSeconds = [];
     var removedLastFiveSeconds = [];
     var removedRecentLastFiveSeconds = [];
+    var dict = {};
 
     // Binding to communicate with ejs script
     vis.binds['bring'] = {
@@ -266,6 +279,7 @@
         var description = desc ? desc : (item.split(',').length > 1) ? item.substring(item.indexOf(',') + 1).trim() : '';
         var existence = document.getElementById(wid + '-' + itemWoDescriptionReplaced);
         var currentDesc = existence ? existence.getAttribute('data-desc') : null;
+        var nameFromDict = dict[wid][itemWoDescription] ? dict[wid][itemWoDescription] : itemWoDescription;
 
         // set state in backend - do this before existence check because desciption may have changed
         vis.setValue(saveId, item + (desc ? ',' + desc : ''));
@@ -303,7 +317,7 @@
         'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
             '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
         'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
-        itemWoDescription +
+            nameFromDict +
             '</div>' +
             '<div class="item-desc" style="max-height: calc(0.2155 * ' + maxWidth + 'px);' +
         'margin-top:calc(-0.0431 * ' + maxWidth + 'px);">' +
@@ -384,6 +398,7 @@
             }
 
             var newItemReplaced = newItems[k].replace(/ /g, '_');
+            var nameFromDict = dict[wid][newItems[k]] ? dict[wid][newItems[k]] : newItems[k];
 
             var html = '<div class="bring-item" data-desc="' + spec[k] + '" id=' + wid + '-' + newItemReplaced +
                 ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
@@ -397,7 +412,7 @@
                 'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
                 '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
                 'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
-                newItems[k] + '</div>' +
+                nameFromDict + '</div>' +
                 '<div class="item-desc" style="max-height: calc(0.2155 * ' + maxWidth + 'px);' +
                 'margin-top:calc(-0.0431 * ' + maxWidth + 'px);">' +
                 spec[k] + '</div></div>';
@@ -477,6 +492,7 @@
             }
 
             var newItemReplaced = newItems[k].replace(/ /g, '_');
+            var nameFromDict = dict[wid][newItems[k]] ? dict[wid][newItems[k]] : newItems[k];
 
             var html = '<div class="bring-recent-item" data-desc="' + spec[k] + '" id="' + wid + '-recent_' + newItemReplaced + '"' +
                 ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
@@ -490,7 +506,7 @@
                 'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
                 '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
                 'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
-                newItems[k] + '</div>' +
+                nameFromDict + '</div>' +
                 '<div class="item-desc" style="max-height: calc(0.2155 * ' + maxWidth + 'px);' +
                 'margin-top:calc(-0.0431 * ' + maxWidth + 'px);">' +
                 spec[k] + '</div></div>';
@@ -514,6 +530,12 @@
 
         textFit(itemNamesResize, {maxFontSize: 0.112 * maxWidth, detectMultiLine: false});
         textFit(itemDescResize, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
+        var transId = vis.widgets[wid].data['oid-translations'] + '.val';
+        try {
+            dict[wid] = JSON.parse(vis.states[transId]);
+        } catch (e) {
+            console.error('Cannot parse translations: ' + e);
+        } // endCatch
     } // endRenderPage
 
 </script>
@@ -523,7 +545,7 @@
         class="vis-tpl"
         data-vis-prev='<img src="widgets/bring/img/shopping-list.png"></img>'
         data-vis-attrs="oid-list/id,list.json;oid-save/id,text;oid-remove/id,text;oid-recent/id,list.json;text-for-adding/text;
-                        max-height-recent/number;max-width-item[116]/number"
+                        oid-translations/id,json;max-height-recent/number;max-width-item[116]/number"
         data-vis-set="bring"
         data-vis-type="ctrl"
         data-vis-update-style="true"
