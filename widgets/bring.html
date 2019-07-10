@@ -290,7 +290,7 @@
         }
         // after we have set state in vis, we remove description
         var oidRemove = vis.widgets[wid].data['oid-remove'];
-        var alternative = item.substring(0, 1).toLowerCase();
+        var alternative = nameFromDict.substring(0, 1).toLowerCase();
         if (/^(ä|ö|ü)/g.test(alternative)) {
             alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
         }
@@ -392,13 +392,13 @@
         for (var k = 0; k < newItems.length; k++) {
             // if item was rm recently backend doesn't know yet so do not add it again
             if (removedLastFiveSeconds[newItems[k]]) continue;
-            alternative = newItems[k].substring(0, 1).toLowerCase();
+            var nameFromDict = dict[wid][newItems[k]] ? dict[wid][newItems[k]] : newItems[k];
+            alternative = nameFromDict.substring(0, 1).toLowerCase();
             if (/^(ä|ö|ü)/g.test(alternative)) {
                 alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
             }
 
             var newItemReplaced = newItems[k].replace(/ /g, '_');
-            var nameFromDict = dict[wid][newItems[k]] ? dict[wid][newItems[k]] : newItems[k];
 
             var html = '<div class="bring-item" data-desc="' + spec[k] + '" id=' + wid + '-' + newItemReplaced +
                 ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
@@ -486,13 +486,13 @@
         var alternative;
         for (var k = 0; k < newItems.length; k++) {
             // if item was rm recently backend doesn't know yet so do not add it again
-            alternative = newItems[k].substring(0, 1).toLowerCase();
+            var newItemReplaced = newItems[k].replace(/ /g, '_');
+            var nameFromDict = dict[wid][newItems[k]] ? dict[wid][newItems[k]] : newItems[k];
+            alternative = nameFromDict.substring(0, 1).toLowerCase();
+
             if (/^(ä|ö|ü)/g.test(alternative)) {
                 alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
             }
-
-            var newItemReplaced = newItems[k].replace(/ /g, '_');
-            var nameFromDict = dict[wid][newItems[k]] ? dict[wid][newItems[k]] : newItems[k];
 
             var html = '<div class="bring-recent-item" data-desc="' + spec[k] + '" id="' + wid + '-recent_' + newItemReplaced + '"' +
                 ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
