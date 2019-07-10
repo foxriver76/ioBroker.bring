@@ -207,6 +207,7 @@
     var removedLastFiveSeconds = [];
     var removedRecentLastFiveSeconds = [];
     var dict = {};
+    var invertedDict = {};
 
     // Binding to communicate with ejs script
     vis.binds['bring'] = {
@@ -266,29 +267,33 @@
         var $save = $('#' + wid + '-save');
         var saveId = vis.widgets[wid].data['oid-save'];
         var maxWidth = vis.widgets[wid].data['max-width-item'];
+
         item = item ? item : $save.val();
+        var itemWoDescription = $save.val().length && invertedDict[wid][item.split(',')[0]] ? invertedDict[wid][item.split(',')[0]] : item.split(',')[0];
         $save.val('');
+
         // return on empty form
         if (item === '') return;
         var stateId = vis.widgets[wid].data['oid-list'];
 
         // if item is already on list --> return
         var currentList = JSON.parse(vis.states[stateId + '.val']);
-        var itemWoDescription = item.split(',')[0];
         var itemWoDescriptionReplaced = itemWoDescription.replace(/ /g, '_');
-        var description = desc ? desc : (item.split(',').length > 1) ? item.substring(item.indexOf(',') + 1).trim() : '';
+        desc = desc ? desc : (item.split(',').length > 1) ? item.substring(item.indexOf(',') + 1).trim() : '';
         var existence = document.getElementById(wid + '-' + itemWoDescriptionReplaced);
         var currentDesc = existence ? existence.getAttribute('data-desc') : null;
+
+        // Translate to list language
         var nameFromDict = dict[wid][itemWoDescription] ? dict[wid][itemWoDescription] : itemWoDescription;
 
         // set state in backend - do this before existence check because description may have changed
-        vis.setValue(saveId, item + (desc ? ',' + desc : ''));
+        vis.setValue(saveId, itemWoDescription + (desc ? ',' + desc : ''));
 
         for (var i = 0; i < currentList.length; i++) {
-            if (((currentList[i].name === itemWoDescription && currentList[i].specification === description) && !removedLastFiveSeconds[itemWoDescription])
-                || (existence !== null && (description === currentDesc))) return;
+            if (((currentList[i].name === itemWoDescription && currentList[i].specification === desc) && !removedLastFiveSeconds[itemWoDescription])
+                || (existence !== null && (desc === currentDesc))) return;
         }
-        // after we have set state in vis, we remove description
+
         var oidRemove = vis.widgets[wid].data['oid-remove'];
         var alternative = nameFromDict.substring(0, 1).toLowerCase();
         if (/^(ä|ö|ü)/g.test(alternative)) {
@@ -301,11 +306,11 @@
         }, 5000);
 
         // if item is there but description changed, remove item
-        if (currentDesc !== null && (description !== currentDesc)) existence && existence.parentNode && existence.parentNode.removeChild(existence);
+        if (currentDesc !== null && (desc !== currentDesc)) existence && existence.parentNode && existence.parentNode.removeChild(existence);
         // if item exists in recent items --> remove it because it is now on active items list
         $('#' + wid + '-recent_' + itemWoDescription.replace(/ /g, '_')).remove();
         // add item instant to widget
-        var html = '<div class="bring-item" data-desc="' + description + '" id=' + wid + '-' + itemWoDescriptionReplaced +
+        var html = '<div class="bring-item" data-desc="' + desc + '" id=' + wid + '-' + itemWoDescriptionReplaced +
             ' onclick="vis.binds[\'bring\'].onclick(this)" data-remove="' + oidRemove + '"' +
             'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px; ' +
             'max-height: ' + maxWidth + 'px; min-height: ' + maxWidth + 'px;"' +
@@ -321,7 +326,7 @@
             '</div>' +
             '<div class="item-desc" style="max-height: calc(0.2155 * ' + maxWidth + 'px);' +
         'margin-top:calc(-0.0431 * ' + maxWidth + 'px);">' +
-        description +
+        desc +
         '</div></div>';
 
         $('#' + wid + '-shoppinglist').append(html);
@@ -533,11 +538,22 @@
         var transId = vis.widgets[wid].data['oid-translations'] + '.val';
         try {
             dict[wid] = JSON.parse(vis.states[transId]);
+            invertedDict[wid] = swap(dict[wid]);
         } catch (e) {
             console.error('Cannot parse translations: ' + e);
         } // endCatch
     } // endRenderPage
 
+    /*
+    *   Swap key value of JSON
+    **/
+    function swap(json){
+        var ret = {};
+        for(var key in json){
+            ret[json[key]] = key;
+        }
+        return ret;
+    }
 </script>
 
 <script id="tplBringShoppingList"
@@ -566,7 +582,7 @@
                      try {
                         translations = JSON.parse(translations);
                      } catch (e) {
-                        console.log('Cannot parse translations: ' + e);
+                        console.error('Cannot parse translations: ' + e);
                      }
                      for (var i = 0; i < productArrayJSON.length; i++) {
                         var name = productArrayJSON[i].name;
@@ -609,7 +625,7 @@
                  try {
                     translations = JSON.parse(translations);
                  } catch (e) {
-                    console.log('Cannot parse translations: ' + e);
+                    console.error('Cannot parse translations: ' + e);
                  }
                  for (var j = 0; j < recentProductArrayJSON.length; j++) {
                     var recentName = recentProductArrayJSON[j].name;
