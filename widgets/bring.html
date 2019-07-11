@@ -198,6 +198,9 @@
         }
     };
 
+    /*
+    *   Add new item to list
+    **/
     function saveItem(item, desc, wid) {
         var $save = $('#' + wid + '-save');
         var maxWidth = vis.widgets[wid].data['max-width-item'];
@@ -227,12 +230,12 @@
             for (var i = 0; i < currentList.length; i++) {
                 if (((currentList[i].name === itemWoDescription && currentList[i].specification === desc) && !removedLastFiveSeconds[itemWoDescription])
                     || (existence !== null && (desc === currentDesc))) return;
-            }
+            } // endFor
 
             var alternative = nameFromDict.substring(0, 1).toLowerCase();
             if (/^(ä|ö|ü)/g.test(alternative)) {
                 alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
-            }
+            } // endIf
 
             addedLastFiveSeconds[item] = true;
             setTimeout(function () {
@@ -241,8 +244,10 @@
 
             // if item is there but description changed, remove item
             if (currentDesc !== null && (desc !== currentDesc)) existence && existence.parentNode && existence.parentNode.removeChild(existence);
+
             // if item exists in recent items --> remove it because it is now on active items list
             $('#' + wid + '-recent_' + itemWoDescription.replace(/ /g, '_')).remove();
+
             // add item instant to widget
             var html = '<div class="bring-item" data-desc="' + desc + '" id=' + wid + '-' + itemWoDescriptionReplaced +
                 ' onclick="vis.binds[\'bring\'].onclick(this)" ' +
@@ -280,6 +285,9 @@
         });
     } // endSaveItem
 
+    /*
+    *   Update current items
+    **/
     function checkItems(wid) {
         var newItems = [];
         var spec = [];
@@ -339,7 +347,7 @@
                 alternative = nameFromDict.substring(0, 1).toLowerCase();
                 if (/^(ä|ö|ü)/g.test(alternative)) {
                     alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
-                }
+                } // endIf
 
                 var newItemReplaced = newItems[k].replace(/ /g, '_');
 
@@ -379,6 +387,9 @@
         });
     } // endCheckItems
 
+    /*
+    *   Update the recent items
+    **/
     function checkRecentItems(wid) {
         var newItems = [];
         var spec = [];
@@ -520,7 +531,7 @@
             ret[json[key]] = key;
         }
         return ret;
-    }
+    } // endSwap
 </script>
 
 <script id="tplBringShoppingList"
@@ -534,9 +545,9 @@
         data-vis-name="bring-shopping-list">
         <div class="vis-widget <%== this.data.attr('class') %>" style="width:230px; height:210px; min-width:145px;" id="<%= this.data.attr('wid'); %>" >
         <div style="height: 45px; margin-bottom: 10px; padding-right: 10px;">
-            <input type="text" placeholder="<%= this.data['text-for-adding'] %>" id="<%= this.data.attr('wid')  %>-save" class="addArticleText" name="addArticle"
+            <input type="text" placeholder="<%= this.data['text-for-adding'] %>" id="<%= this.data.attr('wid') %>-save" class="addArticleText" name="addArticle"
             onkeypress="vis.binds['bring'].onkeypress(this)">
-            <input type="image" src="widgets/bring/img/add.svg" id="<%= this.data.attr('wid')  %>-addButton" class="addButton"/>
+            <input type="image" src="widgets/bring/img/add.svg" id="<%= this.data.attr('wid') %>-addButton" class="addButton"/>
         </div>
         <div class="template-class vis-widget-body <%== this.data.attr('class') %>">
               <div id="<%= this.data.attr('wid') %>-shoppinglist" style="min-width: 100%; padding: 2px;">
