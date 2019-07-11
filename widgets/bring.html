@@ -527,6 +527,11 @@
                 console.error('Cannot parse translations: ' + e);
             } // endCatch
         });
+
+        // After rendering is done, start synchronization interval
+        setInterval(function () {
+            checkItems(wid);
+        }, 15000);
     } // endRenderPage
 
     /*
@@ -545,9 +550,8 @@
         type="text/ejs"
         class="vis-tpl"
         data-vis-prev='<img src="widgets/bring/img/shopping-list.png"></img>'
-        data-vis-attrs="oid-list/id,list.json;oid-recent/id,list.json;text-for-adding/text;
-                        oid-translations/id,json;
-                        max-height-recent/number;max-width-item[116]/number"
+        data-vis-attrs="oid-list/id,list.json;oid-recent/id,list.json;oid-translations/id,json;
+                        text-for-adding/text;max-height-recent/number;max-width-item[116]/number"
         data-vis-set="bring"
         data-vis-type="ctrl"
         data-vis-update-style="true"
@@ -587,14 +591,14 @@
                           <img src="https://web.getbring.com/assets/images/items/<%= nameReplaced.toLowerCase()
                            .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') %>.png"
                           onerror="this.src='https://web.getbring.com/assets/images/items/<%= alternative; %>.png'"
-                          alt=<%= name %> class="item-image" id="<%= this.data.attr('wid')  %>-img-<%= name.replace(/ /g, '_') %>"
+                          alt="<%= name %>" class="item-image" id="<%= this.data.attr('wid')  %>-img-<%= name.replace(/ /g, '_') %>"
                           style="height: calc(0.43 * <%= this.data['max-width-item'] %>px); padding-top: calc(0.172 * <%= this.data['max-width-item'] %>px)">
                           <div class="item-name" style="max-height: 10%">
                             <%= translatedName %>
                           </div>
                           <% if (specification) { %>
                           <div class="item-desc" style="max-height: calc(0.2155 * <%= this.data['max-width-item'] %>px);">
-                            <%= specification%>
+                            <%= specification %>
                           </div>
                           <% } %>
                       </div>
@@ -646,8 +650,4 @@
     </div>
     <% var that = this; %>
     <% setTimeout(function () {renderPage(that.data.attr('wid'))}, 50); %>
-    <% setInterval(function () { %>
-    <%=    checkItems(that.data.attr('wid')); %>
-    <% }, 15000); %>
-
 </script>
