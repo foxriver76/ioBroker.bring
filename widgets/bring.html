@@ -87,15 +87,6 @@
     --------------------------------------------------------
     data-vis-update-style="true"
         Call redraw of widget if some of the CSS styles in editor for this widget was changed
-
-    You can read about Magic tags here: http://canjs.com/guides/EJS.html
-    Following magic tags are exist:
-        <% %> - execute javascript
-        <%= %> - place escaped result to HTML document
-        <%== %> - place unescaped result to HTML document
-
-    You can do "if" conditions and "for" cycles.
-
 -->
 
 <script type="text/javascript">
@@ -114,18 +105,6 @@
                 "es": "ID de lista",
                 "pl": "ID listy",
                 "zh-cn": "清单ID"
-            },
-            "oid-recent": {
-                "en": "Recent Content ID",
-                "de": "Kürzlich hinzugefügt ID",
-                "ru": "ID недавнего контента",
-                "pt": "ID de conteúdo recente",
-                "nl": "Recente Content ID",
-                "fr": "ID de contenu récent",
-                "it": "ID contenuto recente",
-                "es": "ID de contenido reciente",
-                "pl": "Najnowszy identyfikator treści",
-                "zh-cn": "最近的内容ID"
             },
             "text-for-adding": {
                 "en": "Placeholder for adding",
@@ -174,6 +153,7 @@
     var bringInvertedDict = {};
     var bringRemoveId = {};
     var bringSaveId = {};
+    var bringRecentListId = {};
 
     // Binding to communicate with ejs script
     vis.binds['bring'] = {
@@ -407,93 +387,95 @@
         var spec = [];
         var knownList = [];
         var knownSpec = [];
-        var stateId = vis.widgets[wid].data['oid-recent'];
         var maxWidth = vis.widgets[wid].data['max-width-item'];
-        var newList = JSON.parse(vis.states[stateId + '.val']);
 
-        $('.bring-recent-item').each(function (index) {
-            if (this.id.startsWith(wid)) {
-                var stillOnList = false;
-                var itemIdFixed = this.id.substring(14).replace(/_/g, ' ');
-                knownList.push(itemIdFixed);
-                knownSpec.push($(this).data('desc').toString());
+        // get recentList
+        vis.conn.getStates(bringRecentListId[wid], function (err, states) {
+            var newList = JSON.parse(states[bringRecentListId[wid]].val);
+            $('.bring-recent-item').each(function (index) {
+                if (this.id.startsWith(wid)) {
+                    var stillOnList = false;
+                    var itemIdFixed = this.id.substring(14).replace(/_/g, ' ');
+                    knownList.push(itemIdFixed);
+                    knownSpec.push($(this).data('desc').toString());
 
-                for (var i = 0; i < newList.length; i++) {
-                    if (newList[i].name === itemIdFixed) {
-                        stillOnList = true;
-                        break;
-                    } // endIf
-                } // endFor
+                    for (var i = 0; i < newList.length; i++) {
+                        if (newList[i].name === itemIdFixed) {
+                            stillOnList = true;
+                            break;
+                        } // endIf
+                    } // endFor
 
-                // if item is not on list anymore --> remove
-                if (!stillOnList && !removedRecentLastFiveSeconds[itemIdFixed]) {
-                    $(this).remove();
-                    /*removedRecentLastFiveSeconds[this.id] = true;
+                    // if item is not on list anymore --> remove
+                    if (!stillOnList && !removedRecentLastFiveSeconds[itemIdFixed]) {
+                        $(this).remove();
+                        /*removedRecentLastFiveSeconds[this.id] = true;
                 setTimeout(function () {
                     removedRecentLastFiveSeconds[this.id] = false;
                 }, 5000);*/
+                    } // endIf
                 } // endIf
-            } // endIf
+            });
+
+            for (var j = 0; j < newList.length; j++) {
+                var itemName = newList[j].name;
+                var specification = newList[j].specification;
+                var index = knownList.indexOf(itemName);
+                if (index < 0) {
+                    // new Item found
+                    newItems.push(itemName);
+                    spec.push(specification);
+                } else if (knownSpec[index] !== specification) {
+                    // if specification has changed, rm old item and add with new description
+                    newItems.push(itemName);
+                    spec.push(specification);
+                    $('#' + wid + '-recent_' + itemName.replace(/ /g, '_')).remove();
+                }
+            } // endFor
+
+            var alternative;
+            for (var k = 0; k < newItems.length; k++) {
+                // if item was rm recently backend doesn't know yet so do not add it again
+                var newItemReplaced = newItems[k].replace(/ /g, '_');
+                var nameFromDict = bringDict[wid][newItems[k]] ? bringDict[wid][newItems[k]] : newItems[k];
+                alternative = nameFromDict.substring(0, 1).toLowerCase();
+
+                if (/^(ä|ö|ü)/g.test(alternative)) {
+                    alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
+                }
+
+                var html = '<div class="bring-recent-item" data-desc="' + spec[k] + '" id="' + wid + '-recent_' + newItemReplaced + '"' +
+                    ' onclick="vis.binds[\'bring\'].onclick(this)" ' +
+                    'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px; ' +
+                    'max-height: ' + maxWidth + 'px; min-height: ' + maxWidth + 'px;"' +
+                    ' data-list="' + bringRecentListId[wid] + '" data-recentitem="' + newItemReplaced + '"> ' +
+                    '<img src="https://web.getbring.com/assets/images/items/' + newItemReplaced.toLowerCase()
+                        .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
+                    'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
+                    'alt=' + newItems[k] + ' class="item-image" id="' + wid + '-img-' + newItemReplaced + '"' +
+                    'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
+                    '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
+                    'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
+                    nameFromDict + '</div>' +
+                    '<div class="item-desc" style="max-height: calc(0.2155 * ' + maxWidth + 'px);' +
+                    'margin-top:calc(-0.0431 * ' + maxWidth + 'px);">' +
+                    spec[k] + '</div></div>';
+
+                $('#' + wid + '-recentlist').append(html);
+
+                var item = document.getElementById(wid + '-recent_' + newItemReplaced);
+                try {
+                    // resize item name
+                    var resizeText = item.getElementsByClassName('item-name')[0];
+                    textFit(resizeText, {maxFontSize: 0.112 * maxWidth, detectMultiLine: false});
+                    // resize item desc
+                    var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
+                    textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
+                } catch (e) {
+                    console.warn('Cannot resize text for item ' + wid + '-' + newItemReplaced + ':' + e);
+                } // endCatch
+            } // endFor
         });
-
-        for (var j = 0; j < newList.length; j++) {
-            var itemName = newList[j].name;
-            var specification = newList[j].specification;
-            var index = knownList.indexOf(itemName);
-            if (index < 0) {
-                // new Item found
-                newItems.push(itemName);
-                spec.push(specification);
-            } else if (knownSpec[index] !== specification) {
-                // if specification has changed, rm old item and add with new description
-                newItems.push(itemName);
-                spec.push(specification);
-                $('#' + wid + '-recent_' + itemName.replace(/ /g, '_')).remove();
-            }
-        } // endFor
-
-        var alternative;
-        for (var k = 0; k < newItems.length; k++) {
-            // if item was rm recently backend doesn't know yet so do not add it again
-            var newItemReplaced = newItems[k].replace(/ /g, '_');
-            var nameFromDict = bringDict[wid][newItems[k]] ? bringDict[wid][newItems[k]] : newItems[k];
-            alternative = nameFromDict.substring(0, 1).toLowerCase();
-
-            if (/^(ä|ö|ü)/g.test(alternative)) {
-                alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
-            }
-
-            var html = '<div class="bring-recent-item" data-desc="' + spec[k] + '" id="' + wid + '-recent_' + newItemReplaced + '"' +
-                ' onclick="vis.binds[\'bring\'].onclick(this)" ' +
-                'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px; ' +
-                'max-height: ' + maxWidth + 'px; min-height: ' + maxWidth + 'px;"' +
-                ' data-list="' + stateId + '" data-recentitem="' + newItemReplaced + '"> ' +
-                '<img src="https://web.getbring.com/assets/images/items/' + newItemReplaced.toLowerCase()
-                    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
-                'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
-                'alt=' + newItems[k] + ' class="item-image" id="' + wid + '-img-' + newItemReplaced + '"' +
-                'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
-                '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
-                'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
-                nameFromDict + '</div>' +
-                '<div class="item-desc" style="max-height: calc(0.2155 * ' + maxWidth + 'px);' +
-                'margin-top:calc(-0.0431 * ' + maxWidth + 'px);">' +
-                spec[k] + '</div></div>';
-
-            $('#' + wid + '-recentlist').append(html);
-
-            var item = document.getElementById(wid + '-recent_' + newItemReplaced);
-            try {
-                // resize item name
-                var resizeText = item.getElementsByClassName('item-name')[0];
-                textFit(resizeText, {maxFontSize: 0.112 * maxWidth, detectMultiLine: false});
-                // resize item desc
-                var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
-                textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
-            } catch (e) {
-                console.warn('Cannot resize text for item ' + wid + '-' + newItemReplaced + ':' + e);
-            } // endCatch
-        }
     } // endCheckRecentItems
 
     /*
@@ -507,6 +489,7 @@
 
         bringRemoveId[wid] = listNamespace + '.moveToRecentContent';
         bringSaveId[wid] = listNamespace + '.saveItem';
+        bringRecentListId[wid] = listNamespace + '.recentContent';
 
         // Call text fit, to fit text size in div
         textFit(itemNamesResize, {maxFontSize: 0.112 * maxWidth, detectMultiLine: false});
@@ -546,8 +529,7 @@
         type="text/ejs"
         class="vis-tpl"
         data-vis-prev='<img src="widgets/bring/img/shopping-list.png"></img>'
-        data-vis-attrs="oid-list/id,list.json;oid-recent/id,list.json;
-                        text-for-adding/text;max-height-recent/number;max-width-item[116]/number"
+        data-vis-attrs="oid-list/id,list.json;text-for-adding/text;max-height-recent/number;max-width-item[116]/number"
         data-vis-set="bring"
         data-vis-type="ctrl"
         data-vis-update-style="true"
