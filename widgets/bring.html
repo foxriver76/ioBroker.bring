@@ -564,7 +564,7 @@
                      if (!vis.states[this.data.attr('oid-list') + '.val']) return;
                      var productArray = vis.states[this.data.attr('oid-list') + '.val'];
                      var productArrayJSON = JSON.parse(productArray);
-                     var translations = vis.states[this.data.attr('oid-translations') + '.val'];
+                     var translations = vis.states[this.data.attr('oid-translations') + '.val'] || '{}';
                      try {
                         translations = JSON.parse(translations);
                      } catch (e) {
@@ -607,7 +607,7 @@
                  if (!vis.states[this.data.attr('oid-recent') + '.val']) return;
                  var recentProductArray = vis.states[this.data.attr('oid-recent') + '.val'];
                  var recentProductArrayJSON = JSON.parse(recentProductArray);
-                 var translations = vis.states[this.data.attr('oid-translations') + '.val'];
+                 var translations = vis.states[this.data.attr('oid-translations') + '.val'] || '{}';
                  try {
                     translations = JSON.parse(translations);
                  } catch (e) {
