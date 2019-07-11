@@ -162,18 +162,6 @@
                 "es": "Ancho y alto por articulo en px",
                 "pl": "Szerokość i wysokość na element w px",
                 "zh-cn": "px中每个项目的宽度和高度"
-            },
-            "oid-translations": {
-                "en": "Dictionary used for translations",
-                "de": "Wörterbuch für Übersetzungen",
-                "ru": "Словарь, используемый для переводов",
-                "pt": "Dicionário usado para traduções",
-                "nl": "Woordenboek gebruikt voor vertalingen",
-                "fr": "Dictionnaire utilisé pour les traductions",
-                "it": "Dizionario utilizzato per le traduzioni",
-                "es": "Diccionario utilizado para traducciones",
-                "pl": "Słownik używany do tłumaczeń",
-                "zh-cn": "用于翻译的字典"
             }
         });
     }
@@ -196,7 +184,6 @@
                 var item = $el.data('item').replace(/_/g, ' ');
 
                 var wid = $el.attr('id').split('-')[0];
-                console.log(wid);
 
                 vis.conn.setState(bringRemoveId[wid], item, false);
 
@@ -400,12 +387,16 @@
             $('#' + wid + '-shoppinglist').append(html);
 
             var item = document.getElementById(wid + '-' + newItemReplaced);
-            // resize item name
-            var resizeText = item.getElementsByClassName('item-name')[0];
-            textFit(resizeText, {maxFontSize: 0.112 * maxWidth, detectMultiLine: false});
-            // resize item desc
-            var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
-            textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
+            try {
+                // resize item name
+                var resizeText = item.getElementsByClassName('item-name')[0];
+                textFit(resizeText, {maxFontSize: 0.112 * maxWidth, detectMultiLine: false});
+                // resize item desc
+                var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
+                textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
+            } catch(e) {
+                console.warn('Cannot resize text for item ' + wid + '-' + newItemReplaced + ':' + e);
+            } // endCatch
         } // endFor
 
         checkRecentItems(wid);
@@ -492,12 +483,16 @@
             $('#' + wid + '-recentlist').append(html);
 
             var item = document.getElementById(wid + '-recent_' + newItemReplaced);
-            // resize item name
-            var resizeText = item.getElementsByClassName('item-name')[0];
-            textFit(resizeText, {maxFontSize: 0.112 * maxWidth, detectMultiLine: false});
-            // resize item desc
-            var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
-            textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
+            try {
+                // resize item name
+                var resizeText = item.getElementsByClassName('item-name')[0];
+                textFit(resizeText, {maxFontSize: 0.112 * maxWidth, detectMultiLine: false});
+                // resize item desc
+                var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
+                textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
+            } catch (e) {
+                console.warn('Cannot resize text for item ' + wid + '-' + newItemReplaced + ':' + e);
+            } // endCatch
         }
     } // endCheckRecentItems
 
@@ -526,6 +521,7 @@
             } catch (e) {
                 console.error('Cannot parse translations: ' + e);
             } // endCatch
+            checkItems(wid);
         });
 
         // After rendering is done, start synchronization interval
@@ -550,7 +546,7 @@
         type="text/ejs"
         class="vis-tpl"
         data-vis-prev='<img src="widgets/bring/img/shopping-list.png"></img>'
-        data-vis-attrs="oid-list/id,list.json;oid-recent/id,list.json;oid-translations/id,json;
+        data-vis-attrs="oid-list/id,list.json;oid-recent/id,list.json;
                         text-for-adding/text;max-height-recent/number;max-width-item[116]/number"
         data-vis-set="bring"
         data-vis-type="ctrl"
@@ -563,88 +559,11 @@
             <input type="image" src="widgets/bring/img/add.svg" id="<%= this.data.attr('wid')  %>-addButton" class="addButton"/>
         </div>
         <div class="template-class vis-widget-body <%== this.data.attr('class') %>">
-              <div id="<%= this.data.attr('wid')  %>-shoppinglist" style="min-width: 100%; padding: 2px;">
-                     <% /* if no list id configured yet, stop here */
-                     if (!vis.states[this.data.attr('oid-list') + '.val']) return;
-                     var productArray = vis.states[this.data.attr('oid-list') + '.val'];
-                     var productArrayJSON = JSON.parse(productArray);
-                     var translations = vis.states[this.data.attr('oid-translations') + '.val'] || '{}';
-                     try {
-                        translations = JSON.parse(translations);
-                     } catch (e) {
-                        console.error('Cannot parse translations: ' + e);
-                     }
-                     for (var i = 0; i < productArrayJSON.length; i++) {
-                        var name = productArrayJSON[i].name;
-                        var specification = productArrayJSON[i].specification.trim();
-                        var translatedName = translations[name] ? translations[name] : name;
-                        var alternative = translatedName.substring(0, 1).toLowerCase();
-                        var nameReplaced = name.replace(/ /g, '_');
-                        if (/^(ä|ö|ü)/g.test(alternative)) {
-                            alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
-                        } %>
-                      <div class="bring-item" data-desc="<%= specification %>" id="<%= this.data.attr('wid')  %>-<%= nameReplaced %>"
-                                        onclick="vis.binds['bring'].onclick(this)"
-                                         data-list="<%= this.data['oid-list'] %>" data-item="<%= nameReplaced %>"
-                                         style="max-width: <%= this.data['max-width-item'] %>px; min-width: <%= this.data['max-width-item'] %>px;
-                                         min-height: <%= this.data['max-width-item'] %>px; max-height: <%= this.data['max-width-item'] %>px;" >
-                          <img src="https://web.getbring.com/assets/images/items/<%= nameReplaced.toLowerCase()
-                           .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') %>.png"
-                          onerror="this.src='https://web.getbring.com/assets/images/items/<%= alternative; %>.png'"
-                          alt="<%= name %>" class="item-image" id="<%= this.data.attr('wid')  %>-img-<%= name.replace(/ /g, '_') %>"
-                          style="height: calc(0.43 * <%= this.data['max-width-item'] %>px); padding-top: calc(0.172 * <%= this.data['max-width-item'] %>px)">
-                          <div class="item-name" style="max-height: 10%">
-                            <%= translatedName %>
-                          </div>
-                          <% if (specification) { %>
-                          <div class="item-desc" style="max-height: calc(0.2155 * <%= this.data['max-width-item'] %>px);">
-                            <%= specification %>
-                          </div>
-                          <% } %>
-                      </div>
-                  <% } %>
+              <div id="<%= this.data.attr('wid') %>-shoppinglist" style="min-width: 100%; padding: 2px;">
               </div>
               <div style="clear: both;"></div>
               <hr style="margin-top: 5px; margin-bottom:5px;width:70%;text-align:center;">
-              <div id="<%= this.data.attr('wid')  %>-recentlist" style="min-width: 100%; padding: 2px; max-height: <%= this.data['max-height-recent'] ? this.data['max-height-recent'] + 'px' : 'auto' %>; overflow: hidden;">
-                 <% /* if no recent id configured yet, stop here */
-                 if (!vis.states[this.data.attr('oid-recent') + '.val']) return;
-                 var recentProductArray = vis.states[this.data.attr('oid-recent') + '.val'];
-                 var recentProductArrayJSON = JSON.parse(recentProductArray);
-                 var translations = vis.states[this.data.attr('oid-translations') + '.val'] || '{}';
-                 try {
-                    translations = JSON.parse(translations);
-                 } catch (e) {
-                    console.error('Cannot parse translations: ' + e);
-                 }
-                 for (var j = 0; j < recentProductArrayJSON.length; j++) {
-                    var recentName = recentProductArrayJSON[j].name;
-                    var recentSpecification = recentProductArrayJSON[j].specification.trim();
-                    var translatedRecentName = translations[recentName] ? translations[recentName] : recentName;
-                    var recentAlternative = translatedRecentName.substring(0, 1).toLowerCase();
-                    if (/^(ä|ö|ü)/g.test(recentAlternative)) {
-                        recentAlternative = recentAlternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
-                    } %>
-                    <div class="bring-recent-item" data-desc="<%= recentSpecification %>" id="<%= this.data.attr('wid')  %>-recent_<%= recentName.replace(/ /g, '_') %>"
-                                        onclick="vis.binds['bring'].onclick(this)"
-                                         data-list="<%= this.data['oid-recent'] %>" data-recentitem="<%= recentName.replace(/ /g, '_') %>"
-                                         style="max-width: <%= this.data['max-width-item'] %>px; min-width: <%= this.data['max-width-item'] %>px;
-                                         min-height: <%= this.data['max-width-item'] %>px; max-height: <%= this.data['max-width-item'] %>px;" >
-                          <img src="https://web.getbring.com/assets/images/items/<%= recentName.toLowerCase().replace(/ /g, '_')
-                           .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') %>.png"
-                          onerror="this.src='https://web.getbring.com/assets/images/items/<%= recentAlternative; %>.png'"
-                          alt="<%= recentName %>" class="item-image" id="<%= this.data.attr('wid')  %>-img-<%= recentName.replace(/ /g, '_') %>"
-                          style="height: calc(0.43 * <%= this.data['max-width-item'] %>px); padding-top: calc(0.172 * <%= this.data['max-width-item'] %>px)">
-                          <div class="item-name" style="max-height: calc(0.2413 * <%= this.data['max-width-item'] %>px);">
-                            <%= translatedRecentName %>
-                          </div>
-                          <% if (recentSpecification) { %>
-                            <div class="item-desc" style="max-height: calc(0.2155 * <%= this.data['max-width-item'] %>px);">
-                                <%= recentSpecification %>
-                          </div>
-                          <% } %>
-                      </div>
-                <% } %>
+              <div id="<%= this.data.attr('wid') %>-recentlist" style="min-width: 100%; padding: 2px; max-height: <%= this.data['max-height-recent'] ? this.data['max-height-recent'] + 'px' : 'auto' %>; overflow: hidden;">
               </div>
         </div>
     </div>
