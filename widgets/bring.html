@@ -136,13 +136,13 @@
     var bringRegistered = false;
     var addedLastFiveSeconds = [];
     var removedLastFiveSeconds = [];
-    var removedRecentLastFiveSeconds = [];
     var bringDict = {};
     var bringInvertedDict = {};
     var bringRemoveId = {};
     var bringSaveId = {};
     var bringRecentListId = {};
     var bringListId = {};
+    var bringPolling = {};
 
     // Binding to communicate with ejs script
     vis.binds['bring'] = {
@@ -150,8 +150,11 @@
             var $el = $(el);
 
             if ($el.data('item')) {
-                var item = $el.data('item').replace(/_/g, ' ');
+                // Avoid polling while saving
+                clearInterval(bringPolling[wid]);
+                console.log('Polling stopped...'); //test
 
+                var item = $el.data('item').replace(/_/g, ' ');
                 var wid = $el.attr('id').split('-')[0];
 
                 vis.conn.setState(bringRemoveId[wid], item, false);
@@ -171,14 +174,15 @@
                 $el.attr('id', wid + '-recent_' + prevId);
                 $el.attr('data-recentitem', prevData);
                 $('#' + wid + '-recentlist').prepend($el);
+
+                // Reactivate polling
+                console.log('Polling activated...');//test
+                clearInterval(bringPolling[wid]);
+                bringPolling[wid] = setInterval(function () {bringPolling[wid] = checkItems(wid);}, 15000);
             } else {
                 var recentItem = $el.data('recentitem').replace(/_/g, ' ');
                 var desc = $el.data('desc').toString();
                 var wid = $el.attr('id').split('-')[0];
-                removedRecentLastFiveSeconds[recentItem] = true;
-                setTimeout(function () {
-                    removedRecentLastFiveSeconds[recentItem] = false;
-                }, 5000);
                 $el.remove();
                 saveItem(recentItem, desc, wid);
             } // endElse
@@ -202,6 +206,10 @@
     *   Add new item to list
     **/
     function saveItem(item, desc, wid) {
+        // Avoid polling while saving
+        clearInterval(bringPolling[wid]);
+        console.log('Polling stopped ...'); //test
+
         var $save = $('#' + wid + '-save');
         var maxWidth = vis.widgets[wid].data['max-width-item'];
 
@@ -214,6 +222,12 @@
 
         // get current list
         vis.conn.getStates(bringListId[wid], (err, states) => {
+            // test
+            vis.updateStates(states);
+            vis.conn.subscribe(bringListId[wid]);
+            vis.states.bind(bringListId[wid] + '.val' , bringOnChange);
+
+            //testend
             var currentList = JSON.parse(states[bringListId[wid]].val);
             var itemWoDescriptionReplaced = itemWoDescription.replace(/ /g, '_');
             desc = desc ? desc : (item.split(',').length > 1) ? item.substring(item.indexOf(',') + 1).trim() : '';
@@ -259,11 +273,11 @@
                 'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
                 'alt=' + itemWoDescription + ' class="item-image" id="' + wid + '-img-' + itemWoDescriptionReplaced + '"' +
                 'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
-                '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
+                '<div class="item-name" style="height: calc(0.2013 * ' + maxWidth + 'px);' +
                 'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
                 nameFromDict +
                 '</div>' +
-                '<div class="item-desc" style="max-height: calc(0.2155 * ' + maxWidth + 'px);' +
+                '<div class="item-desc" style="height: calc(0.2155 * ' + maxWidth + 'px);' +
                 'margin-top:calc(-0.0431 * ' + maxWidth + 'px);">' +
                 desc +
                 '</div></div>';
@@ -281,7 +295,16 @@
                 textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
             } catch (e) {
                 console.warn('Cannot resize text for item ' + wid + '-' + itemWoDescriptionReplaced + ': ' + e);
+                // Reactivate polling
+                clearInterval(bringPolling[wid]);
+                bringPolling[wid] = setInterval(function () {bringPolling[wid] = checkItems(wid);}, 15000);
+                console.log('Polling activated ...'); //test
             } // endCatch
+
+            // Reactivate polling
+            clearInterval(bringPolling[wid]);
+            bringPolling[wid] = setInterval(function () {bringPolling[wid] = checkItems(wid);}, 15000);
+            console.log('Polling activated ...'); //test
         });
     } // endSaveItem
 
@@ -289,6 +312,7 @@
     *   Update current items
     **/
     function checkItems(wid) {
+        console.log(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Checking Items');
         var newItems = [];
         var spec = [];
         var knownList = [];
@@ -297,7 +321,11 @@
 
         // get current list
         vis.conn.getStates(bringListId[wid], function (err, states) {
+            // Sometimes states is empty -> try again later
+            if (!states[bringListId[wid]]) return console.warn('Check items -> Current list empty, return...');
+
             var newList = JSON.parse(states[bringListId[wid]].val);
+
             $('.bring-item').each(function () {
                 if (this.id.startsWith(wid)) {
                     var stillOnList = false;
@@ -361,10 +389,10 @@
                     'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
                     'alt=' + newItems[k] + ' class="item-image" id="' + wid + '-img-' + newItemReplaced + '"' +
                     'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
-                    '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
+                    '<div class="item-name" style="height: calc(0.2013 * ' + maxWidth + 'px);' +
                     'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
                     nameFromDict + '</div>' +
-                    '<div class="item-desc" style="max-height: calc(0.2155 * ' + maxWidth + 'px);' +
+                    '<div class="item-desc" style="height: calc(0.2155 * ' + maxWidth + 'px);' +
                     'margin-top:calc(-0.0431 * ' + maxWidth + 'px);">' +
                     spec[k] + '</div></div>';
 
@@ -399,6 +427,8 @@
 
         // get recentList
         vis.conn.getStates(bringRecentListId[wid], function (err, states) {
+            // Sometimes states is empty -> try again later
+            if (!states[bringRecentListId[wid]]) return console.warn('Check recent items -> Current list empty, return...');
             var newList = JSON.parse(states[bringRecentListId[wid]].val);
             $('.bring-recent-item').each(function (index) {
                 if (this.id.startsWith(wid)) {
@@ -415,12 +445,8 @@
                     } // endFor
 
                     // if item is not on list anymore --> remove
-                    if (!stillOnList && !removedRecentLastFiveSeconds[itemIdFixed]) {
+                    if (!stillOnList) {
                         $(this).remove();
-                        /*removedRecentLastFiveSeconds[this.id] = true;
-                setTimeout(function () {
-                    removedRecentLastFiveSeconds[this.id] = false;
-                }, 5000);*/
                     } // endIf
                 } // endIf
             });
@@ -462,10 +488,10 @@
                     'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
                     'alt=' + newItems[k] + ' class="item-image" id="' + wid + '-img-' + newItemReplaced + '"' +
                     'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
-                    '<div class="item-name" style="max-height: calc(0.2413 * ' + maxWidth + 'px);' +
+                    '<div class="item-name" style="height: calc(0.2013 * ' + maxWidth + 'px);' +
                     'margin-top: calc(-0.0431 * ' + maxWidth + 'px;">' +
                     nameFromDict + '</div>' +
-                    '<div class="item-desc" style="max-height: calc(0.2155 * ' + maxWidth + 'px);' +
+                    '<div class="item-desc" style="height: calc(0.2155 * ' + maxWidth + 'px);' +
                     'margin-top:calc(-0.0431 * ' + maxWidth + 'px);">' +
                     spec[k] + '</div></div>';
 
@@ -490,19 +516,13 @@
     *   Render page and do init
     **/
     function renderPage(wid) {
-        var maxWidth = vis.widgets[wid].data['max-width-item'];
-        var itemNamesResize = document.getElementsByClassName('item-name');
-        var itemDescResize = document.getElementsByClassName('item-desc');
         var listNamespace = vis.widgets[wid].data['oid-list'];
 
+        // create state ids
         bringRemoveId[wid] = listNamespace + '.moveToRecentContent';
         bringSaveId[wid] = listNamespace + '.saveItem';
         bringRecentListId[wid] = listNamespace + '.recentContent';
         bringListId[wid] = listNamespace + '.content';
-
-        // Call text fit, to fit text size in div
-        textFit(itemNamesResize, {maxFontSize: 0.112 * maxWidth, detectMultiLine: false});
-        textFit(itemDescResize, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
 
         // Get translations
         vis.conn.getStates(listNamespace + '.translation', function (err, states) {
@@ -513,13 +533,28 @@
             } catch (e) {
                 console.error('Cannot parse translations: ' + e);
             } // endCatch
-            checkItems(wid);
-        });
 
-        // After rendering is done, start synchronization interval
-        setInterval(function () {
-            checkItems(wid);
-        }, 15000);
+            var dps = [bringListId[wid], bringRecentListId[wid]];
+
+            // Update states and subscribe to changes
+            vis.conn.getStates(dps, function (error, states) {
+                vis.updateStates(states);
+                vis.conn.subscribe(dps);
+
+                // ad onChange listener
+                for (var i = 0; i < dps.length; i++) {
+                    dps[i] = dps[i] + '.val';
+                    vis.states.bind(dps[i], bringOnChange);
+                } // endFor
+
+                // give vis ability to destroy on change
+                var $div = $('#' + wid);
+                $div.data('bound', dps);
+                $div.data('bindHandler', bringOnChange);
+
+                checkItems(wid);
+            });
+        });
     } // endRenderPage
 
     /*
@@ -532,6 +567,10 @@
         }
         return ret;
     } // endSwap
+
+    function bringOnChange(data1, data2) {
+        console.log('called' +data1 +data2)
+    }
 </script>
 
 <script id="tplBringShoppingList"
