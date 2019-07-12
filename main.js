@@ -221,50 +221,52 @@ async function main() {
 function pollList(listUuid) {
     adapter.log.debug(`[POLL] Poll specific list: ${listUuid}`);
 
-    try {
-        bring.getItems(listUuid).then(data => {
-            adapter.log.debug(`[DATA] Items from ${listUuid} loaded: ${JSON.stringify(data)}`);
-            adapter.setState(`${listUuid}.content`, JSON.stringify(data.purchase), true);
-            adapter.setState(`${listUuid}.recentContent`, JSON.stringify(data.recently), true);
+    bring.getItems(listUuid).then(data => {
+        adapter.log.debug(`[DATA] Items from ${listUuid} loaded: ${JSON.stringify(data)}`);
+        adapter.setState(`${listUuid}.content`, JSON.stringify(data.purchase), true);
+        adapter.setState(`${listUuid}.recentContent`, JSON.stringify(data.recently), true);
 
-            const contentHtml = tableify(data.purchase);
-            const recentContentHtml = tableify(data.recently);
+        const contentHtml = tableify(data.purchase);
+        const recentContentHtml = tableify(data.recently);
 
-            // create na enumeration sentence e. g. for smart assistants
-            let enumSentence = ``;
+        // create na enumeration sentence e. g. for smart assistants
+        let enumSentence = ``;
 
-            data.purchase.forEach((value, index) => {
-                if (index === data.purchase.length - 1 && data.purchase.length > 1) {
-                    enumSentence += ` ${i18nHelper.conjunction[lang]} ${value.name}`;
-                } else if (index !== data.purchase.length - 2 && data.purchase.length > 1) {
-                    enumSentence += `${value.name}, `;
-                } else {
-                    enumSentence += value.name;
-                } // endElse
-            });
-
-            adapter.setState(`${listUuid}.enumSentence`, enumSentence, true);
-            adapter.setState(`${listUuid}.contentHtml`, contentHtml, true);
-            adapter.setState(`${listUuid}.contentHtmlNoHead`, contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml, true);
-            adapter.setState(`${listUuid}.recentContentHtml`, recentContentHtml, true);
-            adapter.setState(`${listUuid}.recentContentHtmlNoHead`, recentContentHtml.includes(`</thead>`) ? `<table>${recentContentHtml.split(`</thead>`)[1]}` : recentContentHtml, true);
-            adapter.setState(`${listUuid}.count`, data.purchase.length, true);
+        data.purchase.forEach((value, index) => {
+            if (index === data.purchase.length - 1 && data.purchase.length > 1) {
+                enumSentence += ` ${i18nHelper.conjunction[lang]} ${value.name}`;
+            } else if (index !== data.purchase.length - 2 && data.purchase.length > 1) {
+                enumSentence += `${value.name}, `;
+            } else {
+                enumSentence += value.name;
+            } // endElse
         });
 
-        bring.getAllUsersFromList(listUuid).then(data => {
-            ensureOnlineState(true);
-            adapter.log.debug(`[DATA] Users from ${listUuid} loaded: ${JSON.stringify(data)}`);
-            adapter.setState(`${listUuid}.users`, JSON.stringify(data.users), true);
-
-            const usersHtml = tableify(data.users);
-
-            adapter.setState(`${listUuid}.usersHtml`, usersHtml, true);
-            adapter.setState(`${listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
-        });
-    } catch (e) {
+        adapter.setState(`${listUuid}.enumSentence`, enumSentence, true);
+        adapter.setState(`${listUuid}.contentHtml`, contentHtml, true);
+        adapter.setState(`${listUuid}.contentHtmlNoHead`, contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml, true);
+        adapter.setState(`${listUuid}.recentContentHtml`, recentContentHtml, true);
+        adapter.setState(`${listUuid}.recentContentHtmlNoHead`, recentContentHtml.includes(`</thead>`) ? `<table>${recentContentHtml.split(`</thead>`)[1]}` : recentContentHtml, true);
+        adapter.setState(`${listUuid}.count`, data.purchase.length, true);
+    }).catch(e => {
         adapter.log.warn(e);
         ensureOnlineState(false);
-    } // endTryCatch
+    });
+
+    bring.getAllUsersFromList(listUuid).then(data => {
+        ensureOnlineState(true);
+        adapter.log.debug(`[DATA] Users from ${listUuid} loaded: ${JSON.stringify(data)}`);
+        adapter.setState(`${listUuid}.users`, JSON.stringify(data.users), true);
+
+        const usersHtml = tableify(data.users);
+
+        adapter.setState(`${listUuid}.usersHtml`, usersHtml, true);
+        adapter.setState(`${listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
+    }).catch(e => {
+        adapter.log.warn(e);
+        ensureOnlineState(false);
+    });
+
 } // endPollList
 
 async function pollAllLists() {
@@ -548,6 +550,9 @@ async function pollAllLists() {
                     } else {
                         enumSentence += value.name;
                     } // endElse
+                }).catch(e => {
+                    adapter.log.warn(e);
+                    ensureOnlineState(false);
                 });
 
                 adapter.setState(`${entry.listUuid}.enumSentence`, enumSentence, true);
@@ -566,6 +571,9 @@ async function pollAllLists() {
 
                 adapter.setState(`${entry.listUuid}.usersHtml`, usersHtml, true);
                 adapter.setState(`${entry.listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
+            }).catch(e => {
+                adapter.log.warn(e);
+                ensureOnlineState(false);
             });
         } // endFor
     } catch (e) {
