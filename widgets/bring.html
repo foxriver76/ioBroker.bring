@@ -168,7 +168,7 @@
                 $el.addClass('bring-recent-item').removeClass('bring-item');
                 var prevData = $el.data('item');
                 $el.removeAttr('data-item');
-                var prevId = $el.attr('id').substring(0, wid.length);
+                var prevId = $el.attr('id').substring(wid.length + 1);
                 $el.attr('id', wid + '-recent_' + prevId);
                 $el.attr('data-recentitem', prevData);
                 $('#' + wid + '-recentlist').prepend($el);
@@ -250,7 +250,7 @@
                 ' onclick="vis.binds[\'bring\'].onclick(this)" ' +
                 'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px; ' +
                 'max-height: ' + maxWidth + 'px; min-height: ' + maxWidth + 'px;"' +
-                ' data-list="' + bringListId[wid] + '" data-item="' + itemWoDescription.replace(/ /g, '_') + '"> ' +
+                ' data-item="' + itemWoDescription.replace(/ /g, '_') + '"> ' +
                 '<img src="https://web.getbring.com/assets/images/items/' + itemWoDescriptionReplaced.toLowerCase()
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
                 'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
@@ -353,7 +353,7 @@
                 ' onclick="vis.binds[\'bring\'].onclick(this)" ' +
                 'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px; ' +
                 'max-height: ' + maxWidth + 'px; min-height: ' + maxWidth + 'px;"' +
-                ' data-list="' + bringListId[wid] + '" data-item="' + newItems[k].replace(/ /g, '_') + '"> ' +
+                ' data-item="' + newItems[k].replace(/ /g, '_') + '"> ' +
                 '<img src="https://web.getbring.com/assets/images/items/' + newItemReplaced.toLowerCase()
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
                 'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
@@ -448,7 +448,7 @@
                 ' onclick="vis.binds[\'bring\'].onclick(this)" ' +
                 'style="max-width: ' + maxWidth + 'px; min-width: ' + maxWidth + 'px; ' +
                 'max-height: ' + maxWidth + 'px; min-height: ' + maxWidth + 'px;"' +
-                ' data-list="' + bringRecentListId[wid] + '" data-recentitem="' + newItemReplaced + '"> ' +
+                ' data-recentitem="' + newItemReplaced + '"> ' +
                 '<img src="https://web.getbring.com/assets/images/items/' + newItemReplaced.toLowerCase()
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
                 'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
