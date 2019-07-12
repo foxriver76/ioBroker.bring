@@ -130,10 +130,12 @@ For every shopping list a channel with the following states will be created:
 
 ## Changelog
 
-### 1.5.0 (2019-07-09)
+### 1.6.0 (2019-07-12)
 * (foxriver76) get translations according to list language
 * (foxriver76) translations will be stored in datapoint
 * (foxriver76) use bring-node-api at least 1.2.1
+* (foxriver76) widget now uses configured language
+* (foxriver76) bugfixes and optimizations in front- and backend
 
 ### 1.4.0 (2019-06-07)
 * (foxriver76) use textFit to fit text to one line in widget

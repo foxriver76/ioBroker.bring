@@ -1,19 +1,19 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.5.0",
+        "version": "1.6.0",
         "news": {
-            "1.5.0": {
-                "en": "usage of node-bring-api version 1.2.1, new state for translations",
-                "de": "Verwendung von Node-Bring-API Version 1.2.1, neuer Status für Übersetzungen",
-                "ru": "использование узла-принес-API версии 1.2.1, новое состояние для переводов",
-                "pt": "uso de node-bring-api versão 1.2.1, novo estado para traduções",
-                "nl": "gebruik van node-bring-api versie 1.2.1, nieuwe staat voor vertalingen",
-                "fr": "utilisation de node-bring-api version 1.2.1, nouvel état pour les traductions",
-                "it": "utilizzo di node-bring-api versione 1.2.1, nuovo stato per le traduzioni",
-                "es": "Uso de la versión 1.2.1 de node-bring-api, nuevo estado para traducciones",
-                "pl": "użycie węzła bring-api wersja 1.2.1, nowy stan dla tłumaczeń",
-                "zh-cn": "node-bring-api 1.2.1版的用法，翻译的新状态"
+            "1.6.0": {
+                "en": "widget is now translated, big frontend optimizations and bugfixes in front- and backend",
+                "de": "Widget ist jetzt übersetzt, große Frontend-Optimierungen und Bugfixes im Front- und Backend",
+                "ru": "Виджет теперь переведен, большие оптимизации веб-интерфейса и исправления ошибок в передней и задней частях.",
+                "pt": "widget agora é traduzido, grandes otimizações frontend e correções de bugs na frente e backend",
+                "nl": "widget is nu vertaald, grote front-end optimalisaties en bugfixes in front- en backend",
+                "fr": "le widget est maintenant traduit, grandes optimisations frontales et corrections de bugs en avant et en arrière",
+                "it": "il widget è ora tradotto, grandi ottimizzazioni frontend e bugfix in front e backend",
+                "es": "El widget está ahora traducido, las grandes optimizaciones de la interfaz y las correcciones de errores en la parte frontal y posterior.",
+                "pl": "Widget jest teraz przetłumaczony, duże optymalizacje frontendu i poprawki błędów w frontend i backend",
+                "zh-cn": "widget现在被翻译，大前端优化和前端和后端的错误修正"
             },
             "1.4.0": {
                 "en": "use textFit to fit longer text to widget + internal reworks for widget",
