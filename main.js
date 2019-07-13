@@ -550,9 +550,6 @@ async function pollAllLists() {
                     } else {
                         enumSentence += value.name;
                     } // endElse
-                }).catch(e => {
-                    adapter.log.warn(e);
-                    ensureOnlineState(false);
                 });
 
                 adapter.setState(`${entry.listUuid}.enumSentence`, enumSentence, true);

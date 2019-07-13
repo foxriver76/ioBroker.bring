@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.6.0",
+        "version": "1.6.1",
         "news": {
+            "1.6.1": {
+                "en": "fixed bug, that prevent html states and other from being set",
+                "de": "Fehler behoben, der verhinderte, dass HTML-Status und andere gesetzt werden",
+                "ru": "исправлена ​​ошибка, препятствовавшая настройке html-состояний и прочего",
+                "pt": "bug fixo, que impede que estados html e outros sejam definidos",
+                "nl": "opgeloste bug, die voorkomen dat html-statussen en andere worden ingesteld",
+                "fr": "bug corrigé, qui empêche les états HTML et autres d'être définis",
+                "it": "bug corretto, che impedisce agli stati html e altri di essere impostati",
+                "es": "error corregido, que evita que se establezcan estados html y otros",
+                "pl": "naprawiono błąd, który uniemożliwia ustawianie stanów HTML i innych",
+                "zh-cn": "修复bug，防止html状态和其他设置"
+            },
             "1.6.0": {
                 "en": "widget is now translated, big frontend optimizations and bugfixes in front- and backend",
                 "de": "Widget ist jetzt übersetzt, große Frontend-Optimierungen und Bugfixes im Front- und Backend",
