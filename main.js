@@ -20,6 +20,7 @@ const polling = {};
 const listLang = {};
 let loginTimeout;
 let lang;
+let dict = {};
 
 function startAdapter(options) {
     options = options || {};
@@ -109,7 +110,7 @@ function startAdapter(options) {
                 let jsonShoppingList = await adapter.getStateAsync(`${adapter.namespace}.${listId}.content`);
                 jsonShoppingList = JSON.parse(jsonShoppingList.val);
                 for (const entry of jsonShoppingList) {
-                    shoppingList = `${shoppingList}${entry.specification ? entry.specification : i18nHelper.noDescription[lang]} - ${entry.name}\n`;
+                    shoppingList = `${shoppingList}${entry.specification ? entry.specification : i18nHelper.noDescription[lang]} - ${dict[entry.name] ? dict[entry.name] : entry.name}\n`;
                 } // endFor
             } catch (e) {
                 adapter.log.error(`Error sending shopping list: ${e}`);
@@ -526,7 +527,7 @@ async function pollAllLists() {
 
             await Promise.all(promises);
 
-            const dict = listLang[entry.listUuid] ? listLang[entry.listUuid] : await bring.loadTranslations(`de-DE`);
+            dict = listLang[entry.listUuid] ? listLang[entry.listUuid] : await bring.loadTranslations(`de-DE`);
             await adapter.setStateAsync(`${entry.listUuid}.translation`, JSON.stringify(dict), true);
 
             bring.getItems(entry.listUuid).then(data => {
@@ -542,11 +543,11 @@ async function pollAllLists() {
 
                 data.purchase.forEach((value, index) => {
                     if (index === data.purchase.length - 1 && data.purchase.length > 1) {
-                        enumSentence += ` ${i18nHelper.conjunction[lang]} ${value.name}`;
+                        enumSentence += ` ${i18nHelper.conjunction[lang]} ${dict[value.name] ? dict[value.name] : value.name}`;
                     } else if (index !== data.purchase.length - 2 && data.purchase.length > 1) {
-                        enumSentence += `${value.name}, `;
+                        enumSentence += `${dict[value.name] ? dict[value.name] : value.name}, `;
                     } else {
-                        enumSentence += value.name;
+                        enumSentence += dict[value.name] ? dict[value.name] : value.name;
                     } // endElse
                 });
 

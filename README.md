@@ -130,6 +130,9 @@ For every shopping list a channel with the following states will be created:
 
 ## Changelog
 
+### 1.5.1 (2019-08-04)
+* (foxriver76) also use translations for enumSentence and notifiations (e. g. email)
+
 ### 1.5.0 (2019-07-09)
 * (foxriver76) get translations according to list language
 * (foxriver76) translations will be stored in datapoint

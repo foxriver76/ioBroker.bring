@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.5.0",
+        "version": "1.5.1",
         "news": {
+            "1.5.1": {
+                "en": "usage of translations for enumSentence and notifiations (e. g. email)",
+                "de": "Verwendung von Übersetzungen für Aufzählungen und Benachrichtigungen (z. B. E-Mail)",
+                "ru": "использование переводов для enumSentence и уведомлений (например, электронная почта)",
+                "pt": "uso de traduções para enumSentence e notifiations (por exemplo, email)",
+                "nl": "gebruik van vertalingen voor enumSentence en kennisgevingen (bijvoorbeeld e-mail)",
+                "fr": "utilisation de traductions pour énumSentence et notifications (e-mail, par exemple)",
+                "it": "utilizzo di traduzioni per enumSentence e notifiche (es. e-mail)",
+                "es": "uso de traducciones para enumSentence y notificaciones (por ejemplo, correo electrónico)",
+                "pl": "wykorzystanie tłumaczeń do wyliczeń i powiadomień (np. e-mail)",
+                "zh-cn": "enumSentence和通知的翻译用法（例如电子邮件）"
+            },
             "1.5.0": {
                 "en": "usage of node-bring-api version 1.2.1, new state for translations",
                 "de": "Verwendung von Node-Bring-API Version 1.2.1, neuer Status für Übersetzungen",
@@ -158,18 +170,6 @@
                 "es": "También no se actualizan los estados principales en el sondeo normal, se corrigen errores importantes y no se maneja ningún error de conexión a Internet",
                 "pl": "nie aktualizuje również stanów głowic podczas normalnego odpytywania, ważnych poprawek i nie obsługuje błędu połączenia z Internetem",
                 "zh-cn": "在正常轮询，重要错误修正和处理没有互联网连接错误也更新没有头状态"
-            },
-            "0.0.8": {
-                "en": "added html states without header and minor fixes",
-                "de": "HTML-Status ohne Header und kleinere Korrekturen hinzugefügt",
-                "ru": "добавлены HTML-состояния без заголовка и незначительных исправлений",
-                "pt": "adicionou estados html sem cabeçalho e pequenas correções",
-                "nl": "html-staten toegevoegd zonder header en kleine fixes",
-                "fr": "ajout d'états html sans en-tête ni correctifs mineurs",
-                "it": "stati aggiunti html senza intestazione e correzioni minori",
-                "es": "Estados HTML añadidos sin encabezado y correcciones menores",
-                "pl": "dodano stany html bez nagłówka i drobnych poprawek",
-                "zh-cn": "添加了没有标题和次要修复的html状态"
             }
         },
         "title": "Bring!",
