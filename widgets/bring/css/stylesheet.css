@@ -66,7 +66,7 @@ div.item-name {
     overflow: hidden;
     margin-top: 0;
     padding: 0;
-    max-width: 95%;
+    width: 95%;
 }
 
 .item-name p {
@@ -79,7 +79,7 @@ div.item-desc {
     overflow: hidden;
     margin-top: 0;
     padding: 0;
-    max-width: 95%;
+    width: 95%;
 }
 
 .item-desc p {

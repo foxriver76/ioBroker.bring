@@ -129,14 +129,18 @@ For every shopping list a channel with the following states will be created:
     *Read only json string, which contains a dictionary to translate the swiss item names to the list language.*
 
 ## Changelog
-
-### 1.5.1 (2019-08-04)
+### 1.6.2 (2019-08-04)
 * (foxriver76) also use translations for enumSentence and notifiations (e. g. email)
 
-### 1.5.0 (2019-07-09)
+### 1.6.1 (2019-07-13)
+* (foxriver76) fixed bug, that prevent html states and other from being set
+
+### 1.6.0 (2019-07-12)
 * (foxriver76) get translations according to list language
 * (foxriver76) translations will be stored in datapoint
 * (foxriver76) use bring-node-api at least 1.2.1
+* (foxriver76) widget now uses configured language
+* (foxriver76) bugfixes and optimizations in front- and backend
 
 ### 1.4.0 (2019-06-07)
 * (foxriver76) use textFit to fit text to one line in widget

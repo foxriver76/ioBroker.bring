@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.5.1",
+        "version": "1.6.2",
         "news": {
-            "1.5.1": {
+            "1.6.2": {
                 "en": "usage of translations for enumSentence and notifiations (e. g. email)",
                 "de": "Verwendung von Übersetzungen für Aufzählungen und Benachrichtigungen (z. B. E-Mail)",
                 "ru": "использование переводов для enumSentence и уведомлений (например, электронная почта)",
@@ -15,17 +15,29 @@
                 "pl": "wykorzystanie tłumaczeń do wyliczeń i powiadomień (np. e-mail)",
                 "zh-cn": "enumSentence和通知的翻译用法（例如电子邮件）"
             },
-            "1.5.0": {
-                "en": "usage of node-bring-api version 1.2.1, new state for translations",
-                "de": "Verwendung von Node-Bring-API Version 1.2.1, neuer Status für Übersetzungen",
-                "ru": "использование узла-принес-API версии 1.2.1, новое состояние для переводов",
-                "pt": "uso de node-bring-api versão 1.2.1, novo estado para traduções",
-                "nl": "gebruik van node-bring-api versie 1.2.1, nieuwe staat voor vertalingen",
-                "fr": "utilisation de node-bring-api version 1.2.1, nouvel état pour les traductions",
-                "it": "utilizzo di node-bring-api versione 1.2.1, nuovo stato per le traduzioni",
-                "es": "Uso de la versión 1.2.1 de node-bring-api, nuevo estado para traducciones",
-                "pl": "użycie węzła bring-api wersja 1.2.1, nowy stan dla tłumaczeń",
-                "zh-cn": "node-bring-api 1.2.1版的用法，翻译的新状态"
+            "1.6.1": {
+                "en": "fixed bug, that prevent html states and other from being set",
+                "de": "Fehler behoben, der verhinderte, dass HTML-Status und andere gesetzt werden",
+                "ru": "исправлена ​​ошибка, препятствовавшая настройке html-состояний и прочего",
+                "pt": "bug fixo, que impede que estados html e outros sejam definidos",
+                "nl": "opgeloste bug, die voorkomen dat html-statussen en andere worden ingesteld",
+                "fr": "bug corrigé, qui empêche les états HTML et autres d'être définis",
+                "it": "bug corretto, che impedisce agli stati html e altri di essere impostati",
+                "es": "error corregido, que evita que se establezcan estados html y otros",
+                "pl": "naprawiono błąd, który uniemożliwia ustawianie stanów HTML i innych",
+                "zh-cn": "修复bug，防止html状态和其他设置"
+            },
+            "1.6.0": {
+                "en": "widget is now translated, big frontend optimizations and bugfixes in front- and backend",
+                "de": "Widget ist jetzt übersetzt, große Frontend-Optimierungen und Bugfixes im Front- und Backend",
+                "ru": "Виджет теперь переведен, большие оптимизации веб-интерфейса и исправления ошибок в передней и задней частях.",
+                "pt": "widget agora é traduzido, grandes otimizações frontend e correções de bugs na frente e backend",
+                "nl": "widget is nu vertaald, grote front-end optimalisaties en bugfixes in front- en backend",
+                "fr": "le widget est maintenant traduit, grandes optimisations frontales et corrections de bugs en avant et en arrière",
+                "it": "il widget è ora tradotto, grandi ottimizzazioni frontend e bugfix in front e backend",
+                "es": "El widget está ahora traducido, las grandes optimizaciones de la interfaz y las correcciones de errores en la parte frontal y posterior.",
+                "pl": "Widget jest teraz przetłumaczony, duże optymalizacje frontendu i poprawki błędów w frontend i backend",
+                "zh-cn": "widget现在被翻译，大前端优化和前端和后端的错误修正"
             },
             "1.4.0": {
                 "en": "use textFit to fit longer text to widget + internal reworks for widget",
@@ -146,30 +158,6 @@
                 "es": "lanzamiento estable",
                 "pl": "wersja stabilna",
                 "zh-cn": "稳定释放"
-            },
-            "0.0.10": {
-                "en": "set info.connection state to false, when cannot get data",
-                "de": "Setze den Status von info.connection auf false, wenn keine Daten abgerufen werden können",
-                "ru": "установить состояние info.connection в false, когда не удается получить данные",
-                "pt": "defina state.connection state como false, quando não puder obter dados",
-                "nl": "set info.connection state to false, when can not get data",
-                "fr": "définir l'état info.connection sur false, lorsqu'il est impossible d'obtenir des données",
-                "it": "imposta lo stato info.connection su false, quando non è possibile ottenere i dati",
-                "es": "establezca el estado de info.connection en falso, cuando no pueda obtener datos",
-                "pl": "ustaw stan info.connection na false, kiedy nie można uzyskać danych",
-                "zh-cn": "将info.connection状态设置为false，何时无法获取数据"
-            },
-            "0.0.9": {
-                "en": "also updating no head states on normal polling, important bugfixes and handle no internet connection error",
-                "de": "Es werden auch NoHead Zustände beim normalen Polling aktualisiert, wichtige Bugfixes und keine Internetverbindungsfehler behandelt",
-                "ru": "также обновляет состояние без заголовка при обычном опросе, важные исправления ошибок и не обрабатывает ошибку интернет-соединения",
-                "pt": "também atualizando sem estados de cabeça no polling normal, correções de bugs importantes e não lida com erros de conexão com a Internet",
-                "nl": "ook geen head states bij te werken op normale polling, belangrijke bugfixes en geen internetverbinding te verhelpen",
-                "fr": "met également à jour aucun état principal lors de l'interrogation normale, corrige des bogues importants et ne gère aucune erreur de connexion Internet",
-                "it": "inoltre non aggiorna gli stati della testa al polling normale, correzioni di bug importanti e non gestisce alcun errore di connessione internet",
-                "es": "También no se actualizan los estados principales en el sondeo normal, se corrigen errores importantes y no se maneja ningún error de conexión a Internet",
-                "pl": "nie aktualizuje również stanów głowic podczas normalnego odpytywania, ważnych poprawek i nie obsługuje błędu połączenia z Internetem",
-                "zh-cn": "在正常轮询，重要错误修正和处理没有互联网连接错误也更新没有头状态"
             }
         },
         "title": "Bring!",
