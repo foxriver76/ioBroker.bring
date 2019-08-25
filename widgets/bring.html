@@ -133,7 +133,7 @@
         });
     }
 
-    var bringRegistered = false;
+    var bringRegistered = {};
     var addedLastFiveSeconds = [];
     var removedLastFiveSeconds = [];
     var bringDict = {};
@@ -182,7 +182,7 @@
         },
         onkeypress: function (event) {
             var wid = event.id.split('-')[0];
-            if (bringRegistered) return;
+            if (bringRegistered[wid]) return;
             $('#' + wid + '-save').keypress(function (event) {
                 if (event.which !== 13) return;
                 saveItem(null, null, wid);
@@ -191,7 +191,8 @@
             $('#' + wid+ '-addButton').click(function () {
                 saveItem(null, null, wid);
             });
-            bringRegistered = true;
+            bringRegistered[wid] = true;
+            console.log(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Registered Event Handlers');
         }
     };
 
@@ -482,6 +483,11 @@
     **/
     function renderPage(wid) {
         var listNamespace = vis.widgets[wid].data['oid-list'];
+
+        // set event handlers registered to false
+        bringRegistered[wid] = false;
+
+        console.log(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Render Widget');
 
         // create individual onChange func that knows the wid
         bringOnChange[wid] = function (obj) {
