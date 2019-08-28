@@ -263,7 +263,7 @@
                 var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
                 textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
             } catch (e) {
-                console.warn('Cannot resize text for item ' + wid + '-' + itemWoDescriptionReplaced + ': ' + e);
+                console.warn(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot resize text for item ' + wid + '-' + itemWoDescriptionReplaced + ': ' + e);
             } // endCatch
         });
     } // endSaveItem
@@ -363,7 +363,7 @@
                 var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
                 textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
             } catch (e) {
-                console.warn('Cannot resize text for item ' + wid + '-' + newItemReplaced + ': ' + e);
+                console.warn(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot resize text for item ' + wid + '-' + newItemReplaced + ': ' + e);
             } // endCatch
         } // endFor
     } // endCheckItems
@@ -458,7 +458,7 @@
                 var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
                 textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
             } catch (e) {
-                console.warn('Cannot resize text for item ' + wid + '-' + newItemReplaced + ': ' + e);
+                console.warn(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot resize text for item ' + wid + '-' + newItemReplaced + ': ' + e);
             } // endCatch
         } // endFor
     } // endCheckRecentItems
@@ -508,7 +508,7 @@
                 bringDict[wid] = !err ? JSON.parse(states[listNamespace + '.translation'].val) : {};
                 bringInvertedDict[wid] = !err ? swap(bringDict[wid]) : {};
             } catch (e) {
-                console.error('Cannot parse translations: ' + e);
+                console.error(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot parse translations: ' + e);
             } // endCatch
 
             var dps = [bringListId[wid], bringRecentListId[wid]];
