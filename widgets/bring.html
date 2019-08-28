@@ -166,7 +166,10 @@
                 // now we add this item to recent content
                 $el.addClass('bring-recent-item').removeClass('bring-item');
                 var prevData = $el.data('item');
+
+                // remove item data from cache and corresponding attribute
                 $el.removeAttr('data-item');
+                $el.removeData('item');
                 var prevId = $el.attr('id').substring(wid.length + 1);
                 $el.attr('id', wid + '-recent_' + prevId);
                 $el.attr('data-recentitem', prevData);
