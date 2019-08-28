@@ -133,7 +133,6 @@
         });
     }
 
-    var bringRegistered = {};
     var addedLastFiveSeconds = [];
     var removedLastFiveSeconds = [];
     var bringDict = {};
@@ -179,20 +178,6 @@
                 $el.remove();
                 saveItem(recentItem, desc, wid);
             } // endElse
-        },
-        onkeypress: function (event) {
-            var wid = event.id.split('-')[0];
-            if (bringRegistered[wid]) return;
-            $('#' + wid + '-save').keypress(function (event) {
-                if (event.which !== 13) return;
-                saveItem(null, null, wid);
-            });
-
-            $('#' + wid+ '-addButton').click(function () {
-                saveItem(null, null, wid);
-            });
-            bringRegistered[wid] = true;
-            console.log(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Registered Event Handlers');
         }
     };
 
@@ -484,10 +469,19 @@
     function renderPage(wid) {
         var listNamespace = vis.widgets[wid].data['oid-list'];
 
-        // set event handlers registered to false
-        bringRegistered[wid] = false;
-
         console.log(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Render Widget');
+
+        // Register event handlers for widget
+        $('#' + wid + '-save').keypress(function (event) {
+            if (event.which !== 13) return;
+            saveItem(null, null, wid);
+        });
+
+        $('#' + wid+ '-addButton').click(function () {
+            saveItem(null, null, wid);
+        });
+
+        console.log(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Registered Event Handlers');
 
         // create individual onChange func that knows the wid
         bringOnChange[wid] = function (obj) {
@@ -564,8 +558,7 @@
         data-vis-name="bring-shopping-list">
         <div class="vis-widget <%== this.data.attr('class') %>" style="width:230px; height:210px; min-width:145px;" id="<%= this.data.attr('wid'); %>" >
         <div style="height: 45px; margin-bottom: 10px; padding-right: 10px;">
-            <input type="text" placeholder="<%= this.data['text-for-adding'] %>" id="<%= this.data.attr('wid') %>-save" class="addArticleText" name="addArticle"
-            onkeypress="vis.binds['bring'].onkeypress(this)">
+            <input type="text" placeholder="<%= this.data['text-for-adding'] %>" id="<%= this.data.attr('wid') %>-save" class="addArticleText" name="addArticle">
             <input type="image" src="widgets/bring/img/add.svg" id="<%= this.data.attr('wid') %>-addButton" class="addButton"/>
         </div>
         <div class="template-class vis-widget-body <%== this.data.attr('class') %>">
