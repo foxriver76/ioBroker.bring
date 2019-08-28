@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.6.2",
+        "version": "1.6.3",
         "news": {
+            "1.6.3": {
+                "en": "fixed bug which only allowed one registered event handler of widget -> now switching between widgets possible",
+                "de": "Fehler behoben, der nur einen registrierten Event-Handler des Widgets erlaubte -> nun kann zwischen Widgets gewechselt werden",
+                "ru": "исправлена ​​ошибка, при которой разрешался только один зарегистрированный обработчик события виджета -> теперь возможно переключение между виджетами",
+                "pt": "Foi corrigido o erro que permitia apenas um manipulador de eventos registrado do widget -> agora é possível alternar entre os widgets",
+                "nl": "opgeloste bug die slechts één geregistreerde event-handler van widget toestond -> nu schakelen tussen widgets mogelijk",
+                "fr": "bug corrigé qui n'autorisait qu'un seul gestionnaire d'événements enregistré de widget -> possibilité de basculer d'un widget à l'autre",
+                "it": "corretto bug che consentiva solo un gestore eventi registrato del widget -> ora è possibile passare da un widget all'altro",
+                "es": "error corregido que solo permitía un controlador de eventos registrado de widget -> ahora es posible cambiar entre widgets",
+                "pl": "naprawiony błąd, który pozwalał tylko na jedną zarejestrowaną procedurę obsługi widżetu -> teraz możliwe przełączanie między widżetami",
+                "zh-cn": "修复了只允许一个注册的小部件事件处理程序的bug  - >现在可以在小部件之间切换"
+            },
             "1.6.2": {
                 "en": "usage of translations for enumSentence and notifiations (e. g. email)",
                 "de": "Verwendung von Übersetzungen für Aufzählungen und Benachrichtigungen (z. B. E-Mail)",
@@ -146,18 +158,6 @@
                 "es": "Añadir posibilidad de enviar mensajes.",
                 "pl": "dodaj możliwość wysyłania wiadomości",
                 "zh-cn": "增加发送消息的可能性"
-            },
-            "1.0.0": {
-                "en": "stable release",
-                "de": "stabile Version",
-                "ru": "стабильный выпуск",
-                "pt": "versão estável",
-                "nl": "stabiele vrijlating",
-                "fr": "version stable",
-                "it": "rilascio stabile",
-                "es": "lanzamiento estable",
-                "pl": "wersja stabilna",
-                "zh-cn": "稳定释放"
             }
         },
         "title": "Bring!",
