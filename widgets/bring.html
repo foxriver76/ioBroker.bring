@@ -133,8 +133,8 @@
         });
     }
 
-    var addedLastFiveSeconds = [];
-    var removedLastFiveSeconds = [];
+    var addedLastFiveSeconds = {};
+    var removedLastFiveSeconds = {};
     var bringDict = {};
     var bringInvertedDict = {};
     var bringRemoveId = {};
@@ -156,9 +156,9 @@
 
                 vis.conn.setState(bringRemoveId[wid], item, false);
 
-                removedLastFiveSeconds[item] = true;
+                removedLastFiveSeconds[wid][item] = true;
                 setTimeout(function () {
-                    removedLastFiveSeconds[item] = false;
+                    removedLastFiveSeconds[wid][item] = false;
                 }, 5000);
 
                 $el.remove();
@@ -211,7 +211,7 @@
 
             // if item is already on list --> return
             for (var i = 0; i < currentList.length; i++) {
-                if (((currentList[i].name === itemWoDescription && currentList[i].specification === desc) && !removedLastFiveSeconds[itemWoDescription])
+                if (((currentList[i].name === itemWoDescription && currentList[i].specification === desc) && !removedLastFiveSeconds[wid][itemWoDescription])
                     || (existence !== null && (desc === currentDesc))) return;
             } // endFor
 
@@ -220,9 +220,9 @@
                 alternative = alternative.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue');
             } // endIf
 
-            addedLastFiveSeconds[item] = true;
+            addedLastFiveSeconds[wid][item] = true;
             setTimeout(function () {
-                addedLastFiveSeconds[item] = false;
+                addedLastFiveSeconds[wid][item] = false;
             }, 5000);
 
             // if item is there but description changed, remove item
@@ -297,11 +297,11 @@
                 } // endFor
 
                 // if item is not on list anymore and is not newly added --> remove
-                if (!stillOnList && !(addedLastFiveSeconds[this.id.replace(/_/g, ' ')])) {
+                if (!stillOnList && !(addedLastFiveSeconds[wid][this.id.replace(/_/g, ' ')])) {
                     $(this).remove();
-                    removedLastFiveSeconds[this.id] = true;
+                    removedLastFiveSeconds[wid][this.id] = true;
                     setTimeout(function () {
-                        removedLastFiveSeconds[this.id] = false;
+                        removedLastFiveSeconds[wid][this.id] = false;
                     }, 5000);
                 } // endIf
             } // endIf
@@ -326,7 +326,7 @@
         var alternative;
         for (var k = 0; k < newItems.length; k++) {
             // if item was rm recently backend doesn't know yet so do not add it again
-            if (removedLastFiveSeconds[newItems[k]]) continue;
+            if (removedLastFiveSeconds[wid][newItems[k]]) continue;
             var nameFromDict = bringDict[wid][newItems[k]] ? bringDict[wid][newItems[k]] : newItems[k];
             alternative = nameFromDict.substring(0, 1).toLowerCase();
             if (/^(ä|ö|ü)/g.test(alternative)) {
@@ -480,6 +480,10 @@
         $('#' + wid+ '-addButton').click(function () {
             saveItem(null, null, wid);
         });
+
+        // create lastFiveSecond states for wid
+        removedLastFiveSeconds[wid] = [];
+        addedLastFiveSeconds[wid] = [];
 
         console.log(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Registered Event Handlers');
 
