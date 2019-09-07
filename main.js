@@ -85,11 +85,11 @@ function startAdapter(options) {
         if (method === `removeItem`) {
             try {
                 await bring.removeItem(listId, state.val);
-                ensureOnlineState(true);
+                adapter.setStateChanged(`info.connection`, true, true);
                 adapter.log.info(`[REMOVE] Removed ${state.val} from ${listId}`);
                 adapter.setState(id, state.val, true);
             } catch (e) {
-                ensureOnlineState(false);
+                adapter.setStateChanged(`info.connection`, false, true);
                 adapter.log.warn(e);
             }
         } else if (method === `saveItem`) {
@@ -97,11 +97,11 @@ function startAdapter(options) {
                 const item = state.val.split(`,`)[0].trim() || state.val;
                 const specification = state.val.includes(`,`) ? state.val.substring(state.val.indexOf(`,`) + 1).trim() : ``;
                 await bring.saveItem(listId, item, specification);
-                ensureOnlineState(true);
+                adapter.setStateChanged(`info.connection`, true, true);
                 adapter.log.info(`[SAVE] Saved ${item} (${specification}) to ${listId}`);
                 adapter.setState(id, state.val, true);
             } catch (e) {
-                ensureOnlineState(false);
+                adapter.setStateChanged(`info.connection`, false, true);
                 adapter.log.warn(e);
             }
         } else if (method === `messageTrigger`) {
@@ -168,11 +168,11 @@ function startAdapter(options) {
         } else if (method === `moveToRecentContent`) {
             try {
                 await bring.moveToRecentList(listId, state.val);
-                ensureOnlineState(true);
+                adapter.setStateChanged(`info.connection`, true, true);
                 adapter.log.info(`[MOVE] Moved ${state.val} to recent content of ${listId}`);
                 adapter.setState(id, state.val, true);
             } catch (e) {
-                ensureOnlineState(false);
+                adapter.setStateChanged(`info.connection`, false, true);
                 adapter.log.warn(e);
             }
         } // endElseIf
@@ -251,11 +251,11 @@ function pollList(listUuid) {
         adapter.setState(`${listUuid}.count`, data.purchase.length, true);
     }).catch(e => {
         adapter.log.warn(e);
-        ensureOnlineState(false);
+        adapter.setStateChanged(`info.connection`, false, true);
     });
 
     bring.getAllUsersFromList(listUuid).then(data => {
-        ensureOnlineState(true);
+        adapter.setStateChanged(`info.connection`, true, true);
         adapter.log.debug(`[DATA] Users from ${listUuid} loaded: ${JSON.stringify(data)}`);
         adapter.setState(`${listUuid}.users`, JSON.stringify(data.users), true);
 
@@ -265,7 +265,7 @@ function pollList(listUuid) {
         adapter.setState(`${listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
     }).catch(e => {
         adapter.log.warn(e);
-        ensureOnlineState(false);
+        adapter.setStateChanged(`info.connection`, false, true);
     });
 
 } // endPollList
@@ -278,7 +278,7 @@ async function pollAllLists() {
 
         adapter.log.debug(`[DATA] Lists loaded: ${JSON.stringify(bringLists)}`);
 
-        ensureOnlineState(true);
+        adapter.setStateChanged(`info.connection`, true, true);
 
         for (const entry of bringLists.lists) {
             const promises = [];
@@ -571,12 +571,16 @@ async function pollAllLists() {
                 adapter.setState(`${entry.listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
             }).catch(e => {
                 adapter.log.warn(e);
-                ensureOnlineState(false);
+                adapter.setStateChanged(`info.connection`, false, true);
             });
         } // endFor
     } catch (e) {
+        adapter.setStateChanged(`info.connection`, false, true);
         adapter.log.warn(e);
-        ensureOnlineState(false);
+        // Check if Access token no longer valid
+        if (e.includes(`JWT access token is not valid`)) {
+            tryLogin();
+        } // endIf
     } // endTryCatch
 
     if (polling.all) clearTimeout(polling.all);
@@ -598,15 +602,6 @@ async function tryLogin() {
         loginTimeout = setTimeout(tryLogin, 30000);
     } // endCatch
 } // endTryLogin
-
-async function ensureOnlineState(onlineState) {
-    try {
-        const currentState = await adapter.getStateAsync(`info.connection`);
-        if (currentState !== onlineState) adapter.setState(`info.connection`, onlineState, true);
-    } catch (e) {
-        adapter.setState(`info.connection`, onlineState, true);
-    } // endTryCatch
-} // endEnsureOnlineState
 
 if (module && module.parent) {
     module.exports = startAdapter;

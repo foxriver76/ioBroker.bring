@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.6.3",
+        "version": "1.6.4",
         "news": {
+            "1.6.4": {
+                "en": "implemented re-authentication when bearer token is expired",
+                "de": "Die erneute Authentifizierung wurde implementiert, wenn das Bearer-Token abgelaufen ist",
+                "ru": "реализована повторная аутентификация по истечении срока действия токена на предъявителя",
+                "pt": "re-autenticação implementada quando o token do portador expirou",
+                "nl": "herauthenticatie geïmplementeerd wanneer het dragertoken is verlopen",
+                "fr": "Ré-authentification implémentée lorsque le jeton porteur a expiré",
+                "it": "implementata la riautenticazione alla scadenza del token al portatore",
+                "es": "re-autenticación implementada cuando el token portador ha expirado",
+                "pl": "zaimplementowano ponowne uwierzytelnienie po wygaśnięciu tokena okaziciela",
+                "zh-cn": "当承载令牌过期时实施重新认证"
+            },
             "1.6.3": {
                 "en": "fixed bug which only allowed one registered event handler of widget -> now switching between widgets possible",
                 "de": "Fehler behoben, der nur einen registrierten Event-Handler des Widgets erlaubte -> nun kann zwischen Widgets gewechselt werden",
@@ -146,18 +158,6 @@
                 "es": "Estado agregado que contiene una enumeración hablable de cada lista de compras.",
                 "pl": "dodano stan, który zawiera wyraźne wyliczenie każdej listy zakupów",
                 "zh-cn": "添加状态，其中包含每个购物清单的可说明的枚举"
-            },
-            "1.1.0": {
-                "en": "add possibility to send messages",
-                "de": "Möglichkeit hinzufügen, Nachrichten zu senden",
-                "ru": "добавить возможность отправлять сообщения",
-                "pt": "adicionar possibilidade de enviar mensagens",
-                "nl": "mogelijkheid toevoegen om berichten te verzenden",
-                "fr": "ajouter la possibilité d'envoyer des messages",
-                "it": "aggiungere la possibilità di inviare messaggi",
-                "es": "Añadir posibilidad de enviar mensajes.",
-                "pl": "dodaj możliwość wysyłania wiadomości",
-                "zh-cn": "增加发送消息的可能性"
             }
         },
         "title": "Bring!",
