@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.6.4",
+        "version": "1.6.5",
         "news": {
-            "1.6.4": {
+            "1.6.5": {
                 "en": "implemented re-authentication when bearer token is expired",
                 "de": "Die erneute Authentifizierung wurde implementiert, wenn das Bearer-Token abgelaufen ist",
                 "ru": "реализована повторная аутентификация по истечении срока действия токена на предъявителя",
