@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.6.5",
+        "version": "1.6.6",
         "news": {
+            "1.6.6": {
+                "en": "improved error handling in widget",
+                "de": "Verbesserte Fehlerbehandlung im Widget",
+                "ru": "улучшена обработка ошибок в виджете",
+                "pt": "tratamento de erros aprimorado no widget",
+                "nl": "verbeterde foutafhandeling in widget",
+                "fr": "amélioration de la gestion des erreurs dans le widget",
+                "it": "migliorata gestione degli errori nel widget",
+                "es": "manejo mejorado de errores en el widget",
+                "pl": "poprawiona obsługa błędów w widżecie",
+                "zh-cn": "改进了小部件中的错误处理"
+            },
             "1.6.5": {
                 "en": "implemented re-authentication when bearer token is expired",
                 "de": "Die erneute Authentifizierung wurde implementiert, wenn das Bearer-Token abgelaufen ist",
@@ -146,18 +158,6 @@
                 "es": "uri codificar solicitud de inicio de sesión, ya que puede contener caracteres especiales",
                 "pl": "uri koduje żądanie logowania, ponieważ może zawierać znak specjalny",
                 "zh-cn": "uri编码登录请求，因为它可以包含特殊字符"
-            },
-            "1.2.0": {
-                "en": "added state which contains a speakable enumeration of each shopping list",
-                "de": "hinzugefügter Zustand, der eine sprechbare Aufzählung jeder Einkaufsliste enthält",
-                "ru": "добавленное состояние, которое содержит понятное перечисление каждого списка покупок",
-                "pt": "estado adicionado que contém uma enumeração falável de cada lista de compras",
-                "nl": "toegevoegde status die een sprekende opsomming van elke boodschappenlijst bevat",
-                "fr": "état ajouté qui contient une énumération parlable de chaque liste de courses",
-                "it": "stato aggiunto che contiene un'enumerazione leggibile di ogni lista della spesa",
-                "es": "Estado agregado que contiene una enumeración hablable de cada lista de compras.",
-                "pl": "dodano stan, który zawiera wyraźne wyliczenie każdej listy zakupów",
-                "zh-cn": "添加状态，其中包含每个购物清单的可说明的枚举"
             }
         },
         "title": "Bring!",

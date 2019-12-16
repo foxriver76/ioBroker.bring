@@ -516,6 +516,8 @@
                 bringInvertedDict[wid] = !err ? swap(bringDict[wid]) : {};
             } catch (e) {
                 console.error(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot parse translations: ' + e);
+                bringDict[wid] = {};
+                bringInvertedDict[wid] = {};
             } // endCatch
 
             var dps = [bringListId[wid], bringRecentListId[wid]];
