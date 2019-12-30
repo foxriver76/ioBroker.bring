@@ -199,7 +199,7 @@
         if (item === '') return;
 
         // get current list
-        vis.conn.getStates(bringListId[wid], (err, states) => {
+        vis.conn.getStates(bringListId[wid], function (err, states) {
             var currentList = JSON.parse(states[bringListId[wid]].val);
             var itemWoDescriptionReplaced = itemWoDescription.replace(/ /g, '_');
             desc = desc ? desc : (item.split(',').length > 1) ? item.substring(item.indexOf(',') + 1).trim() : '';

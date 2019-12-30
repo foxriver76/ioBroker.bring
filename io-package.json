@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.6.6",
+        "version": "1.6.7",
         "news": {
+            "1.6.7": {
+                "en": "ensured compatibility with older browsers",
+                "de": "Kompatibilität mit älteren Browsern sichergestellt",
+                "ru": "обеспечена совместимость со старыми браузерами",
+                "pt": "compatibilidade garantida com navegadores mais antigos",
+                "nl": "zorgde voor compatibiliteit met oudere browsers",
+                "fr": "compatibilité assurée avec les anciens navigateurs",
+                "it": "compatibilità garantita con i browser più vecchi",
+                "es": "compatibilidad garantizada con navegadores antiguos",
+                "pl": "zapewniona kompatybilność ze starszymi przeglądarkami",
+                "zh-cn": "确保与旧版浏览器兼容"
+            },
             "1.6.6": {
                 "en": "improved error handling in widget",
                 "de": "Verbesserte Fehlerbehandlung im Widget",
@@ -146,18 +158,6 @@
                 "es": "widget añadido",
                 "pl": "dodano widżet",
                 "zh-cn": "添加小部件"
-            },
-            "1.2.1": {
-                "en": "uri encode login request because it can contain special character",
-                "de": "Anmeldeanforderung für die URI-Codierung, da Sonderzeichen enthalten sein",
-                "ru": "URI кодировать запрос на вход в систему, потому что он может содержать специальный символ",
-                "pt": "uri codifica o pedido de login porque pode conter caracteres especiais",
-                "nl": "uri codeert inlogaanvraag omdat het een speciaal teken kan bevatten",
-                "fr": "uri encoder la demande de connexion car il peut contenir des caractères spéciaux",
-                "it": "uri codifica la richiesta di accesso perché può contenere caratteri speciali",
-                "es": "uri codificar solicitud de inicio de sesión, ya que puede contener caracteres especiales",
-                "pl": "uri koduje żądanie logowania, ponieważ może zawierać znak specjalny",
-                "zh-cn": "uri编码登录请求，因为它可以包含特殊字符"
             }
         },
         "title": "Bring!",
