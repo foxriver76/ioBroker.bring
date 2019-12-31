@@ -510,7 +510,7 @@
 
         // Get translations
         vis.conn.getStates(listNamespace + '.translation', function (err, states) {
-            if (err) console.err('Cannot get translations: ' + err);
+            if (err) console.error(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot get translations: ' + err);
             try {
                 bringDict[wid] = !err ? JSON.parse(states[listNamespace + '.translation'].val) : {};
                 bringInvertedDict[wid] = !err ? swap(bringDict[wid]) : {};

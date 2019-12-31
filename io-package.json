@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.6.7",
+        "version": "1.6.8",
         "news": {
-            "1.6.7": {
+            "1.6.8": {
                 "en": "ensured compatibility with older browsers",
                 "de": "Kompatibilität mit älteren Browsern sichergestellt",
                 "ru": "обеспечена совместимость со старыми браузерами",
