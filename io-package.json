@@ -195,6 +195,8 @@
         "readme": "https://github.com/foxriver76/ioBroker.bring/blob/master/README.md",
         "loglevel": "info",
         "type": "household",
+        "connectionType": "cloud",
+        "dataSource": "poll",
         "restartAdapters": [
             "vis"
         ]
