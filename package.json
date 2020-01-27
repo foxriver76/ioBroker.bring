@@ -31,7 +31,7 @@
 	},
 	"dependencies": {
 		"bring-shopping": "^1.2.3",
-		"@iobroker/adapter-core": "^2.0.0",
+		"@iobroker/adapter-core": "^2.2.0",
 		"tableify": "^1.1.0"
 	},
 	"devDependencies": {
