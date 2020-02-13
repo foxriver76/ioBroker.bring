@@ -1,6 +1,6 @@
 {
 	"name": "iobroker.bring",
-	"version": "1.6.8",
+	"version": "1.7.0",
 	"engines": {
 		"node": ">=8.0.0"
 	},

@@ -24,47 +24,160 @@
 
     <script type="text/javascript">
 
-        var secret;
+        let secret;
+
+        // polyfill for MS Edge
+        if (!TextEncoder) {
+
+            var TextEncoder = function TextEncoder() {};
+
+            TextEncoder.prototype.encode = function (s) {
+                const e = new Uint8Array(s.length);
+
+                for (let i = 0; i < s.length; i += 1) {
+                    e[i] = s.charCodeAt(i);
+                }
+
+                return e;
+            };
+
+            var TextDecoder = function TextDecoder() {};
+
+            TextDecoder.prototype.decode = function (arr) {
+                let d = "";
+                arr = new Uint8Array(arr);
+                for (let i = 0; i < arr.byteLength; i += 1) {
+                    d += String.fromCharCode(arr[i]);
+                }
+
+                return d;
+            };
+        }
+
+        const enc = new TextEncoder('utf-8');
+        const dec = new TextDecoder();
+
+        function buf2hex(buffer) { // buffer is an ArrayBuffer
+            return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+        } // endBuf2Hex
+
+        function hex2buf(hex) {
+            const buffer = new ArrayBuffer(hex.length / 2);
+            const array = new Uint8Array(buffer);
+            let k = 0;
+            for (let i = 0; i < hex.length; i += 2) {
+                array[k] = parseInt(hex[i] + hex[i + 1], 16);
+                k++;
+            }
+
+            return array;
+        }
+
+        function encryptLegacy(key, value) {
+            let result = '';
+            for (let i = 0; i < value.length; ++i) {
+                result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+            }
+            return result;
+        }
+
+        function decryptLegacy(key, value) {
+            let result = '';
+            for (let i = 0; i < value.length; ++i) {
+                result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+            }
+            return result;
+        }
 
         function encrypt(key, value) {
-            var result = '';
-            for (var i = 0; i < value.length; ++i) {
-                result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
-            }
-            return result;
-        }
+            return new Promise(resolve => {
+                if (key.length < 32) {
+                    resolve(encryptLegacy(key, value));
+                }
+                const keyBuf = enc.encode(key.substr(0, 32));
+                window.crypto.subtle.importKey('raw', keyBuf, {name: 'AES-CBC'}, true, ['encrypt', 'decrypt']).then(key => {
+                    let iv = window.crypto.getRandomValues(new Uint8Array(16));
+                    // now encrypt stuff
+                    window.crypto.subtle.encrypt(
+                        {
+                            name: "AES-CBC",
+                            iv: iv
+                        },
+                        key, //from generateKey or importKey above
+                        enc.encode(value) //ArrayBuffer of data you want to encrypt
+                    ).then(function (encrypted) {
+                        //returns an ArrayBuffer containing the encrypted data
+                        resolve('$/aes-256-cbc' + ':' + buf2hex(iv) + ':' + buf2hex(encrypted));
+                    });
+                });
+            });
+        } // endEncrypt
 
         function decrypt(key, value) {
-            var result = '';
-            for (var i = 0; i < value.length; ++i) {
-                result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
-            }
-            return result;
-        }
+            return new Promise(resolve => {
+                if (!value.startsWith(`$/aes-256-cbc:`) || key.length < 32) {
+                    // key too short use legacy method
+                    resolve(decryptLegacy(key, value));
+                }
+                const keyBuf = enc.encode(key.substr(0, 32));
+                window.crypto.subtle.importKey('raw', keyBuf, {name: 'AES-CBC'}, true, ['encrypt', 'decrypt']).then(key => {
+                    if (!value.startsWith('$/aes-256-cbc')) {
+                        return;
+                    }
+                    const textParts = value.split(':');
+
+                    // now encrypt stuff
+                    window.crypto.subtle.decrypt(
+                        {
+                            name: 'AES-CBC',
+                            iv: hex2buf(textParts[1])
+                        },
+                        key, //from generateKey or importKey above
+                        hex2buf(textParts[2]) //ArrayBuffer of data you want to encrypt
+                    ).then(function (decrypted) {
+                        //returns the decrypted data
+                        resolve(dec.decode(decrypted));
+                    });
+                });
+            });
+        } // endDecrypt
 
         // the function loadSettings has to exist ...
         function load(settings, onChange) {
+            const promises = [];
             // example: select elements with id=key and class=value and insert value
             socket.emit('getObject', 'system.config', function (err, obj) {
                 secret = (obj.native ? obj.native.secret : '') || 'Zgfr56gFe87jJOM';
                 if (!settings) return;
                 $('.value').each(function () {
-                    var $key = $(this);
-                    var id = $key.attr('id');
+                    const $key = $(this);
+                    const id = $key.attr('id');
                     if ($key.attr('type') === 'checkbox') {
                         // do not call onChange direct, because onChange could expect some arguments
                         $key.prop('checked', settings[id]).change(function () {
                             onChange();
                         });
                     } else {
-                        var val = $key.data('crypt') && settings[id] ? decrypt(secret, settings[id]) : settings[id];
-                        // do not call onChange direct, because onChange could expect some arguments
-                        $key.val(val).change(function () {
-                            if ($(this).attr('id') !== 'notificationsType')
+                        if ($key.data('crypt') && settings[id]) {
+                            promises.push(decrypt(secret, settings[id]).then(decrypted => {
+                                const val = decrypted;
+                                $key.val(val).change(function () {
+                                    if ($(this).attr('id') !== 'notificationsType')
+                                        onChange();
+                                }).keyup(function () {
+                                    onChange();
+                                });
+                            }));
+                        } else {
+                            const val = settings[id];
+                            // do not call onChange direct, because onChange could expect some arguments
+                            $key.val(val).change(function () {
+                                if ($(this).attr('id') !== 'notificationsType')
+                                    onChange();
+                            }).keyup(function () {
                                 onChange();
-                        }).keyup(function () {
-                            onChange();
-                        });
+                            });
+                        }
                     }
                 });
 
@@ -77,8 +190,10 @@
                     fillTelegramUser(settings['telegramReceiver'], $(this).val());
                 });
 
-                onChange(false);
-                M.updateTextFields();  // function Materialize.updateTextFields(); to reinitialize all the Materialize labels on the page if you are dynamically adding inputs.
+                Promise.all(promises).then(() => {
+                    onChange(false);
+                    M.updateTextFields();  // function Materialize.updateTextFields(); to reinitialize all the Materialize labels on the page if you are dynamically adding inputs.
+                });
             });
 
             function showOrHide() {
@@ -118,24 +233,31 @@
         // ... and the function save has to exist.
         // you have to make sure the callback is called with the settings object as first param!
         function save(callback) {
+            const promises = [];
             // example: select elements with class=value and build settings object
-            var obj = {};
+            const obj = {};
             $('.value').each(function () {
-                var $this = $(this);
+                const $this = $(this);
                 if ($this.attr('type') === 'checkbox') {
                     obj[$this.attr('id')] = $this.prop('checked');
                 } else {
-                    obj[$this.attr('id')] = $this.data('crypt') && $this.val() ? encrypt(secret, $this.val()) : $this.val();
+                    if ($this.data('crypt')) {
+                        promises.push(encrypt(secret, $this.val()).then(encrypted => {
+                            obj[$this.attr('id')] = encrypted;
+                        }));
+                    } else {
+                        obj[$this.attr('id')] = $this.val();
+                    } // endElse
                 }
             });
-            callback(obj);
+            Promise.all(promises).then(() => callback(obj));
         }
 
         function fillInstances(id, arr, val) {
-            var $sel = $('#' + id);
+            const $sel = $('#' + id);
             $sel.html('<option value="">' + _('none') + '</option>');
-            for (var i = 0; i < arr.length; i++) {
-                var _id = arr[i]._id.replace('system.adapter.', '');
+            for (let i = 0; i < arr.length; i++) {
+                const _id = arr[i]._id.replace('system.adapter.', '');
                 $sel.append('<option value="' + _id + '"' + (_id === val ? ' selected' : '') + '>' + _id + '</option>');
             }
             $sel.select();
@@ -143,8 +265,8 @@
 
         function fillTelegramUser(id, instance) {
             sendTo(null, 'getTelegramUsers', instance, function (obj) {
-                var users = obj.replace(/[{}"\\]/g, "").split(',');
-                var $sel = $('#telegramReceiver');
+                const users = obj.replace(/[{}"\\]/g, "").split(',');
+                const $sel = $('#telegramReceiver');
                 $sel.html('<option value="allTelegramUsers">' + _('All Receiver') + '</option>');
 
                 users.forEach(function (val) {
