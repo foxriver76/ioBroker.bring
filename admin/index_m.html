@@ -56,6 +56,7 @@
 
         const enc = new TextEncoder('utf-8');
         const dec = new TextDecoder();
+        const toastActive = {}
 
         function buf2hex(buffer) { // buffer is an ArrayBuffer
             return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
@@ -92,8 +93,21 @@
         function encrypt(key, value) {
             return new Promise(resolve => {
                 if (key.length < 32) {
-                    resolve(encryptLegacy(key, value));
+                    if (!toastActive['encryptTooShort']) {
+                        toastActive['encryptTooShort'] = setTimeout(() => toastActive['encryptTooShort'] = null, 3000);
+                        showToast(null, _('Provided key too short on encrypt'), null, 3000);
+                    }
+                    return resolve(encryptLegacy(key, value));
                 }
+
+                if (!window.crypto || !window.crypto.subtle) {
+                    if (!toastActive['encryptNoLib']) {
+                        toastActive['encryptNoLib'] = setTimeout(() => toastActive['encryptNoLib'] = null, 3000);
+                        showToast(null, _('Crypto not available on encrypt'), null, 3000);
+                    }
+                    return resolve(encryptLegacy(key, value));
+                }
+
                 const keyBuf = enc.encode(key.substr(0, 32));
                 window.crypto.subtle.importKey('raw', keyBuf, {name: 'AES-CBC'}, true, ['encrypt', 'decrypt']).then(key => {
                     let iv = window.crypto.getRandomValues(new Uint8Array(16));
@@ -117,8 +131,17 @@
             return new Promise(resolve => {
                 if (!value.startsWith(`$/aes-256-cbc:`) || key.length < 32) {
                     // key too short use legacy method
-                    resolve(decryptLegacy(key, value));
+                    return resolve(decryptLegacy(key, value));
                 }
+
+                if (value.startsWith(`$/aes-256-cbc:`) && !window.crypto || !window.crypto.subtle) {
+                    if (!toastActive['decryptNoLib']) {
+                        toastActive['decryptNoLib'] = setTimeout(() => toastActive['decryptNoLib'] = null, 3000);
+                        showToast(null, _('Decryption but no crypto lib'), null, 3000);
+                    }
+                    return resolve('');
+                }
+
                 const keyBuf = enc.encode(key.substr(0, 32));
                 window.crypto.subtle.importKey('raw', keyBuf, {name: 'AES-CBC'}, true, ['encrypt', 'decrypt']).then(key => {
                     if (!value.startsWith('$/aes-256-cbc')) {

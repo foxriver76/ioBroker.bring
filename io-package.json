@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.7.0",
+        "version": "1.7.1",
         "news": {
-            "1.7.0": {
+            "1.7.1": {
                 "en": "we are now using AES-256-CBC as encryption",
                 "de": "Wir verwenden jetzt AES-256-CBC als Verschlüsselung",
                 "ru": "мы сейчас используем AES-256-CBC в качестве шифрования",
