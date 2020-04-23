@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.7.1",
+        "version": "1.7.2",
         "news": {
+            "1.7.2": {
+                "en": "fixed potential issue on rendering widget",
+                "de": "Mögliches Problem beim Rendern des Widgets behoben",
+                "ru": "исправлена потенциальная проблема при отображении виджета",
+                "pt": "problema potencial corrigido no widget de renderização",
+                "nl": "Potentieel probleem opgelost met rendering widget",
+                "fr": "correction d'un problème potentiel sur le widget de rendu",
+                "it": "risolto potenziale problema sul widget di rendering",
+                "es": "problema potencial solucionado en el widget de renderizado",
+                "pl": "naprawiono potencjalny problem z widżetem renderowania",
+                "zh-cn": "修复了渲染小部件上的潜在问题"
+            },
             "1.7.1": {
                 "en": "we are now using AES-256-CBC as encryption",
                 "de": "Wir verwenden jetzt AES-256-CBC als Verschlüsselung",
