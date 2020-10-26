@@ -578,7 +578,7 @@ async function pollAllLists() {
         adapter.setStateChanged(`info.connection`, false, true);
         adapter.log.warn(e);
         // Check if Access token no longer valid
-        if (e.includes(`JWT access token is not valid`)) {
+        if (e.message.includes(`JWT access token is not valid`)) {
             tryLogin();
         } // endIf
     } // endTryCatch
