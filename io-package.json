@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.7.3",
+        "version": "1.7.4",
         "news": {
+            "1.7.4": {
+                "en": "we now render the widget immediately",
+                "de": "Wir rendern das Widget jetzt sofort",
+                "ru": "теперь мы немедленно визуализируем виджет",
+                "pt": "agora renderizamos o widget imediatamente",
+                "nl": "we renderen de widget nu onmiddellijk",
+                "fr": "nous rendons maintenant le widget immédiatement",
+                "it": "ora rendiamo immediatamente il widget",
+                "es": "ahora renderizamos el widget inmediatamente",
+                "pl": "teraz renderujemy widżet natychmiast",
+                "zh-cn": "我们现在立即渲染小部件"
+            },
             "1.7.3": {
                 "en": "bring module now returns real errors instead of strings, we handle them correctly",
                 "de": "bring module gibt jetzt echte Fehler anstelle von Strings zurück, wir behandeln sie korrekt",
