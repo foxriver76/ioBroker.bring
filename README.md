@@ -129,6 +129,7 @@ For every shopping list a channel with the following states will be created:
 ## Changelog
 ### 1.7.5 (2020-12-04)
 * (foxriver76) we now use a unique name for widget rendering function to avoid conflicts
+* (foxriver76) if we cannot render widget immediately we try again after one second (see #57)
 
 ### 1.7.4 (2020-12-04)
 * (foxriver76) we now render the widget immediately

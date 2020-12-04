@@ -579,5 +579,11 @@
                   </div>
             </div>
         </div>
-    <% setTimeout(renderBringWidget, 1500, this.data.attr('wid')); %>
+    <% try {
+            renderBringWidget(this.data.attr('wid'));
+        } catch (e) {
+            console.warn(new Date().toLocaleTimeString() + ' Bring[unknown]: Could not render widget: ' + e);
+            console.log(new Date().toLocaleTimeString() + ' Bring[unknown]: Trying to render again in one second')
+            setTimeout(renderBringWidget, 1000, this.data.attr('wid'));
+        } %>
 </script>
