@@ -469,7 +469,7 @@
     /*
     *   Render page and do init
     **/
-    function renderPage(wid) {
+    function renderBringWidget(wid) {
         var listNamespace = vis.widgets[wid].data['oid-list'];
 
         console.log(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Render Widget');
@@ -566,18 +566,18 @@
         data-vis-update-style="true"
         data-vis-name="bring-shopping-list">
         <div class="vis-widget <%== this.data.attr('class') %>" style="width:230px; height:210px; min-width:145px;" id="<%= this.data.attr('wid'); %>" >
-        <div style="height: 45px; margin-bottom: 10px; padding-right: 10px;">
-            <input type="text" placeholder="<%= this.data['text-for-adding'] %>" id="<%= this.data.attr('wid') %>-save" class="addArticleText" name="addArticle">
-            <input type="image" src="widgets/bring/img/add.svg" id="<%= this.data.attr('wid') %>-addButton" class="addButton"/>
+            <div style="height: 45px; margin-bottom: 10px; padding-right: 10px;">
+                <input type="text" placeholder="<%= this.data['text-for-adding'] %>" id="<%= this.data.attr('wid') %>-save" class="addArticleText" name="addArticle">
+                <input type="image" src="widgets/bring/img/add.svg" id="<%= this.data.attr('wid') %>-addButton" class="addButton"/>
+            </div>
+            <div class="template-class vis-widget-body <%== this.data.attr('class') %>">
+                  <div id="<%= this.data.attr('wid') %>-shoppinglist" style="min-width: 100%; padding: 2px;">
+                  </div>
+                  <div style="clear: both;"></div>
+                  <hr style="margin-top: 5px; margin-bottom: 5px; width: 70%; text-align: center;">
+                  <div id="<%= this.data.attr('wid') %>-recentlist" style="min-width: 100%; padding: 2px; max-height: auto; overflow: hidden;">
+                  </div>
+            </div>
         </div>
-        <div class="template-class vis-widget-body <%== this.data.attr('class') %>">
-              <div id="<%= this.data.attr('wid') %>-shoppinglist" style="min-width: 100%; padding: 2px;">
-              </div>
-              <div style="clear: both;"></div>
-              <hr style="margin-top: 5px; margin-bottom:5px;width:70%;text-align:center;">
-              <div id="<%= this.data.attr('wid') %>-recentlist" style="min-width: 100%; padding: 2px; max-height: auto; overflow: hidden;">
-              </div>
-        </div>
-    </div>
-    <% renderPage(this.data.attr('wid')); %>
+    <% setTimeout(renderBringWidget, 1500, this.data.attr('wid')); %>
 </script>

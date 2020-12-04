@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.7.4",
+        "version": "1.7.5",
         "news": {
+            "1.7.5": {
+                "en": "we now use a unique name for widget rendering function to avoid conflicts",
+                "de": "Wir verwenden jetzt einen eindeutigen Namen für die Widget-Rendering-Funktion, um Konflikte zu vermeiden",
+                "ru": "теперь мы используем уникальное имя для функции рендеринга виджета, чтобы избежать конфликтов",
+                "pt": "agora usamos um nome único para a função de renderização do widget para evitar conflitos",
+                "nl": "we gebruiken nu een unieke naam voor de weergavefunctie van widgets om conflicten te vermijden",
+                "fr": "nous utilisons maintenant un nom unique pour la fonction de rendu du widget afin d'éviter les conflits",
+                "it": "ora usiamo un nome univoco per la funzione di rendering dei widget per evitare conflitti",
+                "es": "ahora usamos un nombre único para la función de representación de widgets para evitar conflictos",
+                "pl": "używamy teraz unikalnej nazwy dla funkcji renderowania widgetów, aby uniknąć konfliktów",
+                "zh-cn": "我们现在为窗口小部件呈现功能使用唯一的名称以避免冲突"
+            },
             "1.7.4": {
                 "en": "we now render the widget immediately",
                 "de": "Wir rendern das Widget jetzt sofort",
