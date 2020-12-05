@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.7.5",
+        "version": "1.7.6",
         "news": {
-            "1.7.5": {
+            "1.7.6": {
                 "en": "we now use a unique name for widget rendering function to avoid conflicts",
                 "de": "Wir verwenden jetzt einen eindeutigen Namen für die Widget-Rendering-Funktion, um Konflikte zu vermeiden",
                 "ru": "теперь мы используем уникальное имя для функции рендеринга виджета, чтобы избежать конфликтов",
