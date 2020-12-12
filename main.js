@@ -31,7 +31,9 @@ function startAdapter(options) {
     adapter.on(`message`, obj => {
         if (obj && obj.command === `getTelegramUsers`) {
             adapter.getForeignState(`${obj.message}.communicate.users`, (err, state) => {
-                if (err) adapter.log.error(err);
+                if (err) {
+                    adapter.log.error(err);
+                }
                 if (state && state.val) {
                     try {
                         adapter.sendTo(obj.from, obj.command, state.val, obj.callback);
@@ -77,7 +79,9 @@ function startAdapter(options) {
     });
 
     adapter.on(`stateChange`, async (id, state) => {
-        if (!id || !state || state.ack) return;
+        if (!id || !state || state.ack) {
+            return;
+        }
         adapter.log.debug(`[STATE] Changed ${id} to ${state.val}`);
         const listId = id.split(`.`)[2];
         const method = id.split(`.`).pop();
@@ -177,16 +181,19 @@ function startAdapter(options) {
             }
         } // endElseIf
 
-        if (!polling[listId]) polling[listId] = setTimeout(() => {
-            pollList(listId);
-            if (polling[listId]) clearTimeout(polling[listId]);
-            polling[listId] = null;
-        }, 1000);
+        if (!polling[listId]) {
+            polling[listId] = setTimeout(() => {
+                pollList(listId);
+                if (polling[listId]) {
+                    clearTimeout(polling[listId]);
+                }
+                polling[listId] = null;
+            }, 1000);
+        }
     });
 
     return adapter;
 } // endStartAdapter
-
 
 async function main() {
     adapter.subscribeStates(`*`);
@@ -212,7 +219,6 @@ async function main() {
     } catch (e) {
         adapter.log.warn(e);
     } // endTryCatch
-
 
     // Start polling, this goes endless
     pollAllLists();
@@ -532,47 +538,42 @@ async function pollAllLists() {
             dict = listLang[entry.listUuid] ? listLang[entry.listUuid] : await bring.loadTranslations(`de-DE`);
             await adapter.setStateAsync(`${entry.listUuid}.translation`, JSON.stringify(dict), true);
 
-            bring.getItems(entry.listUuid).then(data => {
-                adapter.log.debug(`[DATA] Items from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
-                adapter.setState(`${entry.listUuid}.content`, JSON.stringify(data.purchase), true);
-                adapter.setState(`${entry.listUuid}.recentContent`, JSON.stringify(data.recently), true);
+            const data = await bring.getItems(entry.listUuid);
+            adapter.log.debug(`[DATA] Items from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
+            adapter.setState(`${entry.listUuid}.content`, JSON.stringify(data.purchase), true);
+            adapter.setState(`${entry.listUuid}.recentContent`, JSON.stringify(data.recently), true);
 
-                const contentHtml = tableify(data.purchase);
-                const recentContentHtml = tableify(data.recently);
+            const contentHtml = tableify(data.purchase);
+            const recentContentHtml = tableify(data.recently);
 
-                // create na enumeration sentence e. g. for smart assistants
-                let enumSentence = ``;
+            // create na enumeration sentence e. g. for smart assistants
+            let enumSentence = ``;
 
-                data.purchase.forEach((value, index) => {
-                    if (index === data.purchase.length - 1 && data.purchase.length > 1) {
-                        enumSentence += ` ${i18nHelper.conjunction[lang]} ${dict[value.name] ? dict[value.name] : value.name}`;
-                    } else if (index !== data.purchase.length - 2 && data.purchase.length > 1) {
-                        enumSentence += `${dict[value.name] ? dict[value.name] : value.name}, `;
-                    } else {
-                        enumSentence += dict[value.name] ? dict[value.name] : value.name;
-                    } // endElse
-                });
-
-                adapter.setState(`${entry.listUuid}.enumSentence`, enumSentence, true);
-                adapter.setState(`${entry.listUuid}.contentHtml`, contentHtml, true);
-                adapter.setState(`${entry.listUuid}.contentHtmlNoHead`, contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml, true);
-                adapter.setState(`${entry.listUuid}.recentContentHtml`, recentContentHtml, true);
-                adapter.setState(`${entry.listUuid}.recentContentHtmlNoHead`, recentContentHtml.includes(`</thead>`) ? `<table>${recentContentHtml.split(`</thead>`)[1]}` : recentContentHtml, true);
-                adapter.setState(`${entry.listUuid}.count`, data.purchase.length, true);
+            data.purchase.forEach((value, index) => {
+                if (index === data.purchase.length - 1 && data.purchase.length > 1) {
+                    enumSentence += ` ${i18nHelper.conjunction[lang]} ${dict[value.name] ? dict[value.name] : value.name}`;
+                } else if (index !== data.purchase.length - 2 && data.purchase.length > 1) {
+                    enumSentence += `${dict[value.name] ? dict[value.name] : value.name}, `;
+                } else {
+                    enumSentence += dict[value.name] ? dict[value.name] : value.name;
+                } // endElse
             });
 
-            bring.getAllUsersFromList(entry.listUuid).then(data => {
-                adapter.log.debug(`[DATA] Users from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
-                adapter.setState(`${entry.listUuid}.users`, JSON.stringify(data.users), true);
+            adapter.setState(`${entry.listUuid}.enumSentence`, enumSentence, true);
+            adapter.setState(`${entry.listUuid}.contentHtml`, contentHtml, true);
+            adapter.setState(`${entry.listUuid}.contentHtmlNoHead`, contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml, true);
+            adapter.setState(`${entry.listUuid}.recentContentHtml`, recentContentHtml, true);
+            adapter.setState(`${entry.listUuid}.recentContentHtmlNoHead`, recentContentHtml.includes(`</thead>`) ? `<table>${recentContentHtml.split(`</thead>`)[1]}` : recentContentHtml, true);
+            adapter.setState(`${entry.listUuid}.count`, data.purchase.length, true);
 
-                const usersHtml = tableify(data.users);
+            const usersData = await bring.getAllUsersFromList(entry.listUuid);
+            adapter.log.debug(`[DATA] Users from ${entry.listUuid} loaded: ${JSON.stringify(usersData)}`);
+            adapter.setState(`${entry.listUuid}.users`, JSON.stringify(usersData.users), true);
 
-                adapter.setState(`${entry.listUuid}.usersHtml`, usersHtml, true);
-                adapter.setState(`${entry.listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
-            }).catch(e => {
-                adapter.log.warn(e);
-                adapter.setStateChanged(`info.connection`, false, true);
-            });
+            const usersHtml = tableify(usersData.users);
+
+            adapter.setState(`${entry.listUuid}.usersHtml`, usersHtml, true);
+            adapter.setState(`${entry.listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
         } // endFor
     } catch (e) {
         adapter.setStateChanged(`info.connection`, false, true);
@@ -583,7 +584,9 @@ async function pollAllLists() {
         } // endIf
     } // endTryCatch
 
-    if (polling.all) clearTimeout(polling.all);
+    if (polling.all) {
+        clearTimeout(polling.all);
+    }
     polling.all = setTimeout(pollAllLists, 90000);
 } // endPollAllLists
 
@@ -593,12 +596,16 @@ async function tryLogin() {
         adapter.setState(`info.connection`, true, true);
         adapter.setState(`info.user`, bring.name, true);
         adapter.log.info(`[LOGIN] Successfully logged in as ${bring.name}`);
-        if (loginTimeout) clearTimeout(loginTimeout);
+        if (loginTimeout) {
+            clearTimeout(loginTimeout);
+        }
         return Promise.resolve();
     } catch (e) {
         adapter.log.warn(e);
         adapter.log.info(`[LOGIN] Reconnection in 30 seconds`);
-        if (loginTimeout) clearTimeout(loginTimeout);
+        if (loginTimeout) {
+            clearTimeout(loginTimeout);
+        }
         loginTimeout = setTimeout(tryLogin, 30000);
     } // endCatch
 } // endTryLogin

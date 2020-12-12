@@ -283,7 +283,12 @@
         var maxWidth = vis.widgets[wid].data['max-width-item'];
 
         // get current list
-        var newList = JSON.parse(vis.states[bringListId[wid] + '.val']);
+        try {
+            var newList = JSON.parse(vis.states[bringListId[wid] + '.val']);
+        } catch (e) {
+            console.error(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot parse new list on checkItems: ' + e);
+            return;
+        }
 
         $('.bring-item').each(function () {
             if (this.id.startsWith(wid)) {
@@ -383,7 +388,12 @@
         var maxWidth = vis.widgets[wid].data['max-width-item'];
 
         // get recentList
-        var newList = JSON.parse(vis.states[bringRecentListId[wid] + '.val']);
+        try {
+            var newList = JSON.parse(vis.states[bringRecentListId[wid] + '.val']);
+        } catch (e) {
+            console.error(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot parse new list on checkRecentItems: ' + e);
+            return;
+        }
 
         $('.bring-recent-item').each(function (index) {
             if (this.id.startsWith(wid)) {

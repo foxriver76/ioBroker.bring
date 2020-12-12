@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.7.6",
+        "version": "1.7.7",
         "news": {
+            "1.7.7": {
+                "en": "fix potential crash on `pollAllLists` function",
+                "de": "Behebung eines möglichen Absturzes in der Funktion `pollAllLists`",
+                "ru": "исправить потенциальный сбой в функции `pollAllLists`",
+                "pt": "consertar possível falha na função `pollAllLists`",
+                "nl": "mogelijke crash op de functie `pollAllLists` repareren",
+                "fr": "correction d'un crash potentiel sur la fonction `pollAllLists`",
+                "it": "risolto il potenziale crash sulla funzione `pollAllLists`",
+                "es": "arreglar un posible bloqueo en la función `pollAllLists`",
+                "pl": "napraw potencjalną awarię funkcji `pollAllLists`",
+                "zh-cn": "修复`pollAllLists`函数可能发生的崩溃"
+            },
             "1.7.6": {
                 "en": "we now use a unique name for widget rendering function to avoid conflicts",
                 "de": "Wir verwenden jetzt einen eindeutigen Namen für die Widget-Rendering-Funktion, um Konflikte zu vermeiden",
