@@ -253,6 +253,9 @@
             "list"
         ],
         "readme": "https://github.com/foxriver76/ioBroker.bring/blob/master/README.md",
+        "docs": {
+            "de": "docs/de/README.md"
+        },
         "loglevel": "info",
         "type": "household",
         "connectionType": "cloud",
@@ -260,9 +263,6 @@
         "restartAdapters": [
             "vis"
         ]
-    },
-    "docs": {
-        "de": "docs/de/README.md"
     },
     "native": {
         "mail": "",
