@@ -221,6 +221,10 @@
             }
         },
         "title": "Bring!",
+        "titleLang": {
+            "en": "Bring!",
+            "de": "Bring!"
+        },
         "desc": {
             "en": "Manage your shopping list with Bring!",
             "de": "Verwalten Sie Ihre Einkaufsliste mit Bring!",
@@ -254,7 +258,8 @@
         ],
         "readme": "https://github.com/foxriver76/ioBroker.bring/blob/master/README.md",
         "docs": {
-            "de": "docs/de/README.md"
+            "de": "docs/de/README.md",
+            "en": "README.md"
         },
         "loglevel": "info",
         "type": "household",
