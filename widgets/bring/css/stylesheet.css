@@ -39,6 +39,10 @@ span.textFitted {
     color: rgba(250, 250, 250, 0.7);
 }
 
+.addArticleText:focus {
+    outline: none;
+}
+
 .bring-item {
     background-color: #EE524F;
     float: left;

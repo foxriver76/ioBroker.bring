@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "bring",
-        "version": "1.7.7",
+        "version": "1.7.8",
         "news": {
+            "1.7.8": {
+                "en": "widget: fix blue border on input text field in Safari when focussing",
+                "de": "Widget: blauen Rahmen im Eingabetextfeld in Safari beim Fokussieren korrigiert",
+                "ru": "виджет: исправить синюю рамку в текстовом поле ввода в Safari при фокусировке",
+                "pt": "widget: corrige a borda azul no campo de texto de entrada no Safari ao focar",
+                "nl": "widget: blauwe rand repareren in invoertekstveld in Safari bij scherpstellen",
+                "fr": "widget : correction de la bordure bleue sur le champ de saisie de texte dans Safari lors de la mise au point",
+                "it": "widget: corretto il bordo blu sul campo di testo di input in Safari durante la messa a fuoco",
+                "es": "widget: corrige el borde azul en el campo de entrada de texto en Safari al enfocar",
+                "pl": "widget: napraw niebieskie obramowanie w polu wprowadzania tekstu w Safari podczas ustawiania ostrości",
+                "zh-cn": "小部件：在聚焦时修复 Safari 中输入文本字段上的蓝色边框"
+            },
             "1.7.7": {
                 "en": "fix potential crash on `pollAllLists` function",
                 "de": "Behebung eines möglichen Absturzes in der Funktion `pollAllLists`",
