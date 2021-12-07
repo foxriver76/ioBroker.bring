@@ -487,8 +487,7 @@ async function pollAllLists() {
                     desc: `Number of entrys in ${entry.name}`,
                     read: true,
                     write: false,
-                    type: `number`,
-                    def: ``
+                    type: `number`
                 },
                 native: {}
             }));

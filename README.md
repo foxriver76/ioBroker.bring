@@ -136,6 +136,9 @@ For every shopping list a channel with the following states will be created:
 	### **WORK IN PROGRESS**
 -->
 
+### **WORK IN PROGRESS**
+* (foxriver76) we fixed default value of `count` state beeing an empty string
+
 ### 1.7.8 (2021-08-04)
 * (foxriver76) widget: fix blue border on input text field in Safari when focussing
 
