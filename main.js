@@ -2,8 +2,6 @@
  * Bring! adapter
  */
 
-/* jshint -W097 */// jshint strict:false
-/*jslint node: true */
 'use strict';
 
 const utils = require(`@iobroker/adapter-core`);
@@ -15,6 +13,7 @@ let adapter;
 
 let mail;
 let password;
+/** @type {Bring} */
 let bring;
 const polling = {};
 const listLang = {};
@@ -610,9 +609,9 @@ async function tryLogin() {
     } // endCatch
 } // endTryLogin
 
-if (module && module.parent) {
-    module.exports = startAdapter;
-} else {
-    // or start the instance directly
+if (require.main === module) {
     startAdapter();
+} else {
+    // compact mode
+    module.exports = startAdapter;
 } // endElse
