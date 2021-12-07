@@ -1,336 +1,192 @@
 {
-    "common": {
-        "name": "bring",
-        "version": "1.7.8",
-        "news": {
-            "1.7.8": {
-                "en": "widget: fix blue border on input text field in Safari when focussing",
-                "de": "Widget: blauen Rahmen im Eingabetextfeld in Safari beim Fokussieren korrigiert",
-                "ru": "виджет: исправить синюю рамку в текстовом поле ввода в Safari при фокусировке",
-                "pt": "widget: corrige a borda azul no campo de texto de entrada no Safari ao focar",
-                "nl": "widget: blauwe rand repareren in invoertekstveld in Safari bij scherpstellen",
-                "fr": "widget : correction de la bordure bleue sur le champ de saisie de texte dans Safari lors de la mise au point",
-                "it": "widget: corretto il bordo blu sul campo di testo di input in Safari durante la messa a fuoco",
-                "es": "widget: corrige el borde azul en el campo de entrada de texto en Safari al enfocar",
-                "pl": "widget: napraw niebieskie obramowanie w polu wprowadzania tekstu w Safari podczas ustawiania ostrości",
-                "zh-cn": "小部件：在聚焦时修复 Safari 中输入文本字段上的蓝色边框"
-            },
-            "1.7.7": {
-                "en": "fix potential crash on `pollAllLists` function",
-                "de": "Behebung eines möglichen Absturzes in der Funktion `pollAllLists`",
-                "ru": "исправить потенциальный сбой в функции `pollAllLists`",
-                "pt": "consertar possível falha na função `pollAllLists`",
-                "nl": "mogelijke crash op de functie `pollAllLists` repareren",
-                "fr": "correction d'un crash potentiel sur la fonction `pollAllLists`",
-                "it": "risolto il potenziale crash sulla funzione `pollAllLists`",
-                "es": "arreglar un posible bloqueo en la función `pollAllLists`",
-                "pl": "napraw potencjalną awarię funkcji `pollAllLists`",
-                "zh-cn": "修复`pollAllLists`函数可能发生的崩溃"
-            },
-            "1.7.6": {
-                "en": "we now use a unique name for widget rendering function to avoid conflicts",
-                "de": "Wir verwenden jetzt einen eindeutigen Namen für die Widget-Rendering-Funktion, um Konflikte zu vermeiden",
-                "ru": "теперь мы используем уникальное имя для функции рендеринга виджета, чтобы избежать конфликтов",
-                "pt": "agora usamos um nome único para a função de renderização do widget para evitar conflitos",
-                "nl": "we gebruiken nu een unieke naam voor de weergavefunctie van widgets om conflicten te vermijden",
-                "fr": "nous utilisons maintenant un nom unique pour la fonction de rendu du widget afin d'éviter les conflits",
-                "it": "ora usiamo un nome univoco per la funzione di rendering dei widget per evitare conflitti",
-                "es": "ahora usamos un nombre único para la función de representación de widgets para evitar conflictos",
-                "pl": "używamy teraz unikalnej nazwy dla funkcji renderowania widgetów, aby uniknąć konfliktów",
-                "zh-cn": "我们现在为窗口小部件呈现功能使用唯一的名称以避免冲突"
-            },
-            "1.7.4": {
-                "en": "we now render the widget immediately",
-                "de": "Wir rendern das Widget jetzt sofort",
-                "ru": "теперь мы немедленно визуализируем виджет",
-                "pt": "agora renderizamos o widget imediatamente",
-                "nl": "we renderen de widget nu onmiddellijk",
-                "fr": "nous rendons maintenant le widget immédiatement",
-                "it": "ora rendiamo immediatamente il widget",
-                "es": "ahora renderizamos el widget inmediatamente",
-                "pl": "teraz renderujemy widżet natychmiast",
-                "zh-cn": "我们现在立即渲染小部件"
-            },
-            "1.7.3": {
-                "en": "bring module now returns real errors instead of strings, we handle them correctly",
-                "de": "bring module gibt jetzt echte Fehler anstelle von Strings zurück, wir behandeln sie korrekt",
-                "ru": "Модуль принести теперь возвращает реальные ошибки вместо строк, мы обрабатываем их правильно",
-                "pt": "o módulo bring agora retorna erros reais em vez de strings, nós os tratamos corretamente",
-                "nl": "Bring module retourneert nu echte fouten in plaats van strings, we behandelen ze correct",
-                "fr": "le module bring renvoie maintenant des erreurs réelles au lieu de chaînes, nous les traitons correctement",
-                "it": "bring module ora restituisce errori reali invece di stringhe, li gestiamo correttamente",
-                "es": "traer el módulo ahora devuelve errores reales en lugar de cadenas, los manejamos correctamente",
-                "pl": "Moduł bring teraz zwraca prawdziwe błędy zamiast łańcuchów, obsługujemy je poprawnie",
-                "zh-cn": "带来模块现在返回实际错误而不是字符串，我们可以正确处理它们"
-            },
-            "1.7.2": {
-                "en": "fixed potential issue on rendering widget",
-                "de": "Mögliches Problem beim Rendern des Widgets behoben",
-                "ru": "исправлена потенциальная проблема при отображении виджета",
-                "pt": "problema potencial corrigido no widget de renderização",
-                "nl": "Potentieel probleem opgelost met rendering widget",
-                "fr": "correction d'un problème potentiel sur le widget de rendu",
-                "it": "risolto potenziale problema sul widget di rendering",
-                "es": "problema potencial solucionado en el widget de renderizado",
-                "pl": "naprawiono potencjalny problem z widżetem renderowania",
-                "zh-cn": "修复了渲染小部件上的潜在问题"
-            },
-            "1.7.1": {
-                "en": "we are now using AES-256-CBC as encryption",
-                "de": "Wir verwenden jetzt AES-256-CBC als Verschlüsselung",
-                "ru": "мы сейчас используем AES-256-CBC в качестве шифрования",
-                "pt": "agora estamos usando o AES-256-CBC como criptografia",
-                "nl": "we gebruiken nu AES-256-CBC als codering",
-                "fr": "nous utilisons maintenant AES-256-CBC comme cryptage",
-                "it": "ora stiamo usando AES-256-CBC come crittografia",
-                "es": "ahora estamos usando AES-256-CBC como encriptación",
-                "pl": "używamy teraz AES-256-CBC jako szyfrowania",
-                "zh-cn": "我们现在使用AES-256-CBC作为加密"
-            },
-            "1.6.8": {
-                "en": "ensured compatibility with older browsers",
-                "de": "Kompatibilität mit älteren Browsern sichergestellt",
-                "ru": "обеспечена совместимость со старыми браузерами",
-                "pt": "compatibilidade garantida com navegadores mais antigos",
-                "nl": "zorgde voor compatibiliteit met oudere browsers",
-                "fr": "compatibilité assurée avec les anciens navigateurs",
-                "it": "compatibilità garantita con i browser più vecchi",
-                "es": "compatibilidad garantizada con navegadores antiguos",
-                "pl": "zapewniona kompatybilność ze starszymi przeglądarkami",
-                "zh-cn": "确保与旧版浏览器兼容"
-            },
-            "1.6.6": {
-                "en": "improved error handling in widget",
-                "de": "Verbesserte Fehlerbehandlung im Widget",
-                "ru": "улучшена обработка ошибок в виджете",
-                "pt": "tratamento de erros aprimorado no widget",
-                "nl": "verbeterde foutafhandeling in widget",
-                "fr": "amélioration de la gestion des erreurs dans le widget",
-                "it": "migliorata gestione degli errori nel widget",
-                "es": "manejo mejorado de errores en el widget",
-                "pl": "poprawiona obsługa błędów w widżecie",
-                "zh-cn": "改进了小部件中的错误处理"
-            },
-            "1.6.5": {
-                "en": "implemented re-authentication when bearer token is expired",
-                "de": "Die erneute Authentifizierung wurde implementiert, wenn das Bearer-Token abgelaufen ist",
-                "ru": "реализована повторная аутентификация по истечении срока действия токена на предъявителя",
-                "pt": "re-autenticação implementada quando o token do portador expirou",
-                "nl": "herauthenticatie geïmplementeerd wanneer het dragertoken is verlopen",
-                "fr": "Ré-authentification implémentée lorsque le jeton porteur a expiré",
-                "it": "implementata la riautenticazione alla scadenza del token al portatore",
-                "es": "re-autenticación implementada cuando el token portador ha expirado",
-                "pl": "zaimplementowano ponowne uwierzytelnienie po wygaśnięciu tokena okaziciela",
-                "zh-cn": "当承载令牌过期时实施重新认证"
-            },
-            "1.6.3": {
-                "en": "fixed bug which only allowed one registered event handler of widget -> now switching between widgets possible",
-                "de": "Fehler behoben, der nur einen registrierten Event-Handler des Widgets erlaubte -> nun kann zwischen Widgets gewechselt werden",
-                "ru": "исправлена ​​ошибка, при которой разрешался только один зарегистрированный обработчик события виджета -> теперь возможно переключение между виджетами",
-                "pt": "Foi corrigido o erro que permitia apenas um manipulador de eventos registrado do widget -> agora é possível alternar entre os widgets",
-                "nl": "opgeloste bug die slechts één geregistreerde event-handler van widget toestond -> nu schakelen tussen widgets mogelijk",
-                "fr": "bug corrigé qui n'autorisait qu'un seul gestionnaire d'événements enregistré de widget -> possibilité de basculer d'un widget à l'autre",
-                "it": "corretto bug che consentiva solo un gestore eventi registrato del widget -> ora è possibile passare da un widget all'altro",
-                "es": "error corregido que solo permitía un controlador de eventos registrado de widget -> ahora es posible cambiar entre widgets",
-                "pl": "naprawiony błąd, który pozwalał tylko na jedną zarejestrowaną procedurę obsługi widżetu -> teraz możliwe przełączanie między widżetami",
-                "zh-cn": "修复了只允许一个注册的小部件事件处理程序的bug  - >现在可以在小部件之间切换"
-            },
-            "1.6.2": {
-                "en": "usage of translations for enumSentence and notifiations (e. g. email)",
-                "de": "Verwendung von Übersetzungen für Aufzählungen und Benachrichtigungen (z. B. E-Mail)",
-                "ru": "использование переводов для enumSentence и уведомлений (например, электронная почта)",
-                "pt": "uso de traduções para enumSentence e notifiations (por exemplo, email)",
-                "nl": "gebruik van vertalingen voor enumSentence en kennisgevingen (bijvoorbeeld e-mail)",
-                "fr": "utilisation de traductions pour énumSentence et notifications (e-mail, par exemple)",
-                "it": "utilizzo di traduzioni per enumSentence e notifiche (es. e-mail)",
-                "es": "uso de traducciones para enumSentence y notificaciones (por ejemplo, correo electrónico)",
-                "pl": "wykorzystanie tłumaczeń do wyliczeń i powiadomień (np. e-mail)",
-                "zh-cn": "enumSentence和通知的翻译用法（例如电子邮件）"
-            },
-            "1.6.1": {
-                "en": "fixed bug, that prevent html states and other from being set",
-                "de": "Fehler behoben, der verhinderte, dass HTML-Status und andere gesetzt werden",
-                "ru": "исправлена ​​ошибка, препятствовавшая настройке html-состояний и прочего",
-                "pt": "bug fixo, que impede que estados html e outros sejam definidos",
-                "nl": "opgeloste bug, die voorkomen dat html-statussen en andere worden ingesteld",
-                "fr": "bug corrigé, qui empêche les états HTML et autres d'être définis",
-                "it": "bug corretto, che impedisce agli stati html e altri di essere impostati",
-                "es": "error corregido, que evita que se establezcan estados html y otros",
-                "pl": "naprawiono błąd, który uniemożliwia ustawianie stanów HTML i innych",
-                "zh-cn": "修复bug，防止html状态和其他设置"
-            },
-            "1.6.0": {
-                "en": "widget is now translated, big frontend optimizations and bugfixes in front- and backend",
-                "de": "Widget ist jetzt übersetzt, große Frontend-Optimierungen und Bugfixes im Front- und Backend",
-                "ru": "Виджет теперь переведен, большие оптимизации веб-интерфейса и исправления ошибок в передней и задней частях.",
-                "pt": "widget agora é traduzido, grandes otimizações frontend e correções de bugs na frente e backend",
-                "nl": "widget is nu vertaald, grote front-end optimalisaties en bugfixes in front- en backend",
-                "fr": "le widget est maintenant traduit, grandes optimisations frontales et corrections de bugs en avant et en arrière",
-                "it": "il widget è ora tradotto, grandi ottimizzazioni frontend e bugfix in front e backend",
-                "es": "El widget está ahora traducido, las grandes optimizaciones de la interfaz y las correcciones de errores en la parte frontal y posterior.",
-                "pl": "Widget jest teraz przetłumaczony, duże optymalizacje frontendu i poprawki błędów w frontend i backend",
-                "zh-cn": "widget现在被翻译，大前端优化和前端和后端的错误修正"
-            },
-            "1.4.0": {
-                "en": "use textFit to fit longer text to widget + internal reworks for widget",
-                "de": "Verwenden Sie textFit, um längeren Text in das Widget einzufügen, sowie interne Überarbeitungen für das Widget",
-                "ru": "использовать textFit для подгонки длинного текста к виджету + внутренние изменения для виджета",
-                "pt": "use textFit para ajustar texto mais longo ao widget + retrabalho interno para widget",
-                "nl": "gebruik textFit om langere tekst aan widget + interne reworks voor widget aan te passen",
-                "fr": "utilisez textFit pour adapter du texte plus long au widget + retouches internes pour le widget",
-                "it": "usa textFit per adattare testo più lungo a widget + rielaborazioni interne per widget",
-                "es": "use textFit para ajustar texto más largo al widget + trabajos internos para el widget",
-                "pl": "użyj textFit, aby dopasować dłuższy tekst do widgetu + wewnętrzne przeróbki widgetu",
-                "zh-cn": "使用textFit将较长的文本适合小部件+内部重新构建小部件"
-            },
-            "1.3.4": {
-                "en": "add possibility to use this widget multiple times on same page",
-                "de": "Möglichkeit hinzufügt, dieses Widget mehrmals auf derselben Seite zu verwenden",
-                "ru": "добавить возможность использовать этот виджет несколько раз на одной странице",
-                "pt": "Adicionar possibilidade de usar este widget várias vezes na mesma página",
-                "nl": "voeg mogelijkheid toe om deze widget meerdere keren op dezelfde pagina te gebruiken",
-                "fr": "ajout de la possibilité d'utiliser ce widget plusieurs fois sur la même page",
-                "it": "aggiungere la possibilità di utilizzare questo widget più volte nella stessa pagina",
-                "es": "Agregue la posibilidad de usar este widget varias veces en la misma página.",
-                "pl": "dodaj możliwość wielokrotnego używania tego widżetu na tej samej stronie",
-                "zh-cn": "添加在同一页面上多次使用此小部件的可能性"
-            },
-            "1.3.3": {
-                "en": "also change height and div sizes according to users specification and when item is on recent list and added by text input it is now instantly removed from recent list",
-                "de": "Ändern der Höhe un der div-Größe, entsprechend den Benutzerspezifikationen. Wenn sich das Element in der kürzlichen Liste befindet und durch Texteingabe hinzugefügt wird, wird es nun sofort aus der kürzlichen Liste entfernt",
-                "ru": "также изменяйте высоту и размеры div в соответствии со спецификацией пользователя, и когда элемент находится в недавнем списке и добавляется с помощью ввода текста, он немедленно удаляется из недавнего списка",
-                "pt": "também altere a altura e os tamanhos div de acordo com a especificação do usuário e quando o item estiver na lista recente e adicionado por entrada de texto, ele será instantaneamente removido da lista recente",
-                "nl": "verander ook de hoogte en div-maten volgens de gebruikersspecificatie en wanneer het item in de recente lijst staat en door tekstinvoer is toegevoegd, wordt het nu direct uit de recente lijst verwijderd",
-                "fr": "permet également de modifier la taille et la taille des divisions en fonction des spécifications de l'utilisateur. Lorsque l'élément est répertorié et ajouté par saisie de texte, il est instantanément supprimé de la liste récente.",
-                "it": "cambia anche l'altezza e le dimensioni div in base alle specifiche degli utenti e quando l'elemento si trova nell'elenco recente e aggiunto dall'input di testo, viene immediatamente rimosso dall'elenco recente",
-                "es": "también cambia la altura y los tamaños de div según la especificación de los usuarios y cuando el elemento está en la lista reciente y se agrega mediante entrada de texto, ahora se elimina instantáneamente de la lista reciente",
-                "pl": "zmieniaj także wysokość i rozmiary dywanów zgodnie ze specyfikacją użytkownika, a gdy element jest na ostatniej liście i dodawany przez wprowadzanie tekstu, jest natychmiast usuwany z listy",
-                "zh-cn": "还根据用户规格更改高度和div大小，当项目在最近列表中并通过文本输入添加时，它现在立即从最近的列表中删除"
-            },
-            "1.3.2": {
-                "en": "enable configuration of width for items in widget",
-                "de": "Möglichkeit der Konfiguration der Breite für Elemente im Widget",
-                "ru": "включить настройку ширины для элементов в виджете",
-                "pt": "ativar a configuração de largura para itens no widget",
-                "nl": "schakel configuratie van breedte in voor items in widget",
-                "fr": "activer la configuration de la largeur des éléments dans le widget",
-                "it": "abilita la configurazione della larghezza per gli oggetti nel widget",
-                "es": "Habilitar configuración de ancho para elementos en widget",
-                "pl": "włącz konfigurację szerokości dla elementów w widgecie",
-                "zh-cn": "为小部件中的项启用宽度配置"
-            },
-            "1.3.1": {
-                "en": "outsourced api module",
-                "de": "API-Modul ausgelagert",
-                "ru": "внешний API-модуль",
-                "pt": "módulo api terceirizado",
-                "nl": "uitbestede api-module",
-                "fr": "module d'api externalisé",
-                "it": "modulo API esternalizzato",
-                "es": "módulo api subcontratado",
-                "pl": "outsourcing modułu api",
-                "zh-cn": "外包api模块"
-            }
-        },
-        "title": "Bring!",
-        "titleLang": {
-            "en": "Bring!",
-            "de": "Bring!"
-        },
-        "desc": {
-            "en": "Manage your shopping list with Bring!",
-            "de": "Verwalten Sie Ihre Einkaufsliste mit Bring!",
-            "ru": "Управляйте своим списком покупок с Bring!",
-            "pt": "Gerencie sua lista de compras com o Bring!",
-            "nl": "Beheer uw boodschappenlijstje met Bring!",
-            "fr": "Gérez votre liste de courses avec Bring!",
-            "it": "Gestisci la tua lista della spesa con Bring!",
-            "es": "Gestiona tu lista de compras con Bring!",
-            "pl": "Zarządzaj swoją listą zakupów za pomocą narzędzia Przynieś!",
-            "zh-cn": "使用Bring管理您的购物清单！"
-        },
-        "authors": [
-            "Moritz Heusinger <moritz.heusinger@gmail.com>"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "mode": "daemon",
-        "icon": "bring.png",
-        "materialize": true,
-        "enabled": true,
-        "compact": true,
-        "messagebox": true,
-        "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.bring/master/admin/bring.png",
-        "keywords": [
-            "bring!",
-            "bring",
-            "shopping list",
-            "shopping",
-            "list"
-        ],
-        "readme": "https://github.com/foxriver76/ioBroker.bring/blob/master/README.md",
-        "docs": {
-            "de": "docs/de/README.md",
-            "en": "README.md"
-        },
-        "loglevel": "info",
-        "type": "household",
-        "connectionType": "cloud",
-        "dataSource": "poll",
-        "restartAdapters": [
-            "vis"
-        ]
+  "common": {
+    "name": "bring",
+    "version": "1.7.9",
+    "news": {
+      "1.7.9": {
+        "en": "we fixed default value of `count` state beeing an empty string",
+        "de": "Wir haben den Standardwert des 'count'-Zustands behoben, der eine leere Zeichenfolge ist",
+        "ru": "мы исправили значение по умолчанию для состояния `count` как пустую строку",
+        "pt": "fixamos o valor padrão do estado `count` sendo uma string vazia",
+        "nl": "we hebben de standaardwaarde van de `count`-status vastgesteld als een lege string",
+        "fr": "nous avons corrigé la valeur par défaut de l'état `count` étant une chaîne vide",
+        "it": "abbiamo corretto il valore predefinito dello stato `count` come una stringa vuota",
+        "es": "fijamos el valor predeterminado del estado `count` siendo una cadena vacía",
+        "pl": "naprawiliśmy domyślną wartość stanu `count` będącą pustym ciągiem",
+        "zh-cn": "我们将 `count` 状态的默认值固定为一个空字符串"
+      },
+      "1.7.8": {
+        "en": "widget: fix blue border on input text field in Safari when focussing",
+        "de": "Widget: blauen Rahmen im Eingabetextfeld in Safari beim Fokussieren korrigiert",
+        "ru": "виджет: исправить синюю рамку в текстовом поле ввода в Safari при фокусировке",
+        "pt": "widget: corrige a borda azul no campo de texto de entrada no Safari ao focar",
+        "nl": "widget: blauwe rand repareren in invoertekstveld in Safari bij scherpstellen",
+        "fr": "widget : correction de la bordure bleue sur le champ de saisie de texte dans Safari lors de la mise au point",
+        "it": "widget: corretto il bordo blu sul campo di testo di input in Safari durante la messa a fuoco",
+        "es": "widget: corrige el borde azul en el campo de entrada de texto en Safari al enfocar",
+        "pl": "widget: napraw niebieskie obramowanie w polu wprowadzania tekstu w Safari podczas ustawiania ostrości",
+        "zh-cn": "小部件：在聚焦时修复 Safari 中输入文本字段上的蓝色边框"
+      },
+      "1.7.7": {
+        "en": "fix potential crash on `pollAllLists` function",
+        "de": "Behebung eines möglichen Absturzes in der Funktion `pollAllLists`",
+        "ru": "исправить потенциальный сбой в функции `pollAllLists`",
+        "pt": "consertar possível falha na função `pollAllLists`",
+        "nl": "mogelijke crash op de functie `pollAllLists` repareren",
+        "fr": "correction d'un crash potentiel sur la fonction `pollAllLists`",
+        "it": "risolto il potenziale crash sulla funzione `pollAllLists`",
+        "es": "arreglar un posible bloqueo en la función `pollAllLists`",
+        "pl": "napraw potencjalną awarię funkcji `pollAllLists`",
+        "zh-cn": "修复`pollAllLists`函数可能发生的崩溃"
+      },
+      "1.7.6": {
+        "en": "we now use a unique name for widget rendering function to avoid conflicts",
+        "de": "Wir verwenden jetzt einen eindeutigen Namen für die Widget-Rendering-Funktion, um Konflikte zu vermeiden",
+        "ru": "теперь мы используем уникальное имя для функции рендеринга виджета, чтобы избежать конфликтов",
+        "pt": "agora usamos um nome único para a função de renderização do widget para evitar conflitos",
+        "nl": "we gebruiken nu een unieke naam voor de weergavefunctie van widgets om conflicten te vermijden",
+        "fr": "nous utilisons maintenant un nom unique pour la fonction de rendu du widget afin d'éviter les conflits",
+        "it": "ora usiamo un nome univoco per la funzione di rendering dei widget per evitare conflitti",
+        "es": "ahora usamos un nombre único para la función de representación de widgets para evitar conflictos",
+        "pl": "używamy teraz unikalnej nazwy dla funkcji renderowania widgetów, aby uniknąć konfliktów",
+        "zh-cn": "我们现在为窗口小部件呈现功能使用唯一的名称以避免冲突"
+      },
+      "1.7.4": {
+        "en": "we now render the widget immediately",
+        "de": "Wir rendern das Widget jetzt sofort",
+        "ru": "теперь мы немедленно визуализируем виджет",
+        "pt": "agora renderizamos o widget imediatamente",
+        "nl": "we renderen de widget nu onmiddellijk",
+        "fr": "nous rendons maintenant le widget immédiatement",
+        "it": "ora rendiamo immediatamente il widget",
+        "es": "ahora renderizamos el widget inmediatamente",
+        "pl": "teraz renderujemy widżet natychmiast",
+        "zh-cn": "我们现在立即渲染小部件"
+      },
+      "1.7.3": {
+        "en": "bring module now returns real errors instead of strings, we handle them correctly",
+        "de": "bring module gibt jetzt echte Fehler anstelle von Strings zurück, wir behandeln sie korrekt",
+        "ru": "Модуль принести теперь возвращает реальные ошибки вместо строк, мы обрабатываем их правильно",
+        "pt": "o módulo bring agora retorna erros reais em vez de strings, nós os tratamos corretamente",
+        "nl": "Bring module retourneert nu echte fouten in plaats van strings, we behandelen ze correct",
+        "fr": "le module bring renvoie maintenant des erreurs réelles au lieu de chaînes, nous les traitons correctement",
+        "it": "bring module ora restituisce errori reali invece di stringhe, li gestiamo correttamente",
+        "es": "traer el módulo ahora devuelve errores reales en lugar de cadenas, los manejamos correctamente",
+        "pl": "Moduł bring teraz zwraca prawdziwe błędy zamiast łańcuchów, obsługujemy je poprawnie",
+        "zh-cn": "带来模块现在返回实际错误而不是字符串，我们可以正确处理它们"
+      },
+      "1.7.2": {
+        "en": "fixed potential issue on rendering widget",
+        "de": "Mögliches Problem beim Rendern des Widgets behoben",
+        "ru": "исправлена потенциальная проблема при отображении виджета",
+        "pt": "problema potencial corrigido no widget de renderização",
+        "nl": "Potentieel probleem opgelost met rendering widget",
+        "fr": "correction d'un problème potentiel sur le widget de rendu",
+        "it": "risolto potenziale problema sul widget di rendering",
+        "es": "problema potencial solucionado en el widget de renderizado",
+        "pl": "naprawiono potencjalny problem z widżetem renderowania",
+        "zh-cn": "修复了渲染小部件上的潜在问题"
+      }
     },
-    "native": {
-        "mail": "",
-        "password": "",
-        "notificationsType": "E-Mail",
-        "emailInstance": "",
-        "telegramInstance": "",
-        "pushoverInstance": "",
-        "emailSender": "",
-        "emailReceiver": "",
-        "telegramReceiver": "",
-        "pushoverDeviceID": ""
+    "title": "Bring!",
+    "titleLang": {
+      "en": "Bring!",
+      "de": "Bring!"
     },
-    "protectedNative": [
-        "mail",
-        "password"
+    "desc": {
+      "en": "Manage your shopping list with Bring!",
+      "de": "Verwalten Sie Ihre Einkaufsliste mit Bring!",
+      "ru": "Управляйте своим списком покупок с Bring!",
+      "pt": "Gerencie sua lista de compras com o Bring!",
+      "nl": "Beheer uw boodschappenlijstje met Bring!",
+      "fr": "Gérez votre liste de courses avec Bring!",
+      "it": "Gestisci la tua lista della spesa con Bring!",
+      "es": "Gestiona tu lista de compras con Bring!",
+      "pl": "Zarządzaj swoją listą zakupów za pomocą narzędzia Przynieś!",
+      "zh-cn": "使用Bring管理您的购物清单！"
+    },
+    "authors": [
+      "Moritz Heusinger <moritz.heusinger@gmail.com>"
     ],
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "If connected to Bring! API",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.user",
-            "type": "state",
-            "common": {
-                "role": "name",
-                "name": "Name of logged-in user",
-                "type": "string",
-                "read": true,
-                "write": false
-            },
-            "native": {}
-        }
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "icon": "bring.png",
+    "materialize": true,
+    "enabled": true,
+    "compact": true,
+    "messagebox": true,
+    "extIcon": "https://raw.githubusercontent.com/foxriver76/ioBroker.bring/master/admin/bring.png",
+    "keywords": [
+      "bring!",
+      "bring",
+      "shopping list",
+      "shopping",
+      "list"
+    ],
+    "readme": "https://github.com/foxriver76/ioBroker.bring/blob/master/README.md",
+    "docs": {
+      "de": "docs/de/README.md",
+      "en": "README.md"
+    },
+    "loglevel": "info",
+    "type": "household",
+    "connectionType": "cloud",
+    "dataSource": "poll",
+    "restartAdapters": [
+      "vis"
     ]
+  },
+  "native": {
+    "mail": "",
+    "password": "",
+    "notificationsType": "E-Mail",
+    "emailInstance": "",
+    "telegramInstance": "",
+    "pushoverInstance": "",
+    "emailSender": "",
+    "emailReceiver": "",
+    "telegramReceiver": "",
+    "pushoverDeviceID": ""
+  },
+  "protectedNative": [
+    "mail",
+    "password"
+  ],
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "If connected to Bring! API",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.user",
+      "type": "state",
+      "common": {
+        "role": "name",
+        "name": "Name of logged-in user",
+        "type": "string",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    }
+  ]
 }
