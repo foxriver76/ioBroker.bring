@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "bring",
-    "version": "1.7.10",
+    "version": "1.7.11",
     "news": {
+      "1.7.11": {
+        "en": "fixed telegram user selection",
+        "de": "feste Telegrammbenutzerauswahl",
+        "ru": "исправлен выбор пользователя телеграммы",
+        "pt": "seleção de usuário de telegrama fixo",
+        "nl": "vaste telegram gebruikersselectie",
+        "fr": "sélection d'utilisateur de télégramme fixe",
+        "it": "selezione utente telegramma fisso",
+        "es": "selección de usuario de telegrama fijo",
+        "pl": "stały wybór telegramu użytkownika",
+        "zh-cn": "固定电报用户选择"
+      },
       "1.7.10": {
         "en": "fixed telegram user selection",
         "de": "feste Telegrammbenutzerauswahl",
@@ -74,18 +86,6 @@
         "es": "ahora renderizamos el widget inmediatamente",
         "pl": "teraz renderujemy widżet natychmiast",
         "zh-cn": "我们现在立即渲染小部件"
-      },
-      "1.7.3": {
-        "en": "bring module now returns real errors instead of strings, we handle them correctly",
-        "de": "bring module gibt jetzt echte Fehler anstelle von Strings zurück, wir behandeln sie korrekt",
-        "ru": "Модуль принести теперь возвращает реальные ошибки вместо строк, мы обрабатываем их правильно",
-        "pt": "o módulo bring agora retorna erros reais em vez de strings, nós os tratamos corretamente",
-        "nl": "Bring module retourneert nu echte fouten in plaats van strings, we behandelen ze correct",
-        "fr": "le module bring renvoie maintenant des erreurs réelles au lieu de chaînes, nous les traitons correctement",
-        "it": "bring module ora restituisce errori reali invece di stringhe, li gestiamo correttamente",
-        "es": "traer el módulo ahora devuelve errores reales en lugar de cadenas, los manejamos correctamente",
-        "pl": "Moduł bring teraz zwraca prawdziwe błędy zamiast łańcuchów, obsługujemy je poprawnie",
-        "zh-cn": "带来模块现在返回实际错误而不是字符串，我们可以正确处理它们"
       }
     },
     "title": "Bring!",

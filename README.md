@@ -135,7 +135,7 @@ For every shopping list a channel with the following states will be created:
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
-### 1.7.10 (2022-01-21)
+### 1.7.11 (2022-01-21)
 * (foxriver76) fixed telegram user selection
 
 ### 1.7.9 (2021-12-07)
