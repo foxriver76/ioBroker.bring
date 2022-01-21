@@ -286,18 +286,36 @@
             $sel.select();
         }
 
-        function fillTelegramUser(id, instance) {
-            sendTo(null, 'getTelegramUsers', instance, function (obj) {
-                const users = obj.replace(/[{}"\\]/g, "").split(',');
-                const $sel = $('#telegramReceiver');
-                $sel.html('<option value="allTelegramUsers">' + _('All Receiver') + '</option>');
+        function fillTelegramUser(id, telegramInst) {
+            var useUserName = false;
 
-                users.forEach(function (val) {
-                    val = val.split(':');
-                    $('#telegramReceiver').append('<option value="' + val[1] + '"' + (id === val[1] ? ' selected' : '') + '>' + val[1] + '</option>');
+            if (telegramInst !== null) {
+                socket.emit('getObject', `system.adapter.${telegramInst}`, function (err, obj) {
+                    sendTo(null, 'getTelegramUsers', telegramInst, function (usersObj) {
+                        if (obj && obj.native) {
+                            var native = obj.native;
+                            useUserName = native.useUsername;
+                        }
+                        var $sel = $('#telegramReceiver');
+                        $sel.html('<option value="allTelegramUsers">' + _('All Receiver') + '</option>');
+                        const userList = JSON.parse(usersObj);
+                        if (useUserName) {
+                            for (const i in userList) {
+                                $('#telegramReceiver').append('<option value="' + userList[i].userName + '"' + (id === userList[i].userName ? ' selected' : '') + '>' + userList[i].userName + '</option>');
+                            }
+                        } else {
+                            for (const i in userList) {
+                                $('#telegramReceiver').append('<option value="' + userList[i].firstName + '"' + (id === userList[i].firstName ? ' selected' : '') + '>' + userList[i].firstName + '</option>');
+                            }
+                        }
+                        $sel.select();
+                    });
                 });
+            } else {
+                var $sel = $('#telegramUser');
+                $sel.html('<option value="none">' + _('none') + '</option>');
                 $sel.select();
-            });
+            }
         }
     </script>
 </head>

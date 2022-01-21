@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "bring",
-    "version": "1.7.9",
+    "version": "1.7.10",
     "news": {
+      "1.7.10": {
+        "en": "fixed telegram user selection",
+        "de": "feste Telegrammbenutzerauswahl",
+        "ru": "исправлен выбор пользователя телеграммы",
+        "pt": "seleção de usuário de telegrama fixo",
+        "nl": "vaste telegram gebruikersselectie",
+        "fr": "sélection d'utilisateur de télégramme fixe",
+        "it": "selezione utente telegramma fisso",
+        "es": "selección de usuario de telegrama fijo",
+        "pl": "stały wybór użytkownika telegramu",
+        "zh-cn": "固定电报用户选择"
+      },
       "1.7.9": {
         "en": "we fixed default value of `count` state beeing an empty string",
         "de": "Wir haben den Standardwert des 'count'-Zustands behoben, der eine leere Zeichenfolge ist",
@@ -74,18 +86,6 @@
         "es": "traer el módulo ahora devuelve errores reales en lugar de cadenas, los manejamos correctamente",
         "pl": "Moduł bring teraz zwraca prawdziwe błędy zamiast łańcuchów, obsługujemy je poprawnie",
         "zh-cn": "带来模块现在返回实际错误而不是字符串，我们可以正确处理它们"
-      },
-      "1.7.2": {
-        "en": "fixed potential issue on rendering widget",
-        "de": "Mögliches Problem beim Rendern des Widgets behoben",
-        "ru": "исправлена потенциальная проблема при отображении виджета",
-        "pt": "problema potencial corrigido no widget de renderização",
-        "nl": "Potentieel probleem opgelost met rendering widget",
-        "fr": "correction d'un problème potentiel sur le widget de rendu",
-        "it": "risolto potenziale problema sul widget di rendering",
-        "es": "problema potencial solucionado en el widget de renderizado",
-        "pl": "naprawiono potencjalny problem z widżetem renderowania",
-        "zh-cn": "修复了渲染小部件上的潜在问题"
       }
     },
     "title": "Bring!",

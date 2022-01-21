@@ -1,6 +1,6 @@
 {
   "name": "iobroker.bring",
-  "version": "1.7.9",
+  "version": "1.7.10",
   "engines": {
     "node": ">=8.0.0"
   },
@@ -31,18 +31,18 @@
   },
   "dependencies": {
     "bring-shopping": "^1.4.2",
-    "@iobroker/adapter-core": "^2.0.0",
-    "tableify": "^1.1.0"
+    "@iobroker/adapter-core": "^2.5.1",
+    "tableify": "^1.1.1"
   },
   "devDependencies": {
     "gulp": "^4.0.2",
-    "mocha": "^9.0.1",
-    "chai": "^4.1.2",
-    "eslint": "^8.4.1",
-    "axios": "^0.24.0",
+    "mocha": "^9.1.4",
+    "chai": "^4.3.4",
+    "eslint": "^8.7.0",
+    "axios": "^0.25.0",
     "@iobroker/testing": "^2.5.2",
-    "@alcalzone/release-script": "^3.4.1",
-    "@alcalzone/release-script-plugin-iobroker": "^3.4.1"
+    "@alcalzone/release-script": "^3.5.0",
+    "@alcalzone/release-script-plugin-iobroker": "^3.5.0"
   },
   "main": "main.js",
   "scripts": {
