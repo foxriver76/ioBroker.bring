@@ -151,7 +151,7 @@
             var $el = $(el);
 
             if ($el.data('item')) {
-                var item = $el.data('item').replace(/_/g, ' ');
+                var item = $el.data('item').toString().replace(/_/g, ' ');
                 var wid = $el.attr('id').split('-')[0];
 
                 vis.conn.setState(bringRemoveId[wid], item, false);
@@ -175,7 +175,7 @@
                 $el.attr('data-recentitem', prevData);
                 $('#' + wid + '-recentlist').prepend($el);
             } else {
-                var recentItem = $el.data('recentitem').replace(/_/g, ' ');
+                var recentItem = $el.data('recentitem').toString().replace(/_/g, ' ');
                 var desc = $el.data('desc').toString();
                 var wid = $el.attr('id').split('-')[0];
                 $el.remove();
