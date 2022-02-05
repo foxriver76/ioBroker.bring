@@ -135,6 +135,9 @@ For every shopping list a channel with the following states will be created:
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+### 1.7.12 (2022-02-05)
+* (foxriver76) fixed infinity loop in some browsers, if the fallback image of an article cannot be recevied (closes #109)
+
 ### 1.7.11 (2022-01-21)
 * (foxriver76) fixed telegram user selection
 
@@ -253,7 +256,7 @@ For every shopping list a channel with the following states will be created:
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2019-2021 Moritz Heusinger <moritz.heusinger@gmail.com>
+Copyright (c) 2019-2022 Moritz Heusinger <moritz.heusinger@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

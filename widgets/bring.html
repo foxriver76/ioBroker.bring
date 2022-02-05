@@ -242,7 +242,7 @@
                 ' data-item="' + itemWoDescription.replace(/ /g, '_') + '"> ' +
                 '<img src="https://web.getbring.com/assets/images/items/' + itemWoDescriptionReplaced.toLowerCase()
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
-                'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
+                'onerror="this.onerror=null;this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
                 'alt=' + itemWoDescription + ' class="item-image" id="' + wid + '-img-' + itemWoDescriptionReplaced + '"' +
                 'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
                 '<div class="item-name" style="height: calc(0.2013 * ' + maxWidth + 'px);' +
@@ -350,7 +350,7 @@
                 ' data-item="' + newItems[k].replace(/ /g, '_') + '"> ' +
                 '<img src="https://web.getbring.com/assets/images/items/' + newItemReplaced.toLowerCase()
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
-                'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
+                'onerror="this.onerror=null;this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
                 'alt=' + newItems[k] + ' class="item-image" id="' + wid + '-img-' + newItemReplaced + '"' +
                 'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
                 '<div class="item-name" style="height: calc(0.2013 * ' + maxWidth + 'px);' +
@@ -450,7 +450,7 @@
                 ' data-recentitem="' + newItemReplaced + '"> ' +
                 '<img src="https://web.getbring.com/assets/images/items/' + newItemReplaced.toLowerCase()
                     .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue') + '.png" ' +
-                'onerror="this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
+                'onerror="this.onerror=null;this.src=\'https://web.getbring.com/assets/images/items/' + alternative + '.png\'" ' +
                 'alt=' + newItems[k] + ' class="item-image" id="' + wid + '-img-' + newItemReplaced + '"' +
                 'style="height: calc(0.43 * ' + maxWidth + 'px); padding-top: calc(0.172 * ' + maxWidth + 'px)">' +
                 '<div class="item-name" style="height: calc(0.2013 * ' + maxWidth + 'px);' +

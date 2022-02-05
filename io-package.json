@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "bring",
-    "version": "1.7.11",
+    "version": "1.7.12",
     "news": {
+      "1.7.12": {
+        "en": "fixed infinity loop in some browsers, if the fallback image of an article cannot be recevied (closes #109)",
+        "de": "Endlosschleife in einigen Browsern behoben, wenn das Fallback-Bild eines Artikels nicht empfangen werden kann (schließt #109)",
+        "ru": "исправлен бесконечный цикл в некоторых браузерах, если резервное изображение статьи не может быть получено (закрывается #109)",
+        "pt": "loop infinito fixo em alguns navegadores, se a imagem de fallback de um artigo não puder ser recebida (fecha #109)",
+        "nl": "vaste oneindigheidslus in sommige browsers, als de fallback-afbeelding van een artikel niet kan worden ontvangen (sluit #109)",
+        "fr": "boucle à l'infini fixe dans certains navigateurs, si l'image de repli d'un article ne peut pas être reçue (ferme #109)",
+        "it": "ciclo infinito fisso in alcuni browser, se l'immagine di fallback di un articolo non può essere ricevuta (chiude #109)",
+        "es": "bucle infinito fijo en algunos navegadores, si no se puede recibir la imagen alternativa de un artículo (cierra #109)",
+        "pl": "naprawiono pętlę nieskończoności w niektórych przeglądarkach, jeśli nie można odebrać obrazu zastępczego artykułu (zamyka #109)",
+        "zh-cn": "修复了某些浏览器中的无限循环，如果无法接收文章的后备图像（关闭 #109）"
+      },
       "1.7.11": {
         "en": "fixed telegram user selection",
         "de": "feste Telegrammbenutzerauswahl",
@@ -74,18 +86,6 @@
         "es": "ahora usamos un nombre único para la función de representación de widgets para evitar conflictos",
         "pl": "używamy teraz unikalnej nazwy dla funkcji renderowania widgetów, aby uniknąć konfliktów",
         "zh-cn": "我们现在为窗口小部件呈现功能使用唯一的名称以避免冲突"
-      },
-      "1.7.4": {
-        "en": "we now render the widget immediately",
-        "de": "Wir rendern das Widget jetzt sofort",
-        "ru": "теперь мы немедленно визуализируем виджет",
-        "pt": "agora renderizamos o widget imediatamente",
-        "nl": "we renderen de widget nu onmiddellijk",
-        "fr": "nous rendons maintenant le widget immédiatement",
-        "it": "ora rendiamo immediatamente il widget",
-        "es": "ahora renderizamos el widget inmediatamente",
-        "pl": "teraz renderujemy widżet natychmiast",
-        "zh-cn": "我们现在立即渲染小部件"
       }
     },
     "title": "Bring!",
