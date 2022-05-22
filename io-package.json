@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "bring",
-    "version": "1.7.13",
+    "version": "1.7.14",
     "news": {
+      "1.7.14": {
+        "en": "log the error message instead of object, if we catch errors in the widget",
+        "de": "protokollieren Sie die Fehlermeldung anstelle des Objekts, wenn wir Fehler im Widget finden",
+        "ru": "логировать сообщение об ошибке вместо объекта, если мы ловим ошибки в виджете",
+        "pt": "registre a mensagem de erro em vez do objeto, se detectarmos erros no widget",
+        "nl": "log het foutbericht in plaats van het object, als we fouten in de widget ontdekken",
+        "fr": "consigner le message d'erreur au lieu de l'objet, si nous détectons des erreurs dans le widget",
+        "it": "registra il messaggio di errore invece dell'oggetto, se rileviamo errori nel widget",
+        "es": "registrar el mensaje de error en lugar del objeto, si detectamos errores en el widget",
+        "pl": "loguj komunikat o błędzie zamiast obiektu, jeśli wykryjemy błędy w widżecie",
+        "zh-cn": "如果我们在小部件中捕获错误，则记录错误消息而不是对象"
+      },
       "1.7.13": {
         "en": "fixed the onclick handler if someone added just a number",
         "de": "Der Onclick-Handler wurde korrigiert, wenn jemand nur eine Zahl hinzufügte",
@@ -74,18 +86,6 @@
         "es": "widget: corrige el borde azul en el campo de entrada de texto en Safari al enfocar",
         "pl": "widget: napraw niebieskie obramowanie w polu wprowadzania tekstu w Safari podczas ustawiania ostrości",
         "zh-cn": "小部件：在聚焦时修复 Safari 中输入文本字段上的蓝色边框"
-      },
-      "1.7.7": {
-        "en": "fix potential crash on `pollAllLists` function",
-        "de": "Behebung eines möglichen Absturzes in der Funktion `pollAllLists`",
-        "ru": "исправить потенциальный сбой в функции `pollAllLists`",
-        "pt": "consertar possível falha na função `pollAllLists`",
-        "nl": "mogelijke crash op de functie `pollAllLists` repareren",
-        "fr": "correction d'un crash potentiel sur la fonction `pollAllLists`",
-        "it": "risolto il potenziale crash sulla funzione `pollAllLists`",
-        "es": "arreglar un posible bloqueo en la función `pollAllLists`",
-        "pl": "napraw potencjalną awarię funkcji `pollAllLists`",
-        "zh-cn": "修复`pollAllLists`函数可能发生的崩溃"
       }
     },
     "title": "Bring!",

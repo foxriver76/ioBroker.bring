@@ -135,6 +135,9 @@ For every shopping list a channel with the following states will be created:
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+### 1.7.14 (2022-05-22)
+* (foxriver76) log the error message instead of object, if we catch errors in the widget
+
 ### 1.7.13 (2022-02-05)
 * (foxriver76) fixed the onclick handler if someone added just a number
 

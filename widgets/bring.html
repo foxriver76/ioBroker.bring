@@ -266,7 +266,7 @@
                 var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
                 textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
             } catch (e) {
-                console.warn(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot resize text for item ' + wid + '-' + itemWoDescriptionReplaced + ': ' + e);
+                console.warn(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot resize text for item ' + wid + '-' + itemWoDescriptionReplaced + ': ' + e.message);
             } // endCatch
         });
     } // endSaveItem
@@ -286,7 +286,7 @@
         try {
             var newList = JSON.parse(vis.states[bringListId[wid] + '.val']);
         } catch (e) {
-            console.error(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot parse new list on checkItems: ' + e);
+            console.error(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot parse new list on checkItems: ' + e.message);
             return;
         }
 
@@ -371,7 +371,7 @@
                 var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
                 textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
             } catch (e) {
-                console.warn(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot resize text for item ' + wid + '-' + newItemReplaced + ': ' + e);
+                console.warn(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot resize text for item ' + wid + '-' + newItemReplaced + ': ' + e.message);
             } // endCatch
         } // endFor
     } // endCheckItems
@@ -391,7 +391,7 @@
         try {
             var newList = JSON.parse(vis.states[bringRecentListId[wid] + '.val']);
         } catch (e) {
-            console.error(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot parse new list on checkRecentItems: ' + e);
+            console.error(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot parse new list on checkRecentItems: ' + e.message);
             return;
         }
 
@@ -471,7 +471,7 @@
                 var resizeItemDesc = item.getElementsByClassName('item-desc')[0];
                 textFit(resizeItemDesc, {maxFontSize: 0.0948 * maxWidth, detectMultiLine: false});
             } catch (e) {
-                console.warn(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot resize text for item ' + wid + '-' + newItemReplaced + ': ' + e);
+                console.warn(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot resize text for item ' + wid + '-' + newItemReplaced + ': ' + e.message);
             } // endCatch
         } // endFor
     } // endCheckRecentItems
@@ -525,7 +525,7 @@
                 bringDict[wid] = !err ? JSON.parse(states[listNamespace + '.translation'].val) : {};
                 bringInvertedDict[wid] = !err ? swap(bringDict[wid]) : {};
             } catch (e) {
-                console.error(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot parse translations: ' + e);
+                console.error(new Date().toLocaleTimeString() + ' Bring[' + wid + ']: Cannot parse translations: ' + e.message);
                 bringDict[wid] = {};
                 bringInvertedDict[wid] = {};
             } // endCatch
@@ -593,7 +593,7 @@
             setTimeout(renderBringWidget, 75, this.data.attr('wid'));
         } catch (e) {
             // this is not here to catch async timeout but this.data being undefined
-            console.warn(new Date().toLocaleTimeString() + ' Bring[unknown]: Could not render widget: ' + e);
+            console.warn(new Date().toLocaleTimeString() + ' Bring[unknown]: Could not render widget: ' + e.message);
             console.log(new Date().toLocaleTimeString() + ' Bring[unknown]: Trying to render again in one second')
             setTimeout(renderBringWidget, 1000, this.data.attr('wid'));
         } %>
