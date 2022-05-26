@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "bring",
-    "version": "1.7.14",
+    "version": "1.7.15",
     "news": {
+      "1.7.15": {
+        "en": "widget: fixed `margin-top` calculation of item name",
+        "de": "Widget: `Margin-Top`-Berechnung des Artikelnamens korrigiert",
+        "ru": "виджет: исправлено вычисление `margin-top` имени элемента",
+        "pt": "widget: cálculo fixo `margin-top` do nome do item",
+        "nl": "widget: vaste `margin-top` berekening van itemnaam",
+        "fr": "widget : correction du calcul \"margin-top\" du nom de l'élément",
+        "it": "widget: corretto il calcolo `margin-top` del nome dell'elemento",
+        "es": "widget: se corrigió el cálculo `margin-top` del nombre del elemento",
+        "pl": "widget: poprawiono obliczanie `margin-top` nazwy pozycji",
+        "zh-cn": "小部件：修复了项目名称的“margin-top”计算"
+      },
       "1.7.14": {
         "en": "log the error message instead of object, if we catch errors in the widget",
         "de": "protokollieren Sie die Fehlermeldung anstelle des Objekts, wenn wir Fehler im Widget finden",
@@ -74,18 +86,6 @@
         "es": "fijamos el valor predeterminado del estado `count` siendo una cadena vacía",
         "pl": "naprawiliśmy domyślną wartość stanu `count` będącą pustym ciągiem",
         "zh-cn": "我们将 `count` 状态的默认值固定为一个空字符串"
-      },
-      "1.7.8": {
-        "en": "widget: fix blue border on input text field in Safari when focussing",
-        "de": "Widget: blauen Rahmen im Eingabetextfeld in Safari beim Fokussieren korrigiert",
-        "ru": "виджет: исправить синюю рамку в текстовом поле ввода в Safari при фокусировке",
-        "pt": "widget: corrige a borda azul no campo de texto de entrada no Safari ao focar",
-        "nl": "widget: blauwe rand repareren in invoertekstveld in Safari bij scherpstellen",
-        "fr": "widget : correction de la bordure bleue sur le champ de saisie de texte dans Safari lors de la mise au point",
-        "it": "widget: corretto il bordo blu sul campo di testo di input in Safari durante la messa a fuoco",
-        "es": "widget: corrige el borde azul en el campo de entrada de texto en Safari al enfocar",
-        "pl": "widget: napraw niebieskie obramowanie w polu wprowadzania tekstu w Safari podczas ustawiania ostrości",
-        "zh-cn": "小部件：在聚焦时修复 Safari 中输入文本字段上的蓝色边框"
       }
     },
     "title": "Bring!",

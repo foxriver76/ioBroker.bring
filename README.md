@@ -135,6 +135,9 @@ For every shopping list a channel with the following states will be created:
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+### 1.7.15 (2022-05-26)
+* (foxriver76) widget: fixed `margin-top` calculation of item name
+
 ### 1.7.14 (2022-05-22)
 * (foxriver76) log the error message instead of object, if we catch errors in the widget
 
