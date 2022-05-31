@@ -27,21 +27,17 @@ function startAdapter(options) {
 
     adapter = new utils.Adapter(options);
 
-    adapter.on(`message`, obj => {
+    adapter.on(`message`, async obj => {
         if (obj && obj.command === `getTelegramUsers`) {
-            adapter.getForeignState(`${obj.message}.communicate.users`, (err, state) => {
-                if (err) {
-                    adapter.log.error(err);
-                }
+            try {
+                const state = await adapter.getForeignStateAsync(`${obj.message}.communicate.users`);
                 if (state && state.val) {
-                    try {
-                        adapter.sendTo(obj.from, obj.command, state.val, obj.callback);
-                    } catch (err) {
-                        adapter.log.error(err);
-                        adapter.log.error(`Cannot parse stored user ID's from Telegram!`);
-                    }
+                    adapter.sendTo(obj.from, obj.command, state.val, obj.callback);
                 }
-            });
+            } catch (e) {
+                adapter.log.error(`Cannot parse stored user ID's from Telegram!`);
+                adapter.log.error(e.message);
+            }
         }
     });
 
@@ -228,72 +224,68 @@ async function main() {
     pollAllLists();
 } // endMain
 
-function pollList(listUuid) {
+/**
+ * Polls specific list from API
+ *
+ * @param {string} listUuid
+ * @return {Promise<void>}
+ */
+async function pollList(listUuid) {
     adapter.log.debug(`[POLL] Poll specific list: ${listUuid}`);
+    try {
+        const data = await bring.getItems(listUuid);
+        adapter.log.debug(`[DATA] Items from ${listUuid} loaded: ${JSON.stringify(data)}`);
+        adapter.setState(`${listUuid}.content`, JSON.stringify(data.purchase), true);
+        adapter.setState(`${listUuid}.recentContent`, JSON.stringify(data.recently), true);
 
-    bring
-        .getItems(listUuid)
-        .then(data => {
-            adapter.log.debug(`[DATA] Items from ${listUuid} loaded: ${JSON.stringify(data)}`);
-            adapter.setState(`${listUuid}.content`, JSON.stringify(data.purchase), true);
-            adapter.setState(`${listUuid}.recentContent`, JSON.stringify(data.recently), true);
+        const contentHtml = tableify(translateItemsArray(data.purchase));
+        const recentContentHtml = tableify(translateItemsArray(data.recently));
 
-            const contentHtml = tableify(data.purchase);
-            const recentContentHtml = tableify(data.recently);
+        // create na enumeration sentence e. g. for smart assistants
+        const enumSentence = createSentence(data.purchase);
 
-            // create na enumeration sentence e. g. for smart assistants
-            let enumSentence = ``;
+        adapter.setState(`${listUuid}.enumSentence`, enumSentence, true);
+        adapter.setState(`${listUuid}.contentHtml`, contentHtml, true);
+        adapter.setState(
+            `${listUuid}.contentHtmlNoHead`,
+            contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml,
+            true
+        );
+        adapter.setState(`${listUuid}.recentContentHtml`, recentContentHtml, true);
+        adapter.setState(
+            `${listUuid}.recentContentHtmlNoHead`,
+            recentContentHtml.includes(`</thead>`)
+                ? `<table>${recentContentHtml.split(`</thead>`)[1]}`
+                : recentContentHtml,
+            true
+        );
+        adapter.setState(`${listUuid}.count`, data.purchase.length, true);
+    } catch (e) {
+        adapter.log.warn(e);
+        adapter.setStateChanged(`info.connection`, false, true);
+    }
 
-            data.purchase.forEach((value, index) => {
-                if (index === data.purchase.length - 1 && data.purchase.length > 1) {
-                    enumSentence += ` ${i18nHelper.conjunction[lang]} ${value.name}`;
-                } else if (index !== data.purchase.length - 2 && data.purchase.length > 1) {
-                    enumSentence += `${value.name}, `;
-                } else {
-                    enumSentence += value.name;
-                } // endElse
-            });
+    const data = await bring.getAllUsersFromList(listUuid);
+    try {
+        adapter.setStateChanged(`info.connection`, true, true);
+        adapter.log.debug(`[DATA] Users from ${listUuid} loaded: ${JSON.stringify(data)}`);
+        adapter.setState(`${listUuid}.users`, JSON.stringify(data.users), true);
 
-            adapter.setState(`${listUuid}.enumSentence`, enumSentence, true);
-            adapter.setState(`${listUuid}.contentHtml`, contentHtml, true);
-            adapter.setState(
-                `${listUuid}.contentHtmlNoHead`,
-                contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml,
-                true
-            );
-            adapter.setState(`${listUuid}.recentContentHtml`, recentContentHtml, true);
-            adapter.setState(
-                `${listUuid}.recentContentHtmlNoHead`,
-                recentContentHtml.includes(`</thead>`)
-                    ? `<table>${recentContentHtml.split(`</thead>`)[1]}`
-                    : recentContentHtml,
-                true
-            );
-            adapter.setState(`${listUuid}.count`, data.purchase.length, true);
-        })
-        .catch(e => {
-            adapter.log.warn(e);
-            adapter.setStateChanged(`info.connection`, false, true);
-        });
+        const usersHtml = tableify(data.users);
 
-    bring
-        .getAllUsersFromList(listUuid)
-        .then(data => {
-            adapter.setStateChanged(`info.connection`, true, true);
-            adapter.log.debug(`[DATA] Users from ${listUuid} loaded: ${JSON.stringify(data)}`);
-            adapter.setState(`${listUuid}.users`, JSON.stringify(data.users), true);
-
-            const usersHtml = tableify(data.users);
-
-            adapter.setState(`${listUuid}.usersHtml`, usersHtml, true);
-            adapter.setState(`${listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
-        })
-        .catch(e => {
-            adapter.log.warn(e);
-            adapter.setStateChanged(`info.connection`, false, true);
-        });
+        adapter.setState(`${listUuid}.usersHtml`, usersHtml, true);
+        adapter.setState(`${listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
+    } catch (e) {
+        adapter.log.warn(e);
+        adapter.setStateChanged(`info.connection`, false, true);
+    }
 } // endPollList
 
+/**
+ * Polls all lists from API
+ *
+ * @return {Promise<void>}
+ */
 async function pollAllLists() {
     adapter.log.debug(`[POLL] Poll all lists`);
 
@@ -596,23 +588,11 @@ async function pollAllLists() {
             adapter.setState(`${entry.listUuid}.content`, JSON.stringify(data.purchase), true);
             adapter.setState(`${entry.listUuid}.recentContent`, JSON.stringify(data.recently), true);
 
-            const contentHtml = tableify(data.purchase);
-            const recentContentHtml = tableify(data.recently);
+            const contentHtml = tableify(translateItemsArray(data.purchase));
+            const recentContentHtml = tableify(translateItemsArray(data.recently));
 
             // create na enumeration sentence e. g. for smart assistants
-            let enumSentence = ``;
-
-            data.purchase.forEach((value, index) => {
-                if (index === data.purchase.length - 1 && data.purchase.length > 1) {
-                    enumSentence += ` ${i18nHelper.conjunction[lang]} ${
-                        dict[value.name] ? dict[value.name] : value.name
-                    }`;
-                } else if (index !== data.purchase.length - 2 && data.purchase.length > 1) {
-                    enumSentence += `${dict[value.name] ? dict[value.name] : value.name}, `;
-                } else {
-                    enumSentence += dict[value.name] ? dict[value.name] : value.name;
-                } // endElse
-            });
+            const enumSentence = createSentence(data.purchase);
 
             adapter.setState(`${entry.listUuid}.enumSentence`, enumSentence, true);
             adapter.setState(`${entry.listUuid}.contentHtml`, contentHtml, true);
@@ -674,6 +654,42 @@ async function tryLogin() {
         loginTimeout = setTimeout(tryLogin, 30000);
     } // endCatch
 } // endTryLogin
+
+/**
+ *  Translates array of items via global dict
+ *
+ * @param {import('bring-shopping').GetItemsResponseEntry[]} purchaseData
+ * @return {import('bring-shopping').GetItemsResponseEntry[]}
+ */
+function translateItemsArray(purchaseData) {
+    purchaseData.map(entry => {
+        entry.name = dict[entry.name] ? dict[entry.name] : entry.name;
+        return entry;
+    });
+
+    return purchaseData;
+}
+
+/**
+ * Builds up translated enumSentence for smart speakers etc
+ *
+ * @param {import('bring-shopping').GetItemsResponseEntry[]} purchaseData
+ * @return {string}
+ */
+function createSentence(purchaseData) {
+    let enumSentence = '';
+    purchaseData.forEach((value, index) => {
+        if (index === purchaseData.length - 1 && purchaseData.length > 1) {
+            enumSentence += ` ${i18nHelper.conjunction[lang]} ${dict[value.name] ? dict[value.name] : value.name}`;
+        } else if (index !== purchaseData.length - 2 && purchaseData.length > 1) {
+            enumSentence += `${dict[value.name] ? dict[value.name] : value.name}, `;
+        } else {
+            enumSentence += dict[value.name] ? dict[value.name] : value.name;
+        } // endElse
+    });
+
+    return enumSentence;
+}
 
 if (require.main === module) {
     startAdapter();

@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "bring",
-    "version": "1.7.15",
+    "version": "1.7.16",
     "news": {
+      "1.7.16": {
+        "en": "we now ensure that all states which can be used directly are translated (closes #149)",
+        "de": "wir sorgen nun dafür, dass alle direkt verwendbaren Zustände übersetzt werden (beendet #149)",
+        "ru": "теперь мы гарантируем, что все состояния, которые можно использовать напрямую, переведены (закрывается # 149)",
+        "pt": "agora garantimos que todos os estados que podem ser usados diretamente sejam traduzidos (fecha o nº 149)",
+        "nl": "we zorgen er nu voor dat alle staten die direct kunnen worden gebruikt worden vertaald (closes #149)",
+        "fr": "on s'assure maintenant que tous les états utilisables directement sont traduits (ferme #149)",
+        "it": "ora ci assicuriamo che tutti gli stati che possono essere usati direttamente siano tradotti (chiude #149)",
+        "es": "ahora nos aseguramos de que todos los estados que se pueden usar directamente estén traducidos (cierra #149)",
+        "pl": "teraz zapewniamy, że wszystkie stany, których można użyć bezpośrednio, są tłumaczone (zamyka #149)",
+        "zh-cn": "我们现在确保所有可以直接使用的状态都被翻译（关闭 #149）"
+      },
       "1.7.15": {
         "en": "widget: fixed `margin-top` calculation of item name",
         "de": "Widget: `Margin-Top`-Berechnung des Artikelnamens korrigiert",
@@ -74,18 +86,6 @@
         "es": "selección de usuario de telegrama fijo",
         "pl": "stały wybór użytkownika telegramu",
         "zh-cn": "固定电报用户选择"
-      },
-      "1.7.9": {
-        "en": "we fixed default value of `count` state beeing an empty string",
-        "de": "Wir haben den Standardwert des 'count'-Zustands behoben, der eine leere Zeichenfolge ist",
-        "ru": "мы исправили значение по умолчанию для состояния `count` как пустую строку",
-        "pt": "fixamos o valor padrão do estado `count` sendo uma string vazia",
-        "nl": "we hebben de standaardwaarde van de `count`-status vastgesteld als een lege string",
-        "fr": "nous avons corrigé la valeur par défaut de l'état `count` étant une chaîne vide",
-        "it": "abbiamo corretto il valore predefinito dello stato `count` come una stringa vuota",
-        "es": "fijamos el valor predeterminado del estado `count` siendo una cadena vacía",
-        "pl": "naprawiliśmy domyślną wartość stanu `count` będącą pustym ciągiem",
-        "zh-cn": "我们将 `count` 状态的默认值固定为一个空字符串"
       }
     },
     "title": "Bring!",

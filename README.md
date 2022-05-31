@@ -135,6 +135,9 @@ For every shopping list a channel with the following states will be created:
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+### 1.7.16 (2022-05-31)
+* (foxriver76) we now ensure that all states which can be used directly are translated (closes #149)
+
 ### 1.7.15 (2022-05-26)
 * (foxriver76) widget: fixed `margin-top` calculation of item name
 
