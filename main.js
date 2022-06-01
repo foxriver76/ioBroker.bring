@@ -9,6 +9,7 @@ const crypto = require(`${__dirname}/lib/crypto`);
 const Bring = require(`bring-shopping`);
 const tableify = require(`tableify`);
 const i18nHelper = require(`${__dirname}/lib/i18nHelper`);
+const { getStaticObjects } = require(`${__dirname}/lib/utils`);
 let adapter;
 
 let mail;
@@ -20,6 +21,7 @@ const listLang = {};
 let loginTimeout;
 let lang;
 let dict = {};
+let invertedDict = {};
 
 function startAdapter(options) {
     options = options || {};
@@ -80,102 +82,29 @@ function startAdapter(options) {
         const listId = id.split(`.`)[2];
         const method = id.split(`.`).pop();
 
-        if (method === `removeItem`) {
-            try {
-                await bring.removeItem(listId, state.val);
-                adapter.setStateChanged(`info.connection`, true, true);
-                adapter.log.info(`[REMOVE] Removed ${state.val} from ${listId}`);
-                adapter.setState(id, state.val, true);
-            } catch (e) {
-                adapter.setStateChanged(`info.connection`, false, true);
-                adapter.log.warn(e);
-            }
-        } else if (method === `saveItem`) {
-            try {
-                const item = state.val.split(`,`)[0].trim() || state.val;
-                const specification = state.val.includes(`,`)
-                    ? state.val.substring(state.val.indexOf(`,`) + 1).trim()
-                    : ``;
-                await bring.saveItem(listId, item, specification);
-                adapter.setStateChanged(`info.connection`, true, true);
-                adapter.log.info(`[SAVE] Saved ${item} (${specification}) to ${listId}`);
-                adapter.setState(id, state.val, true);
-            } catch (e) {
-                adapter.setStateChanged(`info.connection`, false, true);
-                adapter.log.warn(e);
-            }
-        } else if (method === `messageTrigger`) {
-            let shoppingList = ``;
-            try {
-                let jsonShoppingList = await adapter.getStateAsync(`${adapter.namespace}.${listId}.content`);
-                jsonShoppingList = JSON.parse(jsonShoppingList.val);
-                for (const entry of jsonShoppingList) {
-                    shoppingList = `${shoppingList}${
-                        entry.specification ? entry.specification : i18nHelper.noDescription[lang]
-                    } - ${dict[entry.name] ? dict[entry.name] : entry.name}\n`;
-                } // endFor
-            } catch (e) {
-                adapter.log.error(`Error sending shopping list: ${e}`);
-                return;
-            }
-
-            if (adapter.config.telegramInstance) {
-                try {
-                    if (adapter.config.telegramReceiver === `allTelegramUsers`) {
-                        await adapter.sendToAsync(adapter.config.telegramInstance, `send`, {
-                            text: `*${i18nHelper.shoppingList[lang]}*\n${shoppingList}`,
-                            parse_mode: `Markdown`
-                        });
-                    } else {
-                        await adapter.sendToAsync(adapter.config.telegramInstance, `send`, {
-                            user: adapter.config.telegramReceiver,
-                            text: `*${i18nHelper.shoppingList[lang]}*\n${shoppingList}`,
-                            parse_mode: `Markdown`
-                        });
-                    }
-                    adapter.log.info(`Sent shopping list to ${adapter.config.telegramInstance}`);
-                } catch (e) {
-                    adapter.log.error(`Error sending shopping list to ${adapter.config.telegramInstance}: ${e}`);
-                }
-            } // endIf
-
-            if (adapter.config.pushoverInstance) {
-                try {
-                    await adapter.sendToAsync(adapter.config.pushoverInstance, `send`, {
-                        message: shoppingList,
-                        title: i18nHelper.shoppingList[lang],
-                        device: adapter.config.pushoverDeviceID
-                    });
-                    adapter.log.info(`Sent shopping list to ${adapter.config.pushoverInstance}`);
-                } catch (e) {
-                    adapter.log.error(`Error sending shopping list to ${adapter.config.pushoverInstance}: ${e}`);
-                }
-            } // endIf
-
-            if (adapter.config.emailInstance) {
-                try {
-                    await adapter.sendToAsync(adapter.config.emailInstance, `send`, {
-                        text: shoppingList,
-                        subject: i18nHelper.shoppingList[lang],
-                        to: adapter.config.emailReceiver,
-                        from: adapter.config.emailSender
-                    });
-                    adapter.log.info(`Sent shopping list to ${adapter.config.emailInstance}`);
-                } catch (e) {
-                    adapter.log.error(`Error sending shopping list to ${adapter.config.emailInstance}: ${e}`);
-                }
-            } // endIf
-        } else if (method === `moveToRecentContent`) {
-            try {
-                await bring.moveToRecentList(listId, state.val);
-                adapter.setStateChanged(`info.connection`, true, true);
-                adapter.log.info(`[MOVE] Moved ${state.val} to recent content of ${listId}`);
-                adapter.setState(id, state.val, true);
-            } catch (e) {
-                adapter.setStateChanged(`info.connection`, false, true);
-                adapter.log.warn(e);
-            }
-        } // endElseIf
+        switch (method) {
+            case 'removeItem':
+                await removeItem(listId, state.val, false);
+                break;
+            case 'removeItemTranslated':
+                await removeItem(listId, state.val, true);
+                break;
+            case 'saveItem':
+                await saveItem(listId, state.val, false);
+                break;
+            case 'saveItemTranslated':
+                await saveItem(listId, state.val, true);
+                break;
+            case 'moveToRecentContent':
+                await moveToRecentContent(listId, state.val, false);
+                break;
+            case 'moveToRecentContentTranslated':
+                await moveToRecentContent(listId, state.val, false);
+                break;
+            case 'messageTrigger':
+                await sendShoppingList(listId);
+                break;
+        }
 
         if (!polling[listId]) {
             polling[listId] = setTimeout(() => {
@@ -326,261 +255,16 @@ async function pollAllLists() {
                 );
             } // endTryCatch
 
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.content`, {
-                    type: `state`,
-                    common: {
-                        role: `list.json`,
-                        name: `Content`,
-                        desc: `Content of ${entry.name}`,
-                        read: true,
-                        write: false,
-                        type: `string`,
-                        def: `[]`
-                    },
-                    native: {}
-                })
-            );
+            const objects = getStaticObjects(entry);
 
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.recentContent`, {
-                    type: `state`,
-                    common: {
-                        role: `list.json`,
-                        name: `Recent Content`,
-                        desc: `Recent Content of ${entry.name}`,
-                        read: true,
-                        write: false,
-                        type: `string`,
-                        def: `[]`
-                    },
-                    native: {}
-                })
-            );
-
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.users`, {
-                    type: `state`,
-                    common: {
-                        role: `list.json`,
-                        name: `Users`,
-                        desc: `Users of ${entry.name}`,
-                        read: true,
-                        write: false,
-                        type: `string`,
-                        def: `[]`
-                    },
-                    native: {}
-                })
-            );
-
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.contentHtml`, {
-                    type: `state`,
-                    common: {
-                        role: `list.html`,
-                        name: `Content`,
-                        desc: `Content of ${entry.name}`,
-                        read: true,
-                        write: false,
-                        type: `string`,
-                        def: `[]`
-                    },
-                    native: {}
-                })
-            );
-
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.recentContentHtml`, {
-                    type: `state`,
-                    common: {
-                        role: `list.html`,
-                        name: `Recent Content`,
-                        desc: `Recent Content of ${entry.name}`,
-                        read: true,
-                        write: false,
-                        type: `string`,
-                        def: `[]`
-                    },
-                    native: {}
-                })
-            );
-
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.usersHtml`, {
-                    type: `state`,
-                    common: {
-                        role: `list.html`,
-                        name: `Users`,
-                        desc: `Users of ${entry.name}`,
-                        read: true,
-                        write: false,
-                        type: `string`,
-                        def: `[]`
-                    },
-                    native: {}
-                })
-            );
-
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.contentHtmlNoHead`, {
-                    type: `state`,
-                    common: {
-                        role: `list.html`,
-                        name: `Content`,
-                        desc: `Content of ${entry.name} w/o header`,
-                        read: true,
-                        write: false,
-                        type: `string`,
-                        def: `[]`
-                    },
-                    native: {}
-                })
-            );
-
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.recentContentHtmlNoHead`, {
-                    type: `state`,
-                    common: {
-                        role: `list.html`,
-                        name: `Recent Content`,
-                        desc: `Recent Content of ${entry.name} w/o header`,
-                        read: true,
-                        write: false,
-                        type: `string`,
-                        def: `[]`
-                    },
-                    native: {}
-                })
-            );
-
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.usersHtmlNoHead`, {
-                    type: `state`,
-                    common: {
-                        role: `list.html`,
-                        name: `Users`,
-                        desc: `Users of ${entry.name} w/o header`,
-                        read: true,
-                        write: false,
-                        type: `string`,
-                        def: `[]`
-                    },
-                    native: {}
-                })
-            );
-
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.removeItem`, {
-                    type: `state`,
-                    common: {
-                        role: `text`,
-                        name: `Remove Item`,
-                        desc: `Remove item from List`,
-                        read: true,
-                        write: true,
-                        type: `string`,
-                        def: ``
-                    },
-                    native: {}
-                })
-            );
-
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.moveToRecentContent`, {
-                    type: `state`,
-                    common: {
-                        role: `text`,
-                        name: `Move to Recent List`,
-                        desc: `Move or add item to Recent Content List`,
-                        read: true,
-                        write: true,
-                        type: `string`,
-                        def: ``
-                    },
-                    native: {}
-                })
-            );
-
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.saveItem`, {
-                    type: `state`,
-                    common: {
-                        role: `text`,
-                        name: `Save Item`,
-                        desc: `Save item to List`,
-                        read: true,
-                        write: true,
-                        type: `string`,
-                        def: ``
-                    },
-                    native: {}
-                })
-            );
-
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.count`, {
-                    type: `state`,
-                    common: {
-                        role: `indicator.count`,
-                        name: `Count`,
-                        desc: `Number of entrys in ${entry.name}`,
-                        read: true,
-                        write: false,
-                        type: `number`
-                    },
-                    native: {}
-                })
-            );
-
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.messageTrigger`, {
-                    type: `state`,
-                    common: {
-                        role: `button`,
-                        name: `Message Trigger`,
-                        desc: `Send Message to configured Instance`,
-                        read: true,
-                        write: true,
-                        type: `boolean`
-                    },
-                    native: {}
-                })
-            );
-
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.enumSentence`, {
-                    type: `state`,
-                    common: {
-                        role: `text`,
-                        name: `Enum Sentence`,
-                        desc: `A enum-like sentence containing the shopping list items`,
-                        read: true,
-                        write: false,
-                        type: `string`
-                    },
-                    native: {}
-                })
-            );
-
-            promises.push(
-                adapter.setObjectNotExistsAsync(`${entry.listUuid}.translation`, {
-                    type: `state`,
-                    common: {
-                        role: `json`,
-                        name: `JSON dictionary`,
-                        desc: `A dictionary to translate the swiss item names`,
-                        read: true,
-                        write: false,
-                        type: `string`
-                    },
-                    native: {}
-                })
-            );
+            for (const [id, obj] of Object.entries(objects)) {
+                promises.push(adapter.setObjectNotExistsAsync(`${entry.listUuid}.${id}`, obj));
+            }
 
             await Promise.all(promises);
 
             dict = listLang[entry.listUuid] ? listLang[entry.listUuid] : await bring.loadTranslations(`de-DE`);
+            invertedDict = invertObject(dict);
             await adapter.setStateAsync(`${entry.listUuid}.translation`, JSON.stringify(dict), true);
 
             const data = await bring.getItems(entry.listUuid);
@@ -689,6 +373,176 @@ function createSentence(purchaseData) {
     });
 
     return enumSentence;
+}
+
+/**
+ * Swap key and value
+ * @param {Record<string, string>} obj
+ * @return {Record<string, string>}
+ */
+function invertObject(obj) {
+    const ret = {};
+    for (const key in obj) {
+        ret[obj[key]] = key;
+    }
+    return ret;
+}
+
+/**
+ * Removes item from list
+ *
+ * @param {string} listId
+ * @param {string} article
+ * @param {boolean} translate
+ * @return {Promise<void>}
+ */
+async function removeItem(listId, article, translate) {
+    try {
+        if (translate) {
+            await bring.removeItem(listId, typeof invertedDict[article] === 'string' ? invertedDict[article] : article);
+        } else {
+            await bring.removeItem(listId, article);
+        }
+        adapter.setStateChanged(`info.connection`, true, true);
+        adapter.log.info(`[REMOVE] Removed ${article} from ${listId}`);
+        adapter.setState(`${listId}.${translate ? 'removeItemTranslated' : 'removeItem'}`, article, true);
+    } catch (e) {
+        adapter.setStateChanged(`info.connection`, false, true);
+        adapter.log.warn(e);
+    }
+}
+
+/**
+ * Saves item to list
+ *
+ * @param {string} listId
+ * @param {string} articleWithDescription
+ * @param {boolean} translate
+ * @return {Promise<void>}
+ */
+async function saveItem(listId, articleWithDescription, translate) {
+    try {
+        const item = articleWithDescription.split(`,`)[0].trim() || articleWithDescription;
+        const specification = articleWithDescription.includes(`,`)
+            ? articleWithDescription.substring(articleWithDescription.indexOf(`,`) + 1).trim()
+            : ``;
+        if (translate) {
+            await bring.saveItem(
+                listId,
+                typeof invertedDict[item] === 'string' ? invertedDict[item] : item,
+                specification
+            );
+        } else {
+            await bring.saveItem(listId, item, specification);
+        }
+        adapter.setStateChanged(`info.connection`, true, true);
+        adapter.log.info(`[SAVE] Saved ${item} (${specification}) to ${listId}`);
+        adapter.setState(`${listId}.${translate ? 'saveItem' : 'saveItemTranslated'}`, articleWithDescription, true);
+    } catch (e) {
+        adapter.setStateChanged(`info.connection`, false, true);
+        adapter.log.warn(e);
+    }
+}
+
+/**
+ * Move item from list to recent list
+ *
+ * @param {string} listId
+ * @param {string} article
+ * @param {boolean} translate
+ * @return {Promise<void>}
+ */
+async function moveToRecentContent(listId, article, translate) {
+    try {
+        if (translate) {
+            await bring.moveToRecentList(
+                listId,
+                typeof invertedDict[article] === 'string' ? invertedDict[article] : article
+            );
+        } else {
+            await bring.moveToRecentList(listId, article);
+        }
+
+        adapter.setStateChanged(`info.connection`, true, true);
+        adapter.log.info(`[MOVE] Moved ${article} to recent content of ${listId}`);
+        adapter.setState(
+            `${listId}.${translate ? 'moveToRecentContent' : 'moveToRecentContentTranslated'}`,
+            article,
+            true
+        );
+    } catch (e) {
+        adapter.setStateChanged(`info.connection`, false, true);
+        adapter.log.warn(e);
+    }
+}
+
+/**
+ * Send shopping list to configured receivers
+ *
+ * @param {string} listId
+ * @return {Promise<void>}
+ */
+async function sendShoppingList(listId) {
+    let shoppingList = ``;
+    try {
+        let jsonShoppingList = await adapter.getStateAsync(`${adapter.namespace}.${listId}.content`);
+        jsonShoppingList = JSON.parse(jsonShoppingList.val);
+        for (const entry of jsonShoppingList) {
+            shoppingList = `${shoppingList}${
+                entry.specification ? entry.specification : i18nHelper.noDescription[lang]
+            } - ${dict[entry.name] ? dict[entry.name] : entry.name}\n`;
+        } // endFor
+    } catch (e) {
+        adapter.log.error(`Error sending shopping list: ${e}`);
+        return;
+    }
+
+    if (adapter.config.telegramInstance) {
+        try {
+            if (adapter.config.telegramReceiver === `allTelegramUsers`) {
+                await adapter.sendToAsync(adapter.config.telegramInstance, `send`, {
+                    text: `*${i18nHelper.shoppingList[lang]}*\n${shoppingList}`,
+                    parse_mode: `Markdown`
+                });
+            } else {
+                await adapter.sendToAsync(adapter.config.telegramInstance, `send`, {
+                    user: adapter.config.telegramReceiver,
+                    text: `*${i18nHelper.shoppingList[lang]}*\n${shoppingList}`,
+                    parse_mode: `Markdown`
+                });
+            }
+            adapter.log.info(`Sent shopping list to ${adapter.config.telegramInstance}`);
+        } catch (e) {
+            adapter.log.error(`Error sending shopping list to ${adapter.config.telegramInstance}: ${e}`);
+        }
+    } // endIf
+
+    if (adapter.config.pushoverInstance) {
+        try {
+            await adapter.sendToAsync(adapter.config.pushoverInstance, `send`, {
+                message: shoppingList,
+                title: i18nHelper.shoppingList[lang],
+                device: adapter.config.pushoverDeviceID
+            });
+            adapter.log.info(`Sent shopping list to ${adapter.config.pushoverInstance}`);
+        } catch (e) {
+            adapter.log.error(`Error sending shopping list to ${adapter.config.pushoverInstance}: ${e}`);
+        }
+    } // endIf
+
+    if (adapter.config.emailInstance) {
+        try {
+            await adapter.sendToAsync(adapter.config.emailInstance, `send`, {
+                text: shoppingList,
+                subject: i18nHelper.shoppingList[lang],
+                to: adapter.config.emailReceiver,
+                from: adapter.config.emailSender
+            });
+            adapter.log.info(`Sent shopping list to ${adapter.config.emailInstance}`);
+        } catch (e) {
+            adapter.log.error(`Error sending shopping list to ${adapter.config.emailInstance}: ${e}`);
+        }
+    } // endIf
 }
 
 if (require.main === module) {

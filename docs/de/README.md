@@ -107,8 +107,9 @@ Für jede Einkaufsliste wird ein Channel mit den folgenden Objekten angelegt:
     |string|R|
 
    *Read only json/html string formatiert als Liste, bzw. HTML Tabelle.
-   Beinhaltet die Gegenstände die aktuell auf der Einkaufsliste stehen.
-   Die NoHead HTML Tabellen sind ohne HTML Header.*
+   Beinhaltet die Gegenstände, die aktuell auf der Einkaufsliste stehen.
+   Die NoHead HTML Tabellen sind ohne HTML Header. Die Artikel werden durch das
+   Wörterbuch übersetzt, um die Nutzung in Visualisierungen zu ermöglichen.* 
    
 * *list*.recentContent / *list*.recentContentHtml/NoHead
 
@@ -117,28 +118,31 @@ Für jede Einkaufsliste wird ein Channel mit den folgenden Objekten angelegt:
     |string|R|
 
     *Read only json/html string formatiert als Liste, bzw. HTML Tabelle.
-   Beinhaltet die Gegenstände die kürzlich auf der Einkaufsliste standen.
-   Die NoHead HTML Tabellen sind ohne HTML Header.*
+   Beinhaltet die Gegenstände, die kürzlich auf der Einkaufsliste standen.
+   Die NoHead HTML Tabellen sind ohne HTML Header. Die Artikel werden durch das
+   Wörterbuch übersetzt, um die Nutzung in Visualisierungen zu ermöglichen.*
    
-* *list*.removeItem
+* *list*.removeItem/Translated
 
     |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R/W|
 
    *Mit diesem State kann ein Gegenstand von der Einkaufsliste entfernt werden. 
-   Der State wird bestätigt, sobald das Kommando von der Bring! API bestätigt wurde.*
+   Der State wird bestätigt, sobald das Kommando von der Bring! API bestätigt wurde.
+   Die Translated States übersetzen den Artikel mittels des Wörterbuches bevor er an die API weitergegeben wird.* 
    
-* *list*.moveToRecentContent
+* *list*.moveToRecentContent/Translated
 
     |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
     |string|R/W|
 
    *Mit diesem State kann ein Gegenstand zur recentContent Liste bewegt bzw. hinzugefügt werden. 
-   Der State wird bestätigt, sobald das Kommando von der Bring! API bestätigt wurde.*
+   Der State wird bestätigt, sobald das Kommando von der Bring! API bestätigt wurde.
+   Die Translated States übersetzen den Artikel mittels des Wörterbuches bevor er an die API weitergegeben wird.* 
    
-* *list*.saveItem
+* *list*.saveItem/Translated
 
     |Datentyp|Berechtigung|                                                                       
     |:---:|:---:|
@@ -150,7 +154,8 @@ Für jede Einkaufsliste wird ein Channel mit den folgenden Objekten angelegt:
    ```Apple, 2.50 $, the green ones```
    
    *Hierbei wird alles nach dem ersten Komma, als Spezifikation gewertet und erscheint in der App unter dem Gegenstand. 
-   Der State wird bestätigt, sobald das Kommando von der Bring! API bestätigt wurde.*
+   Der State wird bestätigt, sobald das Kommando von der Bring! API bestätigt wurde.
+   Die Translated States übersetzen den Artikel mittels des Wörterbuches bevor er an die API weitergegeben wird.* 
     
 * *list*.users / *list*.usersHtml/NoHead
 

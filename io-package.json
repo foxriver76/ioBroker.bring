@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "bring",
-    "version": "1.7.16",
+    "version": "1.8.0",
     "news": {
+      "1.8.0": {
+        "en": "introduced new states for `save/remove/movetoRecentContent` which translates the article before passing it to the API (closes #149)",
+        "de": "neue Zustände für `save/remove/movetoRecentContent` eingeführt, die den Artikel übersetzt, bevor er an die API übergeben wird (schließt #149)",
+        "ru": "введены новые состояния для `save/remove/movetoRecentContent`, которые переводят статью перед ее передачей в API (закрывается #149)",
+        "pt": "introduziu novos estados para `save/remove/movetoRecentContent` que traduz o artigo antes de passá-lo para a API (fecha #149)",
+        "nl": "nieuwe statussen geïntroduceerd voor `save/remove/movetoRecentContent` die het artikel vertaalt voordat het wordt doorgegeven aan de API (sluit #149)",
+        "fr": "introduit de nouveaux états pour `save/remove/movetoRecentContent` qui traduit l'article avant de le transmettre à l'API (ferme #149)",
+        "it": "introdotto nuovi stati per `save/remove/movetoRecentContent` che traduce l'articolo prima di passarlo all'API (chiude il n. 149)",
+        "es": "introdujo nuevos estados para `save/remove/movetoRecentContent` que traduce el artículo antes de pasarlo a la API (cierra #149)",
+        "pl": "wprowadzono nowe stany dla `save/remove/movetoRecentContent`, które tłumaczą artykuł przed przekazaniem go do API (zamyka #149)",
+        "zh-cn": "为 `save/remove/movetoRecentContent` 引入了新状态，它在将文章传递给 API 之前翻译文章（关闭 #149）"
+      },
       "1.7.16": {
         "en": "we now ensure that all states which can be used directly are translated (closes #149)",
         "de": "wir sorgen nun dafür, dass alle direkt verwendbaren Zustände übersetzt werden (beendet #149)",
@@ -73,18 +85,6 @@
         "it": "selezione utente telegramma fisso",
         "es": "selección de usuario de telegrama fijo",
         "pl": "stały wybór telegramu użytkownika",
-        "zh-cn": "固定电报用户选择"
-      },
-      "1.7.10": {
-        "en": "fixed telegram user selection",
-        "de": "feste Telegrammbenutzerauswahl",
-        "ru": "исправлен выбор пользователя телеграммы",
-        "pt": "seleção de usuário de telegrama fixo",
-        "nl": "vaste telegram gebruikersselectie",
-        "fr": "sélection d'utilisateur de télégramme fixe",
-        "it": "selezione utente telegramma fisso",
-        "es": "selección de usuario de telegrama fijo",
-        "pl": "stały wybór użytkownika telegramu",
         "zh-cn": "固定电报用户选择"
       }
     },
