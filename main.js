@@ -437,7 +437,7 @@ async function saveItem(listId, articleWithDescription, translate) {
         }
         adapter.setStateChanged(`info.connection`, true, true);
         adapter.log.info(`[SAVE] Saved ${item} (${specification}) to ${listId}`);
-        adapter.setState(`${listId}.${translate ? 'saveItem' : 'saveItemTranslated'}`, articleWithDescription, true);
+        adapter.setState(`${listId}.${translate ? 'saveItemTranslated' : 'saveItem'}`, articleWithDescription, true);
     } catch (e) {
         adapter.setStateChanged(`info.connection`, false, true);
         adapter.log.warn(e);
@@ -466,7 +466,7 @@ async function moveToRecentContent(listId, article, translate) {
         adapter.setStateChanged(`info.connection`, true, true);
         adapter.log.info(`[MOVE] Moved ${article} to recent content of ${listId}`);
         adapter.setState(
-            `${listId}.${translate ? 'moveToRecentContent' : 'moveToRecentContentTranslated'}`,
+            `${listId}.${translate ? 'moveToRecentContentTranslated' : 'moveToRecentContent'}`,
             article,
             true
         );

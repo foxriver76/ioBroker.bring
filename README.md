@@ -139,6 +139,9 @@ For every shopping list a channel with the following states will be created:
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+### 1.8.1 (2022-06-01)
+* (foxriver76) implemented a minor fix for acknowledgment of `translated` objects
+
 ### 1.8.0 (2022-06-01)
 * (foxriver76) introduced new states for `save/remove/movetoRecentContent` which translates the article before passing it to the API (closes #149)
 

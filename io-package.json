@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "bring",
-    "version": "1.8.0",
+    "version": "1.8.1",
     "news": {
+      "1.8.1": {
+        "en": "implemented a minor fix for acknowledgment of `translated` objects",
+        "de": "implementierte eine kleine Korrektur für die Bestätigung von \"übersetzten\" Objekten",
+        "ru": "реализовано небольшое исправление для подтверждения «переведенных» объектов",
+        "pt": "implementou uma pequena correção para reconhecimento de objetos `translated`",
+        "nl": "een kleine oplossing geïmplementeerd voor de bevestiging van `vertaalde` objecten",
+        "fr": "implémenté un correctif mineur pour la reconnaissance des objets \"traduits\"",
+        "it": "implementato una correzione minore per il riconoscimento di oggetti `tradotti`",
+        "es": "implementó una corrección menor para el reconocimiento de objetos `traducidos`",
+        "pl": "zaimplementowano drobną poprawkę do potwierdzania `przetłumaczonych` obiektów",
+        "zh-cn": "为确认“翻译”对象实现了一个小修复"
+      },
       "1.8.0": {
         "en": "introduced new states for `save/remove/movetoRecentContent` which translates the article before passing it to the API (closes #149)",
         "de": "neue Zustände für `save/remove/movetoRecentContent` eingeführt, die den Artikel übersetzt, bevor er an die API übergeben wird (schließt #149)",
@@ -74,18 +86,6 @@
         "es": "bucle infinito fijo en algunos navegadores, si no se puede recibir la imagen alternativa de un artículo (cierra #109)",
         "pl": "naprawiono pętlę nieskończoności w niektórych przeglądarkach, jeśli nie można odebrać obrazu zastępczego artykułu (zamyka #109)",
         "zh-cn": "修复了某些浏览器中的无限循环，如果无法接收文章的后备图像（关闭 #109）"
-      },
-      "1.7.11": {
-        "en": "fixed telegram user selection",
-        "de": "feste Telegrammbenutzerauswahl",
-        "ru": "исправлен выбор пользователя телеграммы",
-        "pt": "seleção de usuário de telegrama fixo",
-        "nl": "vaste telegram gebruikersselectie",
-        "fr": "sélection d'utilisateur de télégramme fixe",
-        "it": "selezione utente telegramma fisso",
-        "es": "selección de usuario de telegrama fijo",
-        "pl": "stały wybór telegramu użytkownika",
-        "zh-cn": "固定电报用户选择"
       }
     },
     "title": "Bring!",
