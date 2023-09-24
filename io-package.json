@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "bring",
-    "version": "1.8.1",
+    "version": "1.8.2",
     "news": {
+      "1.8.2": {
+        "en": "do not crash on invalid `setState` calls (closes #211)",
+        "de": "nicht abstürzen auf ungültig gesetzt Staatsanrufe (schließt #211)",
+        "ru": "не сбой на недействительный набор Государственные звонки (закрыты #211)",
+        "pt": "não travar em conjunto inválido Chamadas de Estado (fecha #211)",
+        "nl": "niet crashen op invalide. Staat roept:",
+        "fr": "ne pas s'écraser sur un set invalide Appels d'Etat (ferme #211)",
+        "it": "non crash su set non valido Chiamate statali (chiude #211)",
+        "es": "no se estrella en conjunto inválido Llamadas estatales (cerca #211)",
+        "pl": "nie dochodzi do rozbicia nieprawidłowego zestawu nieważnych. Głosowanie państwowe (zawiera #211)",
+        "uk": "не збиток на недійсний набір Державні дзвінки (заклади No211)",
+        "zh-cn": "未对所制造的无效事故 国家呼吁(第211号)"
+      },
       "1.8.1": {
         "en": "implemented a minor fix for acknowledgment of `translated` objects",
         "de": "implementierte eine kleine Korrektur für die Bestätigung von \"übersetzten\" Objekten",
@@ -74,18 +87,6 @@
         "es": "corrigió el controlador onclick si alguien agregaba solo un número",
         "pl": "naprawiono obsługę onclick, jeśli ktoś dodał tylko numer",
         "zh-cn": "如果有人只添加了一个数字，则修复了 onclick 处理程序"
-      },
-      "1.7.12": {
-        "en": "fixed infinity loop in some browsers, if the fallback image of an article cannot be recevied (closes #109)",
-        "de": "Endlosschleife in einigen Browsern behoben, wenn das Fallback-Bild eines Artikels nicht empfangen werden kann (schließt #109)",
-        "ru": "исправлен бесконечный цикл в некоторых браузерах, если резервное изображение статьи не может быть получено (закрывается #109)",
-        "pt": "loop infinito fixo em alguns navegadores, se a imagem de fallback de um artigo não puder ser recebida (fecha #109)",
-        "nl": "vaste oneindigheidslus in sommige browsers, als de fallback-afbeelding van een artikel niet kan worden ontvangen (sluit #109)",
-        "fr": "boucle à l'infini fixe dans certains navigateurs, si l'image de repli d'un article ne peut pas être reçue (ferme #109)",
-        "it": "ciclo infinito fisso in alcuni browser, se l'immagine di fallback di un articolo non può essere ricevuta (chiude #109)",
-        "es": "bucle infinito fijo en algunos navegadores, si no se puede recibir la imagen alternativa de un artículo (cierra #109)",
-        "pl": "naprawiono pętlę nieskończoności w niektórych przeglądarkach, jeśli nie można odebrać obrazu zastępczego artykułu (zamyka #109)",
-        "zh-cn": "修复了某些浏览器中的无限循环，如果无法接收文章的后备图像（关闭 #109）"
       }
     },
     "title": "Bring!",
