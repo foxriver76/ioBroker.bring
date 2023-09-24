@@ -5,11 +5,11 @@
 'use strict';
 
 const utils = require(`@iobroker/adapter-core`);
-const crypto = require(`${__dirname}/lib/crypto`);
+const crypto = require(`./lib/crypto`);
 const Bring = require(`bring-shopping`);
 const tableify = require(`tableify`);
-const i18nHelper = require(`${__dirname}/lib/i18nHelper`);
-const { getStaticObjects } = require(`${__dirname}/lib/utils`);
+const i18nHelper = require(`./lib/i18nHelper`);
+const { getStaticObjects } = require(`./lib/utils`);
 let adapter;
 
 let mail;
@@ -50,7 +50,7 @@ function startAdapter(options) {
             callback();
         } catch (e) {
             callback();
-        } // endTryCatch
+        }
     });
 
     adapter.on(`ready`, async () => {
@@ -62,14 +62,14 @@ function startAdapter(options) {
             } else {
                 password = crypto.decrypt(`Zgfr56gFe87jJOM`, adapter.config.password);
                 mail = crypto.decrypt(`Zgfr56gFe87jJOM`, adapter.config.mail);
-            } // endElse
+            }
 
             lang = obj && obj.common && obj.common.language ? obj.common.language : `en`;
         } catch (e) {
             lang = `en`;
             password = crypto.decrypt(`Zgfr56gFe87jJOM`, adapter.config.password);
             mail = crypto.decrypt(`Zgfr56gFe87jJOM`, adapter.config.mail);
-        } // endTryCatch
+        }
 
         main();
     });
@@ -118,7 +118,7 @@ function startAdapter(options) {
     });
 
     return adapter;
-} // endStartAdapter
+}
 
 async function main() {
     adapter.subscribeStates(`*`);
@@ -143,15 +143,15 @@ async function main() {
                         listLang[list.listUuid]
                     )}`
                 );
-            } // endIf
-        } // endFor
+            }
+        }
     } catch (e) {
         adapter.log.warn(e);
-    } // endTryCatch
+    }
 
     // Start polling, this goes endless
     pollAllLists();
-} // endMain
+}
 
 /**
  * Polls specific list from API
@@ -164,8 +164,8 @@ async function pollList(listUuid) {
     try {
         const data = await bring.getItems(listUuid);
         adapter.log.debug(`[DATA] Items from ${listUuid} loaded: ${JSON.stringify(data)}`);
-        adapter.setState(`${listUuid}.content`, JSON.stringify(data.purchase), true);
-        adapter.setState(`${listUuid}.recentContent`, JSON.stringify(data.recently), true);
+        await adapter.setState(`${listUuid}.content`, JSON.stringify(data.purchase), true);
+        await adapter.setState(`${listUuid}.recentContent`, JSON.stringify(data.recently), true);
 
         const contentHtml = tableify(translateItemsArray(data.purchase));
         const recentContentHtml = tableify(translateItemsArray(data.recently));
@@ -173,22 +173,22 @@ async function pollList(listUuid) {
         // create na enumeration sentence e. g. for smart assistants
         const enumSentence = createSentence(data.purchase);
 
-        adapter.setState(`${listUuid}.enumSentence`, enumSentence, true);
-        adapter.setState(`${listUuid}.contentHtml`, contentHtml, true);
-        adapter.setState(
+        await adapter.setState(`${listUuid}.enumSentence`, enumSentence, true);
+        await adapter.setState(`${listUuid}.contentHtml`, contentHtml, true);
+        await adapter.setState(
             `${listUuid}.contentHtmlNoHead`,
             contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml,
             true
         );
-        adapter.setState(`${listUuid}.recentContentHtml`, recentContentHtml, true);
-        adapter.setState(
+        await adapter.setState(`${listUuid}.recentContentHtml`, recentContentHtml, true);
+        await adapter.setState(
             `${listUuid}.recentContentHtmlNoHead`,
             recentContentHtml.includes(`</thead>`)
                 ? `<table>${recentContentHtml.split(`</thead>`)[1]}`
                 : recentContentHtml,
             true
         );
-        adapter.setState(`${listUuid}.count`, data.purchase.length, true);
+        await adapter.setState(`${listUuid}.count`, data.purchase.length, true);
     } catch (e) {
         adapter.log.warn(e);
         adapter.setStateChanged(`info.connection`, false, true);
@@ -198,17 +198,17 @@ async function pollList(listUuid) {
     try {
         adapter.setStateChanged(`info.connection`, true, true);
         adapter.log.debug(`[DATA] Users from ${listUuid} loaded: ${JSON.stringify(data)}`);
-        adapter.setState(`${listUuid}.users`, JSON.stringify(data.users), true);
+        await adapter.setState(`${listUuid}.users`, JSON.stringify(data.users), true);
 
         const usersHtml = tableify(data.users);
 
-        adapter.setState(`${listUuid}.usersHtml`, usersHtml, true);
-        adapter.setState(`${listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
+        await adapter.setState(`${listUuid}.usersHtml`, usersHtml, true);
+        await adapter.setState(`${listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
     } catch (e) {
         adapter.log.warn(e);
         adapter.setStateChanged(`info.connection`, false, true);
     }
-} // endPollList
+}
 
 /**
  * Polls all lists from API
@@ -242,8 +242,8 @@ async function pollAllLists() {
                             native: {}
                         })
                     );
-                } // endIf
-            } catch (e) {
+                }
+            } catch {
                 promises.push(
                     adapter.setObjectNotExistsAsync(entry.listUuid, {
                         type: `channel`,
@@ -253,7 +253,7 @@ async function pollAllLists() {
                         native: {}
                     })
                 );
-            } // endTryCatch
+            }
 
             const objects = getStaticObjects(entry);
 
@@ -269,8 +269,8 @@ async function pollAllLists() {
 
             const data = await bring.getItems(entry.listUuid);
             adapter.log.debug(`[DATA] Items from ${entry.listUuid} loaded: ${JSON.stringify(data)}`);
-            adapter.setState(`${entry.listUuid}.content`, JSON.stringify(data.purchase), true);
-            adapter.setState(`${entry.listUuid}.recentContent`, JSON.stringify(data.recently), true);
+            await adapter.setState(`${entry.listUuid}.content`, JSON.stringify(data.purchase), true);
+            await adapter.setState(`${entry.listUuid}.recentContent`, JSON.stringify(data.recently), true);
 
             const contentHtml = tableify(translateItemsArray(data.purchase));
             const recentContentHtml = tableify(translateItemsArray(data.recently));
@@ -278,52 +278,56 @@ async function pollAllLists() {
             // create na enumeration sentence e. g. for smart assistants
             const enumSentence = createSentence(data.purchase);
 
-            adapter.setState(`${entry.listUuid}.enumSentence`, enumSentence, true);
-            adapter.setState(`${entry.listUuid}.contentHtml`, contentHtml, true);
-            adapter.setState(
+            await adapter.setState(`${entry.listUuid}.enumSentence`, enumSentence, true);
+            await adapter.setState(`${entry.listUuid}.contentHtml`, contentHtml, true);
+            await adapter.setState(
                 `${entry.listUuid}.contentHtmlNoHead`,
                 contentHtml.includes(`</thead>`) ? `<table>${contentHtml.split(`</thead>`)[1]}` : contentHtml,
                 true
             );
-            adapter.setState(`${entry.listUuid}.recentContentHtml`, recentContentHtml, true);
-            adapter.setState(
+            await adapter.setState(`${entry.listUuid}.recentContentHtml`, recentContentHtml, true);
+            await adapter.setState(
                 `${entry.listUuid}.recentContentHtmlNoHead`,
                 recentContentHtml.includes(`</thead>`)
                     ? `<table>${recentContentHtml.split(`</thead>`)[1]}`
                     : recentContentHtml,
                 true
             );
-            adapter.setState(`${entry.listUuid}.count`, data.purchase.length, true);
+            await adapter.setState(`${entry.listUuid}.count`, data.purchase.length, true);
 
             const usersData = await bring.getAllUsersFromList(entry.listUuid);
             adapter.log.debug(`[DATA] Users from ${entry.listUuid} loaded: ${JSON.stringify(usersData)}`);
-            adapter.setState(`${entry.listUuid}.users`, JSON.stringify(usersData.users), true);
+            await adapter.setState(`${entry.listUuid}.users`, JSON.stringify(usersData.users), true);
 
             const usersHtml = tableify(usersData.users);
 
-            adapter.setState(`${entry.listUuid}.usersHtml`, usersHtml, true);
-            adapter.setState(`${entry.listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
-        } // endFor
+            await adapter.setState(`${entry.listUuid}.usersHtml`, usersHtml, true);
+            await adapter.setState(
+                `${entry.listUuid}.usersHtmlNoHead`,
+                `<table>${usersHtml.split(`</thead>`)[1]}`,
+                true
+            );
+        }
     } catch (e) {
         adapter.setStateChanged(`info.connection`, false, true);
         adapter.log.warn(e);
         // Check if Access token no longer valid
         if (e.message.includes(`JWT access token is not valid`)) {
             tryLogin();
-        } // endIf
-    } // endTryCatch
+        }
+    }
 
     if (polling.all) {
         clearTimeout(polling.all);
     }
     polling.all = setTimeout(pollAllLists, 90000);
-} // endPollAllLists
+}
 
 async function tryLogin() {
     try {
         await bring.login();
-        adapter.setState(`info.connection`, true, true);
-        adapter.setState(`info.user`, bring.name, true);
+        await adapter.setState(`info.connection`, true, true);
+        await adapter.setState(`info.user`, bring.name, true);
         adapter.log.info(`[LOGIN] Successfully logged in as ${bring.name}`);
         if (loginTimeout) {
             clearTimeout(loginTimeout);
@@ -336,8 +340,8 @@ async function tryLogin() {
             clearTimeout(loginTimeout);
         }
         loginTimeout = setTimeout(tryLogin, 30000);
-    } // endCatch
-} // endTryLogin
+    }
+}
 
 /**
  *  Translates array of items via global dict
@@ -369,7 +373,7 @@ function createSentence(purchaseData) {
             enumSentence += `${dict[value.name] ? dict[value.name] : value.name}, `;
         } else {
             enumSentence += dict[value.name] ? dict[value.name] : value.name;
-        } // endElse
+        }
     });
 
     return enumSentence;
@@ -405,10 +409,10 @@ async function removeItem(listId, article, translate) {
         }
         adapter.setStateChanged(`info.connection`, true, true);
         adapter.log.info(`[REMOVE] Removed ${article} from ${listId}`);
-        adapter.setState(`${listId}.${translate ? 'removeItemTranslated' : 'removeItem'}`, article, true);
+        await adapter.setState(`${listId}.${translate ? 'removeItemTranslated' : 'removeItem'}`, article, true);
     } catch (e) {
         adapter.setStateChanged(`info.connection`, false, true);
-        adapter.log.warn(e);
+        adapter.log.warn(e.message);
     }
 }
 
@@ -437,10 +441,14 @@ async function saveItem(listId, articleWithDescription, translate) {
         }
         adapter.setStateChanged(`info.connection`, true, true);
         adapter.log.info(`[SAVE] Saved ${item} (${specification}) to ${listId}`);
-        adapter.setState(`${listId}.${translate ? 'saveItemTranslated' : 'saveItem'}`, articleWithDescription, true);
+        await adapter.setState(
+            `${listId}.${translate ? 'saveItemTranslated' : 'saveItem'}`,
+            articleWithDescription,
+            true
+        );
     } catch (e) {
         adapter.setStateChanged(`info.connection`, false, true);
-        adapter.log.warn(e);
+        adapter.log.warn(e.message);
     }
 }
 
@@ -465,14 +473,14 @@ async function moveToRecentContent(listId, article, translate) {
 
         adapter.setStateChanged(`info.connection`, true, true);
         adapter.log.info(`[MOVE] Moved ${article} to recent content of ${listId}`);
-        adapter.setState(
+        await adapter.setState(
             `${listId}.${translate ? 'moveToRecentContentTranslated' : 'moveToRecentContent'}`,
             article,
             true
         );
     } catch (e) {
         adapter.setStateChanged(`info.connection`, false, true);
-        adapter.log.warn(e);
+        adapter.log.warn(e.message);
     }
 }
 
@@ -491,7 +499,7 @@ async function sendShoppingList(listId) {
             shoppingList = `${shoppingList}${
                 entry.specification ? entry.specification : i18nHelper.noDescription[lang]
             } - ${dict[entry.name] ? dict[entry.name] : entry.name}\n`;
-        } // endFor
+        }
     } catch (e) {
         adapter.log.error(`Error sending shopping list: ${e}`);
         return;
@@ -515,7 +523,7 @@ async function sendShoppingList(listId) {
         } catch (e) {
             adapter.log.error(`Error sending shopping list to ${adapter.config.telegramInstance}: ${e}`);
         }
-    } // endIf
+    }
 
     if (adapter.config.pushoverInstance) {
         try {
@@ -528,7 +536,7 @@ async function sendShoppingList(listId) {
         } catch (e) {
             adapter.log.error(`Error sending shopping list to ${adapter.config.pushoverInstance}: ${e}`);
         }
-    } // endIf
+    }
 
     if (adapter.config.emailInstance) {
         try {
@@ -542,7 +550,7 @@ async function sendShoppingList(listId) {
         } catch (e) {
             adapter.log.error(`Error sending shopping list to ${adapter.config.emailInstance}: ${e}`);
         }
-    } // endIf
+    }
 }
 
 if (require.main === module) {
@@ -550,4 +558,4 @@ if (require.main === module) {
 } else {
     // compact mode
     module.exports = startAdapter;
-} // endElse
+}

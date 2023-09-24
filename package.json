@@ -2,7 +2,7 @@
   "name": "iobroker.bring",
   "version": "1.8.1",
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=16.0.0"
   },
   "description": "ioBroker Bring! Adapter",
   "author": {
@@ -30,7 +30,8 @@
     "url": "https://github.com/foxriver76/ioBroker.bring"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.6.0",
+    "@foxriver76/eslint-config": "^1.0.1",
+    "@iobroker/adapter-core": "^3.0.3",
     "bring-shopping": "^1.4.3",
     "tableify": "^1.1.1"
   },
@@ -40,12 +41,8 @@
     "@iobroker/testing": "^3.0.2",
     "axios": "^0.27.2",
     "chai": "^4.3.6",
-    "eslint": "^8.16.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
     "gulp": "^4.0.2",
-    "mocha": "^10.0.0",
-    "prettier": "^2.6.2"
+    "mocha": "^10.2.0"
   },
   "main": "main.js",
   "scripts": {
