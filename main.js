@@ -327,8 +327,8 @@ async function tryLogin() {
     try {
         await bring.login();
         await adapter.setState(`info.connection`, true, true);
-        await adapter.setState(`info.user`, bring.name, true);
-        adapter.log.info(`[LOGIN] Successfully logged in as ${bring.name}`);
+        await adapter.setState(`info.user`, bring.name ?? '', true);
+        adapter.log.info(`[LOGIN] Successfully logged in as ${bring.name ? bring.name : 'unknown'}`);
         if (loginTimeout) {
             clearTimeout(loginTimeout);
         }
