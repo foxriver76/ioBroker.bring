@@ -33,7 +33,7 @@ function startAdapter(options) {
         if (obj && obj.command === `getTelegramUsers`) {
             try {
                 const state = await adapter.getForeignStateAsync(`${obj.message}.communicate.users`);
-                if (state && state.val) {
+                if (state?.val) {
                     adapter.sendTo(obj.from, obj.command, state.val, obj.callback);
                 }
             } catch (e) {
@@ -48,7 +48,7 @@ function startAdapter(options) {
             adapter.log.info(`[END] Stopping Bring! adapter...`);
             adapter.setState(`info.connection`, false, true);
             callback();
-        } catch (e) {
+        } catch {
             callback();
         }
     });
@@ -65,7 +65,7 @@ function startAdapter(options) {
             }
 
             lang = obj && obj.common && obj.common.language ? obj.common.language : `en`;
-        } catch (e) {
+        } catch {
             lang = `en`;
             password = crypto.decrypt(`Zgfr56gFe87jJOM`, adapter.config.password);
             mail = crypto.decrypt(`Zgfr56gFe87jJOM`, adapter.config.mail);
@@ -146,7 +146,7 @@ async function main() {
             }
         }
     } catch (e) {
-        adapter.log.warn(e);
+        adapter.log.warn(`Error loading translations: ${e.message}`);
     }
 
     // Start polling, this goes endless
@@ -190,7 +190,7 @@ async function pollList(listUuid) {
         );
         await adapter.setState(`${listUuid}.count`, data.purchase.length, true);
     } catch (e) {
-        adapter.log.warn(e);
+        adapter.log.warn(`Error polling items for list "${listUuid}": ${e.message}`);
         adapter.setStateChanged(`info.connection`, false, true);
     }
 
@@ -205,7 +205,7 @@ async function pollList(listUuid) {
         await adapter.setState(`${listUuid}.usersHtml`, usersHtml, true);
         await adapter.setState(`${listUuid}.usersHtmlNoHead`, `<table>${usersHtml.split(`</thead>`)[1]}`, true);
     } catch (e) {
-        adapter.log.warn(e);
+        adapter.log.warn(`Error getting users from list "${listUuid}": ${e.message}`);
         adapter.setStateChanged(`info.connection`, false, true);
     }
 }
@@ -310,7 +310,7 @@ async function pollAllLists() {
         }
     } catch (e) {
         adapter.setStateChanged(`info.connection`, false, true);
-        adapter.log.warn(e);
+        adapter.log.warn(`Error polling all lists: ${e.message}`);
         // Check if Access token no longer valid
         if (e.message.includes(`JWT access token is not valid`)) {
             tryLogin();
@@ -320,7 +320,7 @@ async function pollAllLists() {
     if (polling.all) {
         clearTimeout(polling.all);
     }
-    polling.all = setTimeout(pollAllLists, 90000);
+    polling.all = setTimeout(pollAllLists, 90_000);
 }
 
 async function tryLogin() {
@@ -334,12 +334,12 @@ async function tryLogin() {
         }
         return Promise.resolve();
     } catch (e) {
-        adapter.log.warn(e);
+        adapter.log.warn(`Error on login: ${e.message}`);
         adapter.log.info(`[LOGIN] Reconnection in 30 seconds`);
         if (loginTimeout) {
             clearTimeout(loginTimeout);
         }
-        loginTimeout = setTimeout(tryLogin, 30000);
+        loginTimeout = setTimeout(tryLogin, 30_000);
     }
 }
 
@@ -412,7 +412,7 @@ async function removeItem(listId, article, translate) {
         await adapter.setState(`${listId}.${translate ? 'removeItemTranslated' : 'removeItem'}`, article, true);
     } catch (e) {
         adapter.setStateChanged(`info.connection`, false, true);
-        adapter.log.warn(e.message);
+        adapter.log.warn(`Error removing item "${article}" from list "${listId}": ${e.message}`);
     }
 }
 
@@ -448,7 +448,7 @@ async function saveItem(listId, articleWithDescription, translate) {
         );
     } catch (e) {
         adapter.setStateChanged(`info.connection`, false, true);
-        adapter.log.warn(e.message);
+        adapter.log.warn(`Error saving item "${articleWithDescription}" to list "${listId}": ${e.message}`);
     }
 }
 
@@ -480,7 +480,7 @@ async function moveToRecentContent(listId, article, translate) {
         );
     } catch (e) {
         adapter.setStateChanged(`info.connection`, false, true);
-        adapter.log.warn(e.message);
+        adapter.log.warn(`Error moving article "${article}" on list "${listId}" to recent content ${e.message}`);
     }
 }
 
@@ -501,7 +501,7 @@ async function sendShoppingList(listId) {
             } - ${dict[entry.name] ? dict[entry.name] : entry.name}\n`;
         }
     } catch (e) {
-        adapter.log.error(`Error sending shopping list: ${e}`);
+        adapter.log.error(`Error sending shopping list: ${e.message}`);
         return;
     }
 
