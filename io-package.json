@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "bring",
-    "version": "1.8.2",
+    "version": "1.8.3",
     "news": {
+      "1.8.3": {
+        "en": "Improve error messages",
+        "de": "Fehlermeldungen verbessern",
+        "ru": "Улучшить сообщения об ошибках",
+        "pt": "Melhorar as mensagens de erro",
+        "nl": "Improve fouten",
+        "fr": "Améliorer les messages d'erreur",
+        "it": "Migliorare i messaggi di errore",
+        "es": "Mejorar los mensajes de error",
+        "pl": "Improvement error message",
+        "uk": "Поліпшити повідомлення про помилки",
+        "zh-cn": "改善错误信息"
+      },
       "1.8.2": {
         "en": "do not crash on invalid `setState` calls (closes #211)",
         "de": "nicht abstürzen auf ungültig gesetzt Staatsanrufe (schließt #211)",
@@ -75,18 +88,6 @@
         "es": "registrar el mensaje de error en lugar del objeto, si detectamos errores en el widget",
         "pl": "loguj komunikat o błędzie zamiast obiektu, jeśli wykryjemy błędy w widżecie",
         "zh-cn": "如果我们在小部件中捕获错误，则记录错误消息而不是对象"
-      },
-      "1.7.13": {
-        "en": "fixed the onclick handler if someone added just a number",
-        "de": "Der Onclick-Handler wurde korrigiert, wenn jemand nur eine Zahl hinzufügte",
-        "ru": "исправлен обработчик onclick, если кто-то добавил просто число",
-        "pt": "corrigiu o manipulador onclick se alguém adicionasse apenas um número",
-        "nl": "de onclick-handler gerepareerd als iemand alleen een nummer heeft toegevoegd",
-        "fr": "correction du gestionnaire onclick si quelqu'un ajoutait juste un nombre",
-        "it": "corretto il gestore onclick se qualcuno aggiungeva solo un numero",
-        "es": "corrigió el controlador onclick si alguien agregaba solo un número",
-        "pl": "naprawiono obsługę onclick, jeśli ktoś dodał tylko numer",
-        "zh-cn": "如果有人只添加了一个数字，则修复了 onclick 处理程序"
       }
     },
     "title": "Bring!",

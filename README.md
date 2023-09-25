@@ -139,7 +139,7 @@ For every shopping list a channel with the following states will be created:
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 1.8.3 (2023-09-25)
 * (foxriver76) Improve error messages
 
 ### 1.8.2 (2023-09-24)
