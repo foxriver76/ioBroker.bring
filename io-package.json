@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "bring",
-    "version": "1.8.3",
+    "version": "1.8.4",
     "news": {
+      "1.8.4": {
+        "en": "fixed setting `undefined` state when no name specified",
+        "de": "undefinierter zustand, wenn kein name angegeben ist",
+        "ru": "фиксированная настройка неопределенного состояния, когда не указано имя",
+        "pt": "definição fixa estado indefinido quando nenhum nome especificado",
+        "nl": "vertaling:",
+        "fr": "réglage fixe état indéfini quand aucun nom spécifié",
+        "it": "impostazione fissa stato non definito quando nessun nome specificato",
+        "es": "estado fijo no definido cuando ningún nombre especificado",
+        "pl": "ustawodawstwo nieokreślone, gdy żadna nazwa nie została określona",
+        "uk": "фіксована установка невизначеного стану при відсутності вказаного імені",
+        "zh-cn": "2. 如果没有指定名称,则确定固定状态"
+      },
       "1.8.3": {
         "en": "Improve error messages",
         "de": "Fehlermeldungen verbessern",
@@ -76,18 +89,6 @@
         "es": "widget: se corrigió el cálculo `margin-top` del nombre del elemento",
         "pl": "widget: poprawiono obliczanie `margin-top` nazwy pozycji",
         "zh-cn": "小部件：修复了项目名称的“margin-top”计算"
-      },
-      "1.7.14": {
-        "en": "log the error message instead of object, if we catch errors in the widget",
-        "de": "protokollieren Sie die Fehlermeldung anstelle des Objekts, wenn wir Fehler im Widget finden",
-        "ru": "логировать сообщение об ошибке вместо объекта, если мы ловим ошибки в виджете",
-        "pt": "registre a mensagem de erro em vez do objeto, se detectarmos erros no widget",
-        "nl": "log het foutbericht in plaats van het object, als we fouten in de widget ontdekken",
-        "fr": "consigner le message d'erreur au lieu de l'objet, si nous détectons des erreurs dans le widget",
-        "it": "registra il messaggio di errore invece dell'oggetto, se rileviamo errori nel widget",
-        "es": "registrar el mensaje de error en lugar del objeto, si detectamos errores en el widget",
-        "pl": "loguj komunikat o błędzie zamiast obiektu, jeśli wykryjemy błędy w widżecie",
-        "zh-cn": "如果我们在小部件中捕获错误，则记录错误消息而不是对象"
       }
     },
     "title": "Bring!",
