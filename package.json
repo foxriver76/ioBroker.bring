@@ -30,7 +30,7 @@
     "url": "https://github.com/foxriver76/ioBroker.bring"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.1.5",
+    "@iobroker/adapter-core": "^3.2.2",
     "bring-shopping": "^2.0.0",
     "tableify": "^1.1.1"
   },
