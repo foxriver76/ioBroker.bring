@@ -75,7 +75,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version-file: '.nvmrc'
 
     steps:
       - uses: actions/checkout@v1
@@ -85,7 +85,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install package
-        run: npm i
+        run: npm ci
 
       - name: Publish package to npm
         run: |
