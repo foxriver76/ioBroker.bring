@@ -78,7 +78,7 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
-          node-version-file: '.nvmrc'
+          node-version: 22
 
       - name: Install package
         run: npm ci
@@ -89,7 +89,7 @@ jobs:
           npm whoami
           npm publish
 
-  # Dummy job for skipped builds - without this, github reports the build as failed
+  # Dummy job for skipped builds - without this, GitHub reports the build as failed
   skip-ci:
     if: contains(github.event.head_commit.message, '[skip ci]')
     runs-on: ubuntu-latest
