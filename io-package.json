@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "bring",
-    "version": "1.8.4",
+    "version": "1.9.0",
     "news": {
+      "1.9.0": {
+        "en": "updated `bring-shopping` module (get rid of deprecated `request` module)\ndropped support for Node.js 16 (it is EOL)",
+        "de": "aktualisiertes modul `bring-shopping` (deprecated `request` entfernen)\nabgelehnt Unterstützung für Node.js 16 (es ist EOL)",
+        "ru": "обновленный модуль < < брендинг-шоппинг > > (избавьтесь от депрецированного модуля < < запроса > > )\nсброс поддержки Node.js 16 (это EOL)",
+        "pt": "módulo `bring-shopping` atualizado (se livrar do módulo `request` deprecated)\nsuporte descartado para Node.js 16 (é EOL)",
+        "nl": "bijgewerkte module \"bring-shopping\" (verwijder de verouderde module \"x\"\nsteun voor Node.js 16 is ingetrokken (het is EOL)",
+        "fr": "module `request` mis à jour (se débarrasser du module `request` déprécié)\nsupport abandonné pour Node.js 16 (c'est EOL)",
+        "it": "modulo `bring-shopping` aggiornato ( sbarazzarsi del modulo `request` deprecato)\nha lasciato il supporto per Node.js 16 (è EOL)",
+        "es": "módulo de \" compra \" actualizado (deshacerse del módulo de \" investigación \" deprecado)\napoyo reducido para Node.js 16 (es EOL)",
+        "pl": "zaktualizowany moduł \"bring- shopping\" (pozbądź się przestarzałego modułu \"request\")\nupuszczone wsparcie dla Node.js 16 (jest EOL)",
+        "uk": "оновлений модуль `bring-shopping` (позбавлення від застарілого модуля `request`)\nпідтримка Node.js 16 (це EOL)",
+        "zh-cn": "更新的 \" 选购 \" 模块(删除已贬值的 \" 请求 \" 模块)\n已放弃对Node.js 16的支持( 是 EOL)"
+      },
       "1.8.4": {
         "en": "fixed setting `undefined` state when no name specified",
         "de": "undefinierter zustand, wenn kein name angegeben ist",
@@ -77,18 +90,6 @@
         "es": "ahora nos aseguramos de que todos los estados que se pueden usar directamente estén traducidos (cierra #149)",
         "pl": "teraz zapewniamy, że wszystkie stany, których można użyć bezpośrednio, są tłumaczone (zamyka #149)",
         "zh-cn": "我们现在确保所有可以直接使用的状态都被翻译（关闭 #149）"
-      },
-      "1.7.15": {
-        "en": "widget: fixed `margin-top` calculation of item name",
-        "de": "Widget: `Margin-Top`-Berechnung des Artikelnamens korrigiert",
-        "ru": "виджет: исправлено вычисление `margin-top` имени элемента",
-        "pt": "widget: cálculo fixo `margin-top` do nome do item",
-        "nl": "widget: vaste `margin-top` berekening van itemnaam",
-        "fr": "widget : correction du calcul \"margin-top\" du nom de l'élément",
-        "it": "widget: corretto il calcolo `margin-top` del nome dell'elemento",
-        "es": "widget: se corrigió el cálculo `margin-top` del nombre del elemento",
-        "pl": "widget: poprawiono obliczanie `margin-top` nazwy pozycji",
-        "zh-cn": "小部件：修复了项目名称的“margin-top”计算"
       }
     },
     "title": "Bring!",
