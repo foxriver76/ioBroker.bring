@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "bring",
-    "version": "1.9.0",
+    "version": "1.9.1",
     "news": {
+      "1.9.1": {
+        "en": "fixed issue on token expiration",
+        "de": "feste ausgabe von token-experimenten",
+        "ru": "фиксированный вопрос об истечении токена",
+        "pt": "problema fixo na expiração do token",
+        "nl": "vaste uitgifte op het verstrijken van token",
+        "fr": "émission fixe à l'expiration du jeton",
+        "it": "emissione fissa sulla scadenza dei token",
+        "es": "cuestión fija en la expiración de token",
+        "pl": "stałe wydanie na token data ważności",
+        "uk": "виправлене питання про закінчення терміну дії токени",
+        "zh-cn": "债券到期时的固定发行"
+      },
       "1.9.0": {
         "en": "updated `bring-shopping` module (get rid of deprecated `request` module)\ndropped support for Node.js 16 (it is EOL)",
         "de": "aktualisiertes modul `bring-shopping` (deprecated `request` entfernen)\nabgelehnt Unterstützung für Node.js 16 (es ist EOL)",
@@ -78,18 +91,6 @@
         "es": "introdujo nuevos estados para `save/remove/movetoRecentContent` que traduce el artículo antes de pasarlo a la API (cierra #149)",
         "pl": "wprowadzono nowe stany dla `save/remove/movetoRecentContent`, które tłumaczą artykuł przed przekazaniem go do API (zamyka #149)",
         "zh-cn": "为 `save/remove/movetoRecentContent` 引入了新状态，它在将文章传递给 API 之前翻译文章（关闭 #149）"
-      },
-      "1.7.16": {
-        "en": "we now ensure that all states which can be used directly are translated (closes #149)",
-        "de": "wir sorgen nun dafür, dass alle direkt verwendbaren Zustände übersetzt werden (beendet #149)",
-        "ru": "теперь мы гарантируем, что все состояния, которые можно использовать напрямую, переведены (закрывается # 149)",
-        "pt": "agora garantimos que todos os estados que podem ser usados diretamente sejam traduzidos (fecha o nº 149)",
-        "nl": "we zorgen er nu voor dat alle staten die direct kunnen worden gebruikt worden vertaald (closes #149)",
-        "fr": "on s'assure maintenant que tous les états utilisables directement sont traduits (ferme #149)",
-        "it": "ora ci assicuriamo che tutti gli stati che possono essere usati direttamente siano tradotti (chiude #149)",
-        "es": "ahora nos aseguramos de que todos los estados que se pueden usar directamente estén traducidos (cierra #149)",
-        "pl": "teraz zapewniamy, że wszystkie stany, których można użyć bezpośrednio, są tłumaczone (zamyka #149)",
-        "zh-cn": "我们现在确保所有可以直接使用的状态都被翻译（关闭 #149）"
       }
     },
     "title": "Bring!",
