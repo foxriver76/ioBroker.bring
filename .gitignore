@@ -13,3 +13,6 @@ admin/i18n/*/flat.txt
 *.launch
 .settings/
 *.sublime-workspace
+
+#ignore .commitinfo created by ioBroker release script
+.commitinfo
