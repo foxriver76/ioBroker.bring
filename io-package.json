@@ -135,6 +135,7 @@
       "en": "README.md"
     },
     "loglevel": "info",
+    "tier": 2,
     "type": "household",
     "connectionType": "cloud",
     "dataSource": "poll",
