@@ -113,7 +113,10 @@
     "authors": [
       "Moritz Heusinger <moritz.heusinger@gmail.com>"
     ],
-    "license": "MIT",
+    "licenseInformation": {
+      "type": "free",
+      "license": "MIT"
+    },
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "icon": "bring.png",
