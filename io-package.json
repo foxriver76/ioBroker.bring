@@ -93,7 +93,6 @@
         "zh-cn": "为 `save/remove/movetoRecentContent` 引入了新状态，它在将文章传递给 API 之前翻译文章（关闭 #149）"
       }
     },
-    "title": "Bring!",
     "titleLang": {
       "en": "Bring!",
       "de": "Bring!"
