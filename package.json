@@ -2,7 +2,7 @@
   "name": "iobroker.bring",
   "version": "1.9.1",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "description": "ioBroker Bring! Adapter",
   "author": {
