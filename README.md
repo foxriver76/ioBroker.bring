@@ -291,6 +291,8 @@ For every shopping list a channel with the following states will be created:
 ### 0.0.3
 * (foxriver76) initial release
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 The MIT License (MIT)
 
