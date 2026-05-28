@@ -117,7 +117,6 @@
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "icon": "bring.png",
-    "materialize": true,
     "enabled": true,
     "compact": true,
     "messagebox": true,
@@ -143,9 +142,12 @@
     ],
     "dependencies": [
       {
-        "js-controller": ">=3.0.0"
+        "js-controller": ">=6.0.11"
       }
-    ]
+    ],
+    "adminUI": {
+      "config": "materialize"
+    }
   },
   "native": {
     "mail": "",
