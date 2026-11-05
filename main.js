@@ -10,12 +10,16 @@ const Bring = require(`bring-shopping`);
 const tableify = require(`tableify`);
 const i18nHelper = require(`./lib/i18nHelper`);
 const { getStaticObjects } = require(`./lib/utils`);
+const { createBringImageUpload } = require('./lib/bringImageUpload');
+const { createBringSpecial } = require('./lib/bringSpecial');
+let bringSpecial;
 let adapter;
 
 let mail;
 let password;
 /** @type {Bring} */
 let bring;
+let bringImageUpload;
 const polling = {};
 const listLang = {};
 let loginTimeout;
@@ -45,6 +49,7 @@ function startAdapter(options) {
 
     adapter.on(`unload`, callback => {
         try {
+            if (bringSpecial) bringSpecial.stop();
             adapter.log.info(`[END] Stopping Bring! adapter...`);
             adapter.setState(`info.connection`, false, true);
             callback();
@@ -79,6 +84,7 @@ function startAdapter(options) {
             return;
         }
         adapter.log.debug(`[STATE] Changed ${id} to ${state.val}`);
+        if (typeof state.val === 'string' && !state.val.trim()) return;
         const listId = id.split(`.`)[2];
         const method = id.split(`.`).pop();
 
@@ -90,7 +96,17 @@ function startAdapter(options) {
                 await removeItem(listId, state.val, true);
                 break;
             case 'saveItem':
-                await saveItem(listId, state.val, false);
+                await handleUnifiedSaveItem(listId, state.val);
+                break;
+            case 'saveItemWithAttributes':
+                await saveItemWithAttributes(
+                    listId, state.val, 'saveItemWithAttributes'
+                );
+                break;
+            case 'setItemAttributes':
+                await saveItemWithAttributes(
+                    listId, state.val, 'setItemAttributes'
+                );
                 break;
             case 'saveItemTranslated':
                 await saveItem(listId, state.val, true);
@@ -100,6 +116,31 @@ function startAdapter(options) {
                 break;
             case 'moveToRecentContentTranslated':
                 await moveToRecentContent(listId, state.val, false);
+                break;
+            case 'saveItemSpecial':
+            // Kompatibilitaet mit bereits vorhandenen alten Datenpunkten.
+            case 'addItemSpecial':
+            case 'addItemSpecialWithAttributes':
+                if (!bringSpecial) {
+                    bringSpecial = createBringSpecial(
+                        adapter,
+                        () => bring,
+                        saveItemWithAttributes
+                    );
+                }
+                bringSpecial.enqueue(
+                    listId, state.val, method
+                );
+                break;
+            case 'saveItemImage':
+                if (!bringImageUpload) {
+                    bringImageUpload = createBringImageUpload(
+                        adapter,
+                        () => bring,
+                        bringAttributeListeLesen
+                    );
+                }
+                await bringImageUpload(listId, state.val);
                 break;
             case 'messageTrigger':
                 await sendShoppingList(listId);
@@ -153,6 +194,302 @@ async function main() {
     pollAllLists();
 }
 
+
+// Native Bring!-Attribute auslesen.
+// Die normalen content-Datenpunkte bleiben unveraendert.
+
+let bringAttrHeaders = null;
+let bringAttrAuthUntil = 0;
+let bringAttrLoginPromise = null;
+const bringAttrWarnings = new Map();
+
+async function bringAttributeLogin(force = false) {
+    if (
+        !force &&
+        bringAttrHeaders &&
+        Date.now() < bringAttrAuthUntil
+    ) {
+        return bringAttrHeaders;
+    }
+
+    if (!force && bringAttrLoginPromise) {
+        return bringAttrLoginPromise;
+    }
+
+    const promise = (async () => {
+        const apiKey =
+            bring?.headers?.['X-BRING-API-KEY'];
+
+        if (!apiKey) {
+            throw new Error('Bring API-Key fehlt');
+        }
+
+        const response = await fetch(
+            'https://api.getbring.com/rest/v2/bringauth',
+            {
+                method: 'POST',
+                body: new URLSearchParams({
+                    email: mail,
+                    password
+                })
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                'Bring Login HTTP ' + response.status
+            );
+        }
+
+        const login = await response.json();
+
+        if (!login.uuid || !login.access_token) {
+            throw new Error(
+                'Bring Login unvollstaendig'
+            );
+        }
+
+        const headers = {
+            Authorization:
+                (login.token_type || 'Bearer') +
+                ' ' + login.access_token,
+            'X-BRING-API-KEY': apiKey,
+            'X-BRING-CLIENT': 'android',
+            'X-BRING-APPLICATION': 'bring',
+            'X-BRING-COUNTRY': 'DE',
+            'X-BRING-USER-UUID': login.uuid
+        };
+
+        if (login.publicUuid) {
+            headers['X-BRING-PUBLIC-USER-UUID'] =
+                login.publicUuid;
+        }
+
+        bringAttrHeaders = headers;
+
+        // Sitzung wiederverwenden statt
+        // bei jedem Polling neu einzuloggen.
+        bringAttrAuthUntil =
+            Date.now() + 30 * 60 * 1000;
+
+        return headers;
+    })();
+
+    bringAttrLoginPromise = promise;
+
+    try {
+        return await promise;
+    } finally {
+        if (bringAttrLoginPromise === promise) {
+            bringAttrLoginPromise = null;
+        }
+    }
+}
+
+async function bringAttributeListeLesen(listId) {
+    const url =
+        'https://api.getbring.com/rest/v2/bringlists/' +
+        encodeURIComponent(listId);
+
+    for (let versuch = 0; versuch < 2; versuch++) {
+        const headers = await bringAttributeLogin(
+            versuch > 0
+        );
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers
+        });
+
+        if (
+            response.status === 401 &&
+            versuch === 0
+        ) {
+            bringAttrHeaders = null;
+            continue;
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                'Bring Artikel HTTP ' + response.status
+            );
+        }
+
+        const data = await response.json();
+
+        if (
+            !Array.isArray(data?.items?.purchase) ||
+            !Array.isArray(data?.items?.recently)
+        ) {
+            throw new Error(
+                'Unerwartetes Bring Artikel-JSON'
+            );
+        }
+
+        return data.items;
+    }
+
+    throw new Error(
+        'Bring Sitzung nicht autorisiert'
+    );
+}
+
+// API-Artikel in ein lesbares JSON umwandeln.
+function bringAttributeArtikel(item) {
+    const attrs = Array.isArray(item.attributes)
+        ? item.attributes
+        : [];
+
+    const label = attrs.find(
+        a => a.type === 'PURCHASE_CONDITIONS'
+    )?.content || {};
+
+    return {
+        ...item,
+        name: item.itemId,
+        itemId: item.itemId,
+        specification: item.specification || '',
+        uuid: item.uuid || null,
+
+        // Direkt auswertbare Labels
+        discounted: label.discounted === true,
+        urgent: label.urgent === true,
+        convenient: label.convenient === true,
+
+        // Alle Originalattribute behalten
+        attributes: attrs
+    };
+}
+
+// Neue Lese-Datenpunkte aktualisieren.
+async function pollBringAttributes(listId) {
+    try {
+        const items =
+            await bringAttributeListeLesen(listId);
+
+        // Benutzerbilder und angepasste Icons
+        // liegen im separaten Bring-Details-Endpunkt.
+        let details = [];
+
+        try {
+            const response =
+                await bring.getItemsDetails(listId);
+
+            if (!Array.isArray(response)) {
+                throw new Error(
+                    'Details-Antwort ist kein Array'
+                );
+            }
+
+            details = response;
+
+        } catch (e) {
+            // Bei einem Bildfehler bleiben die
+            // normalen Artikelattribute nutzbar.
+            adapter.log.debug(
+                '[LABELS] Bilddetails nicht verfuegbar: ' +
+                e.message
+            );
+        }
+
+        const detailByUuid = new Map();
+        for (const d of details) {
+            if (d?.uuid) detailByUuid.set(d.uuid, d);
+        }
+        const detailMap = new Map();
+
+        for (const d of details) {
+            if (!d || !d.itemId) continue;
+
+            const key = String(d.itemId)
+                .trim()
+                .toLocaleLowerCase('de-DE');
+
+            // Bei mehrdeutigen Eintraegen kein
+            // fremdes Bild zuweisen.
+            if (detailMap.has(key)) {
+                detailMap.set(key, null);
+            } else {
+                detailMap.set(key, d);
+            }
+        }
+
+        const withDetails = item => {
+            const base = bringAttributeArtikel(item);
+
+            const key = String(item.itemId || '')
+                .trim()
+                .toLocaleLowerCase('de-DE');
+
+            const detail =
+                (item.uuid && detailByUuid.get(item.uuid)) ||
+                detailMap.get(key);
+
+            return {
+                ...base,
+                imageUrl: detail?.imageUrl || null,
+                userIconItemId:
+                    detail?.userIconItemId || null,
+                userSectionId:
+                    detail?.userSectionId || null,
+                assignedTo:
+                    detail?.assignedTo || null,
+                // Raw detail JSON: do not discard new Bring fields.
+                details: detail ? { ...detail } : null
+            };
+        };
+
+        const aktiv = items.purchase.map(
+            withDetails
+        );
+
+        const zuletzt = items.recently.map(
+            withDetails
+        );
+
+        await adapter.setStateAsync(
+            `${listId}.contentWithAttributes`,
+            JSON.stringify(aktiv),
+            true
+        );
+
+        await adapter.setStateAsync(
+            `${listId}.recentContentWithAttributes`,
+            JSON.stringify(zuletzt),
+            true
+        );
+
+        bringAttrWarnings.delete(listId);
+
+        adapter.log.debug(
+            `[LABELS] ${listId}: ` +
+            `${aktiv.length} Artikel mit Attributen geladen`
+        );
+
+    } catch (e) {
+        // Fehler beim neuen Abruf duerfen das
+        // bisherige content nicht beeintraechtigen.
+        const message = e.message || String(e);
+        const previous = bringAttrWarnings.get(listId);
+
+        if (
+            !previous ||
+            previous.message !== message ||
+            Date.now() - previous.at > 30 * 60 * 1000
+        ) {
+            adapter.log.warn(
+                `[LABELS] Attribute fuer ${listId} ` +
+                `nicht geladen: ${message}`
+            );
+
+            bringAttrWarnings.set(listId, {
+                message,
+                at: Date.now()
+            });
+        }
+    }
+}
+
 /**
  * Polls specific list from API
  *
@@ -189,6 +526,7 @@ async function pollList(listUuid) {
             true
         );
         await adapter.setState(`${listUuid}.count`, data.purchase.length, true);
+        await pollBringAttributes(listUuid);
     } catch (e) {
         adapter.log.warn(`Error polling items for list "${listUuid}": ${e.message}`);
         adapter.setStateChanged(`info.connection`, false, true);
@@ -294,6 +632,7 @@ async function pollAllLists() {
                 true
             );
             await adapter.setState(`${entry.listUuid}.count`, data.purchase.length, true);
+            await pollBringAttributes(entry.listUuid);
 
             const usersData = await bring.getAllUsersFromList(entry.listUuid);
             adapter.log.debug(`[DATA] Users from ${entry.listUuid} loaded: ${JSON.stringify(usersData)}`);
@@ -409,11 +748,441 @@ async function removeItem(listId, article, translate) {
         }
         adapter.setStateChanged(`info.connection`, true, true);
         adapter.log.info(`[REMOVE] Removed ${article} from ${listId}`);
-        await adapter.setState(`${listId}.${translate ? 'removeItemTranslated' : 'removeItem'}`, article, true);
+        await adapter.setState(`${listId}.${translate ? 'removeItemTranslated' : 'removeItem'}`, '', true);
     } catch (e) {
         adapter.setStateChanged(`info.connection`, false, true);
         adapter.log.warn(`Error removing item "${article}" from list "${listId}": ${e.message}`);
     }
+}
+
+
+/**
+ * Local test: native Bring! purchase labels.
+ *
+ * JSON in saveItem or saveItemWithAttributes:
+ * {
+ *   "name": "Bacon",
+ *   "specification": "",
+ *   "discounted": true
+ * }
+ *
+ * setItemAttributes changes only existing articles.
+ */
+
+async function saveItemWithAttributes(listId, raw, stateName, options = {}) {
+    try {
+        if (typeof raw !== 'string') {
+            throw new Error('JSON string expected');
+        }
+
+        const data = JSON.parse(raw);
+
+        if (!data || typeof data !== 'object' || Array.isArray(data)) {
+            throw new Error('JSON object expected');
+        }
+
+        const name = String(data.name || '').trim();
+
+        if (!name || name.length > 200) {
+            throw new Error('Missing or invalid name');
+        }
+
+        const hasSpecification =
+            Object.prototype.hasOwnProperty.call(
+                data, 'specification'
+            );
+
+        const specification = hasSpecification
+            ? data.specification
+            : '';
+
+        if (
+            typeof specification !== 'string' ||
+            specification.length > 500
+        ) {
+            throw new Error(
+                'specification must be a string (max 500 chars)'
+            );
+        }
+
+        const keys = [
+            'discounted',
+            'urgent',
+            'convenient'
+        ];
+
+        const givenFlags = keys.filter(k =>
+            Object.prototype.hasOwnProperty.call(data, k)
+        );
+
+        for (const k of givenFlags) {
+            if (typeof data[k] !== 'boolean') {
+                throw new Error(k + ' must be true or false');
+            }
+        }
+
+        if (stateName === 'setItemAttributes') {
+            if (hasSpecification) {
+                throw new Error(
+                    'Use saveItemWithAttributes to update specification'
+                );
+            }
+
+            if (!givenFlags.length) {
+                throw new Error('At least one label required');
+            }
+        }
+
+        const apiKey = bring?.headers?.['X-BRING-API-KEY'];
+
+        if (!apiKey) {
+            throw new Error('Bring API key unavailable');
+        }
+
+        const loginRes = await fetch(
+            'https://api.getbring.com/rest/v2/bringauth',
+            {
+                method: 'POST',
+                body: new URLSearchParams({
+                    email: mail,
+                    password
+                })
+            }
+        );
+
+        if (!loginRes.ok) {
+            throw new Error(
+                'Bring login HTTP ' + loginRes.status
+            );
+        }
+
+        const login = await loginRes.json();
+
+        if (!login.uuid || !login.access_token) {
+            throw new Error('Incomplete Bring login');
+        }
+
+        const headers = {
+            Authorization:
+                (login.token_type || 'Bearer') +
+                ' ' + login.access_token,
+            'X-BRING-API-KEY': apiKey,
+            'X-BRING-CLIENT': 'android',
+            'X-BRING-APPLICATION': 'bring',
+            'X-BRING-COUNTRY': 'DE',
+            'X-BRING-USER-UUID': login.uuid
+        };
+
+        if (login.publicUuid) {
+            headers['X-BRING-PUBLIC-USER-UUID'] =
+                login.publicUuid;
+        }
+
+        const listUrl =
+            'https://api.getbring.com/rest/v2/bringlists/' +
+            encodeURIComponent(listId);
+
+        const itemUrl = listUrl + '/items';
+
+        const position = {
+            accuracy: '0.0',
+            altitude: '0.0',
+            latitude: '0.0',
+            longitude: '0.0'
+        };
+
+        async function readItems() {
+            const response = await fetch(
+                listUrl,
+                { headers }
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    'Bring read HTTP ' + response.status
+                );
+            }
+
+            const result = await response.json();
+
+            if (!Array.isArray(result?.items?.purchase)) {
+                throw new Error(
+                    'Unexpected Bring list response'
+                );
+            }
+
+            return result.items.purchase;
+        }
+
+        async function writeChanges(changes) {
+            const response = await fetch(
+                itemUrl,
+                {
+                    method: 'PUT',
+                    headers: {
+                        ...headers,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        changes,
+                        sender: ''
+                    })
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    'Bring update HTTP ' + response.status
+                );
+            }
+        }
+
+        const find = items =>
+            items.filter(p => p.itemId === name);
+
+        let matches = find(await readItems());
+
+        if (matches.length > 1) {
+            throw new Error(
+                'Multiple articles with identical name'
+            );
+        }
+
+        if (
+            matches.length === 0 &&
+            stateName === 'setItemAttributes'
+        ) {
+            throw new Error(
+                'Article does not exist on the list'
+            );
+        }
+
+        // Alte Labels sichern, bevor eine Beschreibung
+        // geaendert wird.
+        const previousLabels = matches.length === 1
+            ? (matches[0].attributes || []).find(
+                a => a.type === 'PURCHASE_CONDITIONS'
+              )?.content
+            : null;
+
+        const desiredLabels = {};
+
+        for (const k of keys) {
+            desiredLabels[k] =
+                Object.prototype.hasOwnProperty.call(
+                    data, k
+                )
+                    ? data[k]
+                    : previousLabels?.[k] === true;
+        }
+
+        const newArticle = matches.length === 0;
+
+        if (newArticle) {
+            // Neuen Artikel anlegen.
+            await writeChanges([{
+                ...position,
+                itemId: name,
+                spec: specification,
+                uuid: null,
+                operation: 'TO_PURCHASE'
+            }]);
+
+        } else if (
+            hasSpecification &&
+            matches[0].specification !== specification
+        ) {
+            // Beschreibung eines vorhandenen Artikels
+            // aktualisieren, UUID beibehalten.
+            await writeChanges([{
+                ...position,
+                itemId: matches[0].itemId,
+                uuid: matches[0].uuid,
+                spec: specification,
+                operation: 'TO_PURCHASE'
+            }]);
+        }
+
+        // Sicherstellen, dass Artikel und Beschreibung
+        // wirklich in Bring! gespeichert sind.
+        let item = null;
+
+        for (let i = 0; i < 6; i++) {
+            const current = find(await readItems());
+
+            if (current.length > 1) {
+                throw new Error('Article now ambiguous');
+            }
+
+            if (
+                current.length === 1 &&
+                current[0].uuid &&
+                (
+                    !hasSpecification ||
+                    current[0].specification === specification
+                )
+            ) {
+                item = current[0];
+                break;
+            }
+
+            await new Promise(
+                resolve => setTimeout(resolve, 450)
+            );
+        }
+
+        if (!item) {
+            throw new Error(
+                'Article or specification could not be verified'
+            );
+        }
+
+        // Labels schreiben und dabei vorherige Flags
+        // erhalten, falls diese nicht angegeben wurden.
+        const needsLabelWrite =
+            givenFlags.length > 0 ||
+            (hasSpecification && previousLabels != null);
+
+        if (needsLabelWrite) {
+            await writeChanges([{
+                ...position,
+                uuid: item.uuid,
+                itemId: item.itemId,
+                spec: item.specification || '',
+                operation: 'ATTRIBUTE_UPDATE',
+                attribute: {
+                    type: 'PURCHASE_CONDITIONS',
+                    content: desiredLabels
+                }
+            }]);
+
+            let confirmed = false;
+
+            for (let i = 0; i < 6; i++) {
+                const current = find(await readItems());
+
+                const labels =
+                    (current[0]?.attributes || []).find(
+                        a => a.type === 'PURCHASE_CONDITIONS'
+                    )?.content || {};
+
+                if (
+                    current.length === 1 &&
+                    keys.every(
+                        k => labels[k] === desiredLabels[k]
+                    ) &&
+                    (
+                        !hasSpecification ||
+                        current[0].specification === specification
+                    )
+                ) {
+                    confirmed = true;
+                    break;
+                }
+
+                await new Promise(
+                    resolve => setTimeout(resolve, 450)
+                );
+            }
+
+            if (!confirmed) {
+                throw new Error(
+                    'Bring labels could not be verified'
+                );
+            }
+        }
+
+        // Erst nach erfolgreicher Verifizierung quittieren.
+        if (options.acknowledge !== false) {
+            await adapter.setStateAsync(`${listId}.${stateName}`, raw, true);
+        }
+
+        adapter.log.info(
+            `[LABELS] Saved "${name}" in ${listId}: ` +
+            JSON.stringify({
+                specification: hasSpecification
+                    ? specification
+                    : '(unchanged)',
+                ...Object.fromEntries(
+                    givenFlags.map(k => [k, data[k]])
+                )
+            })
+        );
+
+        adapter.setStateChanged(
+            'info.connection',
+            true,
+            true
+        );
+        return true;
+
+    } catch (e) {
+        adapter.log.warn(
+            `[LABELS] ${stateName} failed: ${e.message}`
+        );
+        if (options.throwOnError) throw e;
+        return false;
+    }
+}
+
+/**
+ * Vereinheitlichter normaler Bring!-Eingang.
+ * saveItem: Text ("Milch, 2 Liter") ODER JSON mit name/specification/Labels.
+ * Leeren und Ergebnis nach jedem verarbeiteten Befehl; bei Fehler Ergebnis behalten.
+ * requestId dient dem gemeinsamen BringManager als eindeutige Bestaetigung.
+ */
+async function handleUnifiedSaveItem(listId, raw) {
+    const stateId = `${listId}.saveItem`;
+    const resultId = `${listId}.saveItemLastResult`;
+    if (typeof raw !== 'string' || !raw.trim()) {
+        await adapter.setStateAsync(stateId, '', true);
+        return;
+    }
+
+    let ok = false;
+    let name = '';
+    let requestId = null;
+    let error = null;
+    try {
+        const input = raw.trim();
+        if (input.startsWith('{') || input.startsWith('[')) {
+            const data = JSON.parse(input);
+            if (!data || typeof data !== 'object' || Array.isArray(data)) {
+                throw new Error('JSON-Objekt erwartet');
+            }
+            name = String(data.name || '').trim();
+            requestId = typeof data.requestId === 'string' ? data.requestId : null;
+            await saveItemWithAttributes(listId, raw, 'saveItem', {
+                acknowledge: false,
+                throwOnError: true
+            });
+        } else {
+            name = input.split(',')[0].trim();
+            if (!name || name.length > 200) {
+                throw new Error('Ungueltiger Artikelname');
+            }
+            await saveItem(listId, raw, false, {
+                acknowledge: false,
+                throwOnError: true
+            });
+        }
+        ok = true;
+    } catch (e) {
+        error = e.message || String(e);
+        adapter.log.warn('[SAVE] ' + name + ': ' + error);
+    }
+    // Keine neuen, zwischenzeitlich geschriebenen Befehle loeschen.
+    try {
+        const current = await adapter.getStateAsync(stateId);
+        if (current?.val === raw) {
+            await adapter.setStateAsync(stateId, '', true);
+        }
+    } catch (e) {
+        adapter.log.warn('[SAVE] Eingabe konnte nicht geleert werden: ' + e.message);
+    }
+    await adapter.setStateAsync(resultId, JSON.stringify({
+        ok, name, requestId, error, timestamp: new Date().toISOString()
+    }), true);
 }
 
 /**
@@ -424,7 +1193,7 @@ async function removeItem(listId, article, translate) {
  * @param {boolean} translate
  * @return {Promise<void>}
  */
-async function saveItem(listId, articleWithDescription, translate) {
+async function saveItem(listId, articleWithDescription, translate, options = {}) {
     try {
         const item = articleWithDescription.split(`,`)[0].trim() || articleWithDescription;
         const specification = articleWithDescription.includes(`,`)
@@ -441,14 +1210,18 @@ async function saveItem(listId, articleWithDescription, translate) {
         }
         adapter.setStateChanged(`info.connection`, true, true);
         adapter.log.info(`[SAVE] Saved ${item} (${specification}) to ${listId}`);
-        await adapter.setState(
-            `${listId}.${translate ? 'saveItemTranslated' : 'saveItem'}`,
-            articleWithDescription,
-            true
-        );
+        if (options.acknowledge !== false) {
+            await adapter.setState(
+                `${listId}.${translate ? 'saveItemTranslated' : 'saveItem'}`,
+                '', true
+            );
+        }
+        return true;
     } catch (e) {
         adapter.setStateChanged(`info.connection`, false, true);
         adapter.log.warn(`Error saving item "${articleWithDescription}" to list "${listId}": ${e.message}`);
+        if (options.throwOnError) throw e;
+        return false;
     }
 }
 
@@ -475,7 +1248,7 @@ async function moveToRecentContent(listId, article, translate) {
         adapter.log.info(`[MOVE] Moved ${article} to recent content of ${listId}`);
         await adapter.setState(
             `${listId}.${translate ? 'moveToRecentContentTranslated' : 'moveToRecentContent'}`,
-            article,
+            '',
             true
         );
     } catch (e) {
