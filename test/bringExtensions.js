@@ -15,6 +15,8 @@ const oldBase = process.env.IOBROKER_BRING_IMAGE_BASE_DIR;
 const oldAllow = process.env.IOBROKER_BRING_IMAGE_LAN_ALLOWLIST;
 process.env.IOBROKER_BRING_IMAGE_BASE_DIR = dir;
 delete process.env.IOBROKER_BRING_IMAGE_LAN_ALLOWLIST;
+// The adapter may have loaded this module before the test's environment was set.
+delete require.cache[require.resolve('../lib/bringImageUpload')];
 const { createBringImageUpload } = require('../lib/bringImageUpload');
 const imageUrl = 'https://bring-production.s3.amazonaws.com/bring/listitemdetail/list/detail';
 
